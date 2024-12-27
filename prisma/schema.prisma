@@ -13,3 +13,71 @@ model User {
   name      String?
   createdAt DateTime @default(now())
 }
+
+// Achievement Schema
+
+model Achievements {
+  achievementId Int       @id @default(autoincrement())
+  title         String
+  description   String
+  startDate     DateTime
+  endDate       DateTime
+  organizedBy   String
+  mode          Mode
+  isTechnical   Boolean
+  result        String
+  certificate   String?
+  status        Status
+  dateCreated   DateTime @default(now())
+  dateModified  DateTime @default(now())
+  images        AchievementImage[]
+}
+
+model AchievementImage {
+  id             Int       @id @default(autoincrement())
+  achievementId  Int
+  imageUrl       String
+  achievement    Achievements @relation(fields: [achievementId], references: [achievementId])
+  @@map("achievementImages")
+}
+
+model AchievementAnnouncement {
+  id             Int       @id @default(autoincrement())
+  userId Int 
+  achievementId  Int
+  mentorId Int
+  dateCreated   DateTime
+  dateModified  DateTime
+}
+
+model VerificationRequest {
+  id             Int       @id @default(autoincrement())
+  achievementId Int
+  studentId Int
+  mentorId Int
+  status Status
+  dateCreated   DateTime
+  dateModified  DateTime
+}
+
+model Notification {
+  id             Int       @id @default(autoincrement())
+  userId Int
+  content String
+  status Status
+  dateCreated   DateTime
+  dateModified  DateTime
+}
+
+enum Mode {
+  ONLINE
+  OFFLINE
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+
