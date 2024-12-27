@@ -26,10 +26,10 @@ model Achievements {
   mode          Mode
   isTechnical   Boolean
   result        String
-  certificate   String
+  certificate   String?
   status        Status
-  dateCreated   DateTime
-  dateModified  DateTime
+  dateCreated   DateTime @default(now())
+  dateModified  DateTime @default(now())
   images        AchievementImage[]
 }
 
