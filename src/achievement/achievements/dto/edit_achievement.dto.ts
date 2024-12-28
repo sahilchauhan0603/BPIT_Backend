@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
-import { Mode } from '../enum';
+import { Mode, Status } from '../enum';
 
 export class EditAchievementDTO {
   @IsString()
@@ -33,5 +33,9 @@ export class EditAchievementDTO {
   @IsString()
   @IsOptional()
   result: string;
+
+  @IsString()
+  @IsOptional()
+  status: Status;
 
 }
