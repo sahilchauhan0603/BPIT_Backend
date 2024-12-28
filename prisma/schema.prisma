@@ -93,6 +93,7 @@ model Faculty {
   users      User[]  @relation("FacultyUsers")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  societyfaculty SocietyCoordinator[] @relation("Faculty")
 }
 
 model User {
@@ -131,6 +132,8 @@ model User {
   interviewExperiences InterviewExperience[] @relation("UserInterviewExperience")
   eventsAttended EventAttendee[] @relation("UserToEventAttendees")
   equipmentComplaints EquipmentHistory[] @relation("UserToEquipment")
+  societyTestimonials SocietyTestimonial[] @relation("UserinSocietyTestimonial")
+  societyMember SocietyMember[] @relation("SocietyMember")
 }
 
 model Achievement {
@@ -227,17 +230,17 @@ model EventAttendee {
   user User @relation("UserToEventAttendees",fields: [userId], references: [userId])
 }
 
-model News {
-  newsId Int @id @default(autoincrement())
-  newsTitle String
-  newsDescription String
-  newsImage String
-  newsDate DateTime
-  isActive Boolean @default(true)
-  author String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model News {
+//   newsId Int @id @default(autoincrement())
+//   newsTitle String
+//   newsDescription String
+//   newsImage String
+//   newsDate DateTime
+//   isActive Boolean @default(true)
+//   author String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model SocietyProfile {
   societyId Int @id @default(autoincrement())
@@ -250,20 +253,37 @@ model SocietyProfile {
   societyHeadMobile String
   societyWebsite String
   isApproved Boolean @default(false)
-  
+  profile SocietyTestimonial[] @relation("ProfileOfSociety")
+  coordinator SocietyCoordinator[] @relation("CoordinatorOfSociety")
+  societyAchievements SocietyAchievment[] @relation("AchievementOfSociety")
+  societyMembers SocietyMember[] @relation("MemberOfSociety")
+  gallery SocietyGallery[] @relation("GallerySociety")
+  news SocietyNews[] @relation("NewsSociety")
 }
+
+
 model SocietyCoordinator {
   coordinatorId Int @id @default(autoincrement())
   societyId Int
+  society SocietyProfile @relation("CoordinatorOfSociety",fields: [societyId], references: [societyId])
   facultyId Int
+  faculty Faculty @relation("Faculty",fields: [facultyId], references: [facultyId])
   startDate DateTime
   endDate DateTime
   isActiveCoordinator Boolean @default(true)
   crestedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
 model SocietyTestimonial {
+  userId  Int
+  user User @relation("UserinSocietyTestimonial",fields: [userId], references: [userId])
+  societyId Int
+  society SocietyProfile @relation("ProfileOfSociety",fields: [societyId], references: [societyId])
   societyTestimonialId Int @id @default(autoincrement())
+  title String
+  description String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -271,12 +291,28 @@ model SocietyTestimonial {
 
 model SocietyAchievment{
   societyAchievmentId Int @id @default(autoincrement())
-
+  societyId Int
+  society SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
+  title String
+  description String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-model Testimonials {
-  testimonialId Int @id @default(autoincrement())
-  testimonialTitle String
-  testimonialDescription String
+
+
+model SocietyMember{
+  societyMemberId Int @id @default(autoincrement())
+  userId  Int
+  user User @relation("SocietyMember",fields: [userId], references: [userId])
+  societyId Int
+  society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])
+  societyPosition String
+  domainExpertise String
+  memberType String
+  isApproved Boolean @default(true)
+  isActiveMember Boolean @default(true)
+  dateJoined DateTime
+  dateResigned DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -284,13 +320,23 @@ model Testimonials {
 model SocietyGallery {
   societyGalleryId Int @id @default(autoincrement())
   societyId Int
-
+  society SocietyProfile @relation("GallerySociety",fields: [societyId], references: [societyId])
+  imageUrl String
+  imageTitle String
+  imageDescription String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
 model SocietyNews {
   societyNewsId Int @id @default(autoincrement())
   societyId Int
-  isActive Boolean @default(true)
-  visibility String
+  society SocietyProfile @relation("NewsSociety",fields: [societyId], references: [societyId])
+  newsTitle String
+  newsDescription String
+  dateOfNews DateTime
+  author String
+  anyImageUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
