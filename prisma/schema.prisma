@@ -147,26 +147,9 @@ model User {
   equipmentComplaints      EquipmentHistory[] @relation("UserToEquipment")
   societyTestimonials      SocietyTestimonial[] @relation("UserinSocietyTestimonial")
   societyMember            SocietyMember[] @relation("SocietyMember")
-  societyUser              SocietyProfile @relation("SocietyUsers",fields: [societyId], references: [societyId])
+  societyUser              SocietyProfile[] @relation("SocietyUsers")
+  jobPosting               JobsPosting[] @relation("UserJobsPosting")
 }
-
-// model Achievement {
-//   achievementId Int @id @default(autoincrement())
-//   userId Int
-//   title String
-//   description String
-//   location String
-//   dateAchieved DateTime
-//   mode Boolean
-//   isTechnical Boolean
-//   isVerified Boolean @default(false)
-//   proofUrl String
-//   imageUrl String?
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-//   user User @relation("UserAchievements", fields: [userId], references: [userId])
-//   alumniAchievement AlumniAchievement? @relation("AchievementAlumniAchievements")
-// }
 
 model AlumniAchievement {
   alumniAchievementsId Int      @id @default(autoincrement())
