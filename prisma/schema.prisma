@@ -268,8 +268,6 @@ model SocietyProfile {
   societyHeadMobile  String
   societyWebsite     String
   isApproved         Boolean @default(false)
-  society_type       SocietyType
-  society_status     SocietyStatus
   testimonials        SocietyTestimonial[] @relation("ProfileOfSociety")
   coordinator        SocietyCoordinator[] @relation("CoordinatorOfSociety")
   societyAchievements SocietyAchievment[] @relation("AchievementOfSociety")

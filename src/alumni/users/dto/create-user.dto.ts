@@ -1,63 +1,66 @@
-import { IsNotEmpty, isNumber, IsNumber, IsNumberString, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  isNumber,
+  IsNumber,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 import { Role } from '../enum/index';
 
 export class CreateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  firstName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    firstName: string;
+  @IsString()
+  @IsNotEmpty()
+  lastName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    lastName: string;
+  @IsString()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    email: string;
+  @IsNumberString()
+  @IsNotEmpty()
+  mobile: string;
 
-    @IsNumberString()
-    @IsNotEmpty()
-    mobile: string;
+  @IsString()
+  @IsNotEmpty()
+  enrollmentNumber: string;
 
-    @IsString()
-    @IsNotEmpty()
-    enrollmentNumber: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
+  @IsString()
+  @IsNotEmpty()
+  role: Role;
 
-    @IsString()
-    @IsNotEmpty()
-    role: Role;
+  @IsString()
+  @IsNotEmpty()
+  section: string;
 
-    @IsString()
-    @IsNotEmpty()
-    section: string;
+  @IsNumber()
+  @IsNotEmpty()
+  passingYear: number;
 
-    @IsNumber()
-    @IsNotEmpty()
-    passingYear: number;
+  @IsString()
+  @IsNotEmpty()
+  fathersName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    fathersName: string;
+  @IsString()
+  @IsNotEmpty()
+  mothersName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    mothersName: string;
+  @IsString()
+  @IsNotEmpty()
+  hobby: string;
 
-    @IsString()
-    @IsNotEmpty()
-    hobby: string;
+  @IsNumberString()
+  @IsNotEmpty()
+  parentsPhone: string;
 
-    @IsNumberString()
-    @IsNotEmpty()
-    parentsPhone: string;
-
-    @IsNumber()
-    @IsNotEmpty()
-    facultyId: number;
-
-
+  @IsNumber()
+  @IsNotEmpty()
+  facultyId: number;
 }

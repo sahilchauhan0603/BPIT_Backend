@@ -4,6 +4,6 @@ import { InterviewExperienceService } from './interview-experience.service';
 
 @Module({
   controllers: [InterviewExperienceController],
-  providers: [InterviewExperienceService]
+  providers: [InterviewExperienceService],
 })
 export class InterviewExperienceModule {}

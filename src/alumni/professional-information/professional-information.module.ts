@@ -4,6 +4,6 @@ import { ProfessionalInformationService } from './professional-information.servi
 
 @Module({
   controllers: [ProfessionalInformationController],
-  providers: [ProfessionalInformationService]
+  providers: [ProfessionalInformationService],
 })
 export class ProfessionalInformationModule {}

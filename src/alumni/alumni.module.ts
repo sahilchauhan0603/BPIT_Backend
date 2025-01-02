@@ -7,10 +7,15 @@ import { AlumniController } from './alumni.controller';
 import { AlumniService } from './alumni.service';
 import { AdminModule } from './admin/admin.module';
 
-
 @Module({
-  imports: [InterviewExperienceModule, ProfessionalInformationModule, UsersModule, JobsModule, AdminModule],
+  imports: [
+    InterviewExperienceModule,
+    ProfessionalInformationModule,
+    UsersModule,
+    JobsModule,
+    AdminModule,
+  ],
   controllers: [AlumniController],
-  providers: [AlumniService]
+  providers: [AlumniService],
 })
 export class AlumniModule {}

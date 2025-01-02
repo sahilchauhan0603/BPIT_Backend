@@ -9,7 +9,9 @@ describe('InterviewExperienceController', () => {
       controllers: [InterviewExperienceController],
     }).compile();
 
-    controller = module.get<InterviewExperienceController>(InterviewExperienceController);
+    controller = module.get<InterviewExperienceController>(
+      InterviewExperienceController,
+    );
   });
 
   it('should be defined', () => {

@@ -9,7 +9,9 @@ describe('InterviewExperienceService', () => {
       providers: [InterviewExperienceService],
     }).compile();
 
-    service = module.get<InterviewExperienceService>(InterviewExperienceService);
+    service = module.get<InterviewExperienceService>(
+      InterviewExperienceService,
+    );
   });
 
   it('should be defined', () => {
