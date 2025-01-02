@@ -134,6 +134,7 @@ model User {
   interviewExperiences InterviewExperience[] @relation("UserInterviewExperience")
   eventsAttended EventAttendee[] @relation("UserToEventAttendees")
   equipmentComplaints EquipmentHistory[] @relation("UserToEquipment")
+  jobPostings JobsPosting[] @relation("UserJobsPosting")
 }
 
 // model Achievement {
@@ -187,6 +188,23 @@ model ProfessionalInformation {
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime  @updatedAt
   user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId])
+}
+
+model JobsPosting {
+  jobsPostingId Int @id @default(autoincrement())
+  userId        Int
+  jobTitle      String
+  jobDescription String
+  companyName String
+  companyLocation String
+  jobMode   String      // Remote , Onsite, Hybrid
+  jobType       String  // Full-time, Part-time, Internship
+  jobCategory   String  // Techincal, Non-tech etc..
+  expectedSalary String
+  applyLink String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation("UserJobsPosting", fields: [userId], references: [userId])
 }
 
 model InterviewExperience {
