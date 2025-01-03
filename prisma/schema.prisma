@@ -117,6 +117,7 @@ model User {
   mobile                   String                    @unique
   enrollmentNumber         String                    @unique
   password                 String
+  section                  String
   role                     Role
   branch                   String
   passingYear              Int
@@ -138,7 +139,7 @@ model User {
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
   facultyId                Int
-  faculty                  Faculty                   @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
+  faculty                  Faculty                @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
   achievements             Achievement[]             @relation("UserAchievements")
   professionalInformations ProfessionalInformation[] @relation("UserProfessionalInformation")
   alumniAchievements       AlumniAchievement[] @relation("UserAlumniAchievements")

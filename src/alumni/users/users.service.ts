@@ -1,62 +1,110 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
-
+import { handleError, isPrismaError } from "../helper/exception.helper"
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    let item: any;
-    item = await this.prisma.user.findFirst({
-      where: {
-        enrollmentNumber: dto.enrollmentNumber,
-        email: dto.email,
-        mobile: dto.mobile,
-      },
-    });
-    if (item) return { status: 'error', message: 'user already exists!' };
-    item = await this.prisma.user.create({
-      data: {
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        email: dto.email,
-        mobile: dto.mobile,
-        enrollmentNumber: dto.enrollmentNumber,
-        password: dto.password,
-        role: dto.role,
-        section: dto.section,
-        passingYear: dto.passingYear,
-        fathersName: dto.fathersName,
-        mothersName: dto.mothersName,
-        hobby: dto.hobby,
-        parentsPhone: dto.parentsPhone,
-        facultyId: dto.facultyId,
-      },
-    });
-    return {
-      status: 'success',
-      item,
-      message: 'User added successfully',
-    };
+    try {
+      const existingUser = await this.prisma.user.findFirst({
+        where: {
+          enrollmentNumber: dto.enrollmentNumber,
+          email: dto.email,
+          mobile: dto.mobile,
+        },
+      });
+
+      if (existingUser) {
+        throw new HttpException(
+          { status: 'error', message: 'User already exists!' },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      const newUser = await this.prisma.user.create({
+        data: dto,
+      });
+
+      return {
+        status: 'success',
+        item: newUser,
+        message: 'User added successfully',
+      };
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+    try {
+      const users = await this.prisma.user.findMany();
+      return { status: 'success', items: users };
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  findOne(id: number) {
-    return this.prisma.user.findUnique({ where: { userId: id } });
+  async findOne(id: number) {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { userId: id } });
+
+      if (!user) {
+        throw new HttpException(
+          { status: 'error', message: 'User not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return { status: 'success', item: user };
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  update(id: number, Dto: UpdateUserDto) {
-    return this.prisma.user.update({
-      where: { userId: id },
-      data: Dto,
-    });
+  async update(id: number, Dto: UpdateUserDto) {
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { userId: id },
+        data: Dto,
+      });
+
+      return {
+        status: 'success',
+        item: updatedUser,
+        message: 'User updated successfully',
+      };
+    } catch (error) {
+      if (isPrismaError(error) && error.code === 'P2025') {
+        throw new HttpException(
+          { status: 'error', message: 'User not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      handleError(error);
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.user.delete({ where: { userId: id } });
+  async remove(id: number) {
+    try {
+      const deletedUser = await this.prisma.user.delete({
+        where: { userId: id },
+      });
+
+      return {
+        status: 'success',
+        item: deletedUser,
+        message: 'User deleted successfully',
+      };
+    } catch (error) {
+      if (isPrismaError(error) && error.code === 'P2025') {
+        throw new HttpException(
+          { status: 'error', message: 'User not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      handleError(error);
+    }
   }
 }

@@ -100,4 +100,16 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   instagramProfileUrl: string;
+
+  @IsString()
+  @IsOptional()
+  branch: string;
+
+  @IsNumber()
+  @IsOptional()
+  facultyId: number;
+
+  @IsNumber()
+  @IsOptional()
+  societyId: number;
 }

@@ -1,4 +1,6 @@
 import {
+  isInt,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
@@ -25,6 +27,10 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  branch: string;
+
+  @IsString()
+  @IsNotEmpty()
   enrollmentNumber: string;
 
   @IsString()
@@ -39,7 +45,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   section: string;
 
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   passingYear: number;
 
@@ -59,7 +65,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   parentsPhone: string;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsInt()
   facultyId: number;
+
+  @IsInt()
+  societyId: number;
 }
