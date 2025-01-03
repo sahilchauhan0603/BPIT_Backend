@@ -271,7 +271,7 @@ model SocietyProfile {
   isApproved         Boolean @default(false)
   testimonials        SocietyTestimonial[] @relation("ProfileOfSociety")
   coordinator        SocietyCoordinator[] @relation("CoordinatorOfSociety")
-  societyAchievements SocietyAchievment[] @relation("AchievementOfSociety")
+  societyAchievements SocietyAchievement[] @relation("AchievementOfSociety")
   societyMembers     SocietyMember[] @relation("MemberOfSociety")
   gallery            SocietyGallery[] @relation("GallerySociety")
   news               SocietyNews[] @relation("NewsSociety")
@@ -304,8 +304,8 @@ model SocietyTestimonial {
   updatedAt DateTime @updatedAt
 }
 
-model SocietyAchievment{
-  societyAchievmentId Int @id @default(autoincrement())
+model SocietyAchievement{
+  societyAchievementId Int @id @default(autoincrement())
   societyId           Int
   society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
   title               String

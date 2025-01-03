@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobPostingDto, UpdateJobPostingDto } from './dto/index';
 
@@ -19,7 +28,7 @@ export class JobsController {
   }
   // Get a job posting by ID
   @Get(':id')
-  async findOne(@Param('id') id: string){
+  async findOne(@Param('id') id: string) {
     const jobId = parseInt(id, 10);
     if (isNaN(jobId)) {
       throw new BadRequestException('Invalid ID format');
@@ -29,7 +38,10 @@ export class JobsController {
 
   // Update a job posting by ID
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateJobPostingDto: UpdateJobPostingDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateJobPostingDto: UpdateJobPostingDto,
+  ) {
     const jobId = parseInt(id, 10);
     if (isNaN(jobId)) {
       throw new BadRequestException('Invalid ID format');
@@ -42,7 +54,7 @@ export class JobsController {
   async findByUserId(@Param('userId') userId: string) {
     const userIdInt = parseInt(userId, 10);
     if (isNaN(userIdInt)) {
-        throw new BadRequestException('Invalid ID format');
+      throw new BadRequestException('Invalid ID format');
     }
     return await this.JobsService.findByUserId(userIdInt);
   }

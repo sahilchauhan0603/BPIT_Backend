@@ -1,4 +1,11 @@
-import { IsString, IsBoolean, IsOptional, IsDate, IsInt, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsBoolean,
+  IsOptional,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+} from 'class-validator';
 
 export class CreateInterviewExperienceDto {
   @IsInt()
@@ -18,7 +25,7 @@ export class CreateInterviewExperienceDto {
   description: string;
 
   @IsBoolean()
-  isApproved: boolean = false;  // Default to false when creating
+  isApproved: boolean = false; // Default to false when creating
 
   @IsString()
   @IsNotEmpty()

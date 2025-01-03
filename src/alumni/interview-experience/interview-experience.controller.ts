@@ -1,16 +1,34 @@
 // interview-experience.controller.ts
-import { Controller, Get, Post, Body, Param, Put, Delete, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { InterviewExperienceService } from './interview-experience.service';
-import { CreateInterviewExperienceDto, UpdateInterviewExperienceDto } from './dto/index';
+import {
+  CreateInterviewExperienceDto,
+  UpdateInterviewExperienceDto,
+} from './dto/index';
 
 @Controller('interview-experience')
 export class InterviewExperienceController {
-  constructor(private readonly interviewExperienceService: InterviewExperienceService) {}
+  constructor(
+    private readonly interviewExperienceService: InterviewExperienceService,
+  ) {}
 
   // Create a new interview experience
   @Post()
-  async create(@Body() createInterviewExperienceDto: CreateInterviewExperienceDto) {
-    return await this.interviewExperienceService.create(createInterviewExperienceDto);
+  async create(
+    @Body() createInterviewExperienceDto: CreateInterviewExperienceDto,
+  ) {
+    return await this.interviewExperienceService.create(
+      createInterviewExperienceDto,
+    );
   }
 
   // Get all interview experiences (only approved ones)
@@ -49,7 +67,10 @@ export class InterviewExperienceController {
     if (isNaN(experienceId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.interviewExperienceService.update(experienceId, updateInterviewExperienceDto);
+    return await this.interviewExperienceService.update(
+      experienceId,
+      updateInterviewExperienceDto,
+    );
   }
 
   // Delete an interview experience by ID

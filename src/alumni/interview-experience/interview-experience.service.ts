@@ -1,7 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateInterviewExperienceDto, UpdateInterviewExperienceDto } from './dto/index';
-import { handleError, isPrismaError } from "../helper/exception.helper";
+import {
+  CreateInterviewExperienceDto,
+  UpdateInterviewExperienceDto,
+} from './dto/index';
+import { handleError, isPrismaError } from '../helper/exception.helper';
 
 @Injectable()
 export class InterviewExperienceService {
@@ -27,21 +30,22 @@ export class InterviewExperienceService {
   // Get all approved interview experiences
   async findAll() {
     try {
-      const interviewExperiences = await this.prisma.interviewExperience.findMany({
-        where: { isApproved: true },
-        include: {
-          user: {
-            select: {
-              firstName: true,
-              lastName: true,
-              passingYear: true,
-              branch: true,
-              section: true,
-              email: true,
+      const interviewExperiences =
+        await this.prisma.interviewExperience.findMany({
+          where: { isApproved: true },
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                passingYear: true,
+                branch: true,
+                section: true,
+                email: true,
+              },
             },
           },
-        },
-      });
+        });
       return { status: 'success', items: interviewExperiences };
     } catch (error) {
       handleError(error);
@@ -51,21 +55,22 @@ export class InterviewExperienceService {
   // Get an interview experience by ID
   async findOne(id: number) {
     try {
-      const interviewExperience = await this.prisma.interviewExperience.findUnique({
-        where: { interviewExperienceId: id },
-        include: {
-          user: {
-            select: {
-              firstName: true,
-              lastName: true,
-              passingYear: true,
-              branch: true,
-              section: true,
-              email: true,
+      const interviewExperience =
+        await this.prisma.interviewExperience.findUnique({
+          where: { interviewExperienceId: id },
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                passingYear: true,
+                branch: true,
+                section: true,
+                email: true,
+              },
             },
           },
-        },
-      });
+        });
 
       if (!interviewExperience) {
         throw new HttpException(
@@ -83,21 +88,22 @@ export class InterviewExperienceService {
   // Get all interview experiences by user ID (approved and non-approved)
   async findByUserId(userId: number) {
     try {
-      const interviewExperiences = await this.prisma.interviewExperience.findMany({
-        where: { userId: userId },
-        include: {
-          user: {
-            select: {
-              firstName: true,
-              lastName: true,
-              passingYear: true,
-              branch: true,
-              section: true,
-              email: true,
+      const interviewExperiences =
+        await this.prisma.interviewExperience.findMany({
+          where: { userId: userId },
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                passingYear: true,
+                branch: true,
+                section: true,
+                email: true,
+              },
             },
           },
-        },
-      });
+        });
       return interviewExperiences;
     } catch (error) {
       handleError(error);
@@ -107,10 +113,11 @@ export class InterviewExperienceService {
   // Update an interview experience by ID
   async update(id: number, dto: UpdateInterviewExperienceDto) {
     try {
-      const updatedInterviewExperience = await this.prisma.interviewExperience.update({
-        where: { interviewExperienceId: id },
-        data: dto,
-      });
+      const updatedInterviewExperience =
+        await this.prisma.interviewExperience.update({
+          where: { interviewExperienceId: id },
+          data: dto,
+        });
 
       return {
         status: 'success',
@@ -131,9 +138,10 @@ export class InterviewExperienceService {
   // Delete an interview experience by ID
   async remove(id: number) {
     try {
-      const deletedInterviewExperience = await this.prisma.interviewExperience.delete({
-        where: { interviewExperienceId: id },
-      });
+      const deletedInterviewExperience =
+        await this.prisma.interviewExperience.delete({
+          where: { interviewExperienceId: id },
+        });
 
       return {
         status: 'success',

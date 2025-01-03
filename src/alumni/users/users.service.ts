@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
-import { handleError, isPrismaError } from "../helper/exception.helper"
+import { handleError, isPrismaError } from '../helper/exception.helper';
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
