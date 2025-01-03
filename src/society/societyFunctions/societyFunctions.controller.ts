@@ -20,12 +20,12 @@ export class SocietyController {
     return await this.societyService.addSociety(createSocietyDto);
   }
 
-  @Put(':id')
+  @Put(':societyId')
   async updateSociety(
-    @Param('id') id: number,
+    @Param('societyId') societyId: number,
     @Body() updateSocietyDto: EditSocietyDTO,
   ) {
-    return await this.societyService.updateSociety(id, updateSocietyDto);
+    return await this.societyService.updateSociety(societyId, updateSocietyDto);
   }
 
   @Get()
@@ -33,13 +33,13 @@ export class SocietyController {
     return await this.societyService.fetchAllSocieties();
   }
 
-  @Get(':id')
-  async fetchSocietyById(@Param('id') id: number) {
-    return await this.societyService.fetchSocietyById(id);
+  @Get(':societyId')
+  async fetchSocietyById(@Param('societyId') societyId: number) {
+    return await this.societyService.fetchSocietyById(societyId);
   }
 
-  @Delete(':id')
-  async removeSocietyById(@Param('id') id: number) {
-    return await this.societyService.removeSocietyById(id);
+  @Delete(':societyId')
+  async removeSocietyById(@Param('societyId') societyId: number) {
+    return await this.societyService.removeSocietyById(societyId);
   }
 }

@@ -1,4 +1,55 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Put,
+  Get,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
+import { SocietyEventsService } from './society-events.service';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 
-@Controller('society-events')
-export class SocietyEventsController {}
+@Controller('api/v1')
+export class SocietyEventsController {
+  constructor(private readonly societyEventsService: SocietyEventsService) {}
+
+  @Post('/events')
+  async addNewEvent(@Body() createEventDto: CreateEventDto) {
+    return await this.societyEventsService.addEvent(createEventDto);
+  }
+
+  @Put('/events/:eventID')
+  async updateEvent(
+    @Param('eventID') eventID: number,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    return await this.societyEventsService.updateEvent(eventID, updateEventDto);
+  }
+
+  @Get('/events')
+  async getAllEvents() {
+    return await this.societyEventsService.fetchAllEvents();
+  }
+
+  @Get('/events/:eventID')
+  async getEventById(@Param('eventID') eventID: number) {
+    return await this.societyEventsService.fetchEventById(eventID);
+  }
+
+  @Get('/events/society/:societyID')
+  async getEventsBySocietyId(@Param('societyID') societyID: number) {
+    return await this.societyEventsService.fetchEventsBySocietyId(societyID);
+  }
+
+  @Delete('/events/delete/:eventID')
+  async removeEvent(@Param('eventID') eventID: number) {
+    return await this.societyEventsService.removeEvent(eventID);
+  }
+
+  @Delete('/events/delete-by-society/:societyID')
+  async removeEventsBySocietyId(@Param('societyID') societyID: number) {
+    return await this.societyEventsService.removeEventsBySocietyId(societyID);
+  }
+}

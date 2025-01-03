@@ -11,13 +11,13 @@ import { SocietyAchievementsService } from './society-achievements.service';
 import { CreateSocietyAchievementDto } from './dto/create-society-achievement.dto';
 import { UpdateSocietyAchievementDto } from './dto/update-society-achievement.dto';
 
-@Controller('society-achievements')
+@Controller('api/v1')
 export class SocietyAchievementsController {
   constructor(
     private readonly societyAchievementsService: SocietyAchievementsService,
   ) {}
 
-  @Post()
+  @Post('/achievements')
   async addNewAchievement(
     @Body() createSocietyAchievementDto: CreateSocietyAchievementDto,
   ) {
@@ -26,7 +26,7 @@ export class SocietyAchievementsController {
     );
   }
 
-  @Put(':achievementID')
+  @Put('/achievements/:achievementID')
   async updateAchievement(
     @Param('achievementID') achievementID: number,
     @Body() updateSocietyAchievementDto: UpdateSocietyAchievementDto,
@@ -37,24 +37,25 @@ export class SocietyAchievementsController {
     );
   }
 
-  @Get()
+  //admin panel
+  @Get('/admin/achievements')
   async getAllAchievements() {
     return await this.societyAchievementsService.findAll();
   }
 
-  @Get(':societyID')
+  @Get('/admin/achievements/:societyID')
   async getAchievementsBySocietyID(@Param('societyID') societyID: number) {
     return await this.societyAchievementsService.findBySocietyID(societyID);
   }
 
-  @Delete(':achievementID')
+  @Delete('/achievements/:achievementID')
   async removeAchievementByID(@Param('achievementID') achievementID: number) {
     return await this.societyAchievementsService.removeByAchievementID(
       achievementID,
     );
   }
 
-  @Delete('society/:societyID')
+  @Delete('/achievements/:societyID')
   async removeAchievementsBySocietyID(@Param('societyID') societyID: number) {
     return await this.societyAchievementsService.removeBySocietyID(societyID);
   }
