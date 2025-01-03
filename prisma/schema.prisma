@@ -118,7 +118,7 @@ model User {
   enrollmentNumber         String                    @unique
   password                 String
   role                     Role
-  section                  String
+  branch                   String
   passingYear              Int
   fathersName              String
   mothersName              String
@@ -337,14 +337,15 @@ model StudentMarking {
 
 
 model SocietyMember{
-  societyMemberId Int @id @default(autoincrement())
   userId  Int
+  enrollmentNo Int @id @default(autoincrement())
   user User @relation("SocietyMember",fields: [userId], references: [userId])
   societyId Int
   society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])
   societyPosition String
   domainExpertise String
   memberType String
+  studentContributions String
   isApproved Boolean @default(true)
   isActiveMember Boolean @default(true)
   dateJoined DateTime

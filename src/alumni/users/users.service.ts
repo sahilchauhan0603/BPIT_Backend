@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +17,22 @@ export class UsersService {
     });
     if (item) return { status: 'error', message: 'user already exists!' };
     item = await this.prisma.user.create({
-      data: dto,
+      data: {
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        email: dto.email,
+        mobile: dto.mobile,
+        enrollmentNumber: dto.enrollmentNumber,
+        password: dto.password,
+        role: dto.role,
+        section: dto.section,
+        passingYear: dto.passingYear,
+        fathersName: dto.fathersName,
+        mothersName: dto.mothersName,
+        hobby: dto.hobby,
+        parentsPhone: dto.parentsPhone,
+        facultyId: dto.facultyId,
+      },
     });
     return {
       status: 'success',

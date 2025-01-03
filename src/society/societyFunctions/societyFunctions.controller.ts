@@ -11,7 +11,7 @@ import { SocietyService } from './societyFunctions.service';
 import { AddSocietyDto } from './dto';
 import { EditSocietyDTO } from './dto';
 
-@Controller('societies')
+@Controller('api/v1/societies')
 export class SocietyController {
   constructor(private readonly societyService: SocietyService) {}
 
