@@ -6,6 +6,8 @@ import { JobsModule } from './jobs/jobs.module';
 import { AlumniController } from './alumni.controller';
 import { AlumniService } from './alumni.service';
 import { AdminModule } from './admin/admin.module';
+import { GallaryModule } from './gallary/gallary.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { AdminModule } from './admin/admin.module';
     UsersModule,
     JobsModule,
     AdminModule,
+    GallaryModule,
+    NewsModule,
   ],
   controllers: [AlumniController],
   providers: [AlumniService],
