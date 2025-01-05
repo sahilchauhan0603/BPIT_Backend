@@ -23,7 +23,7 @@ export class NewsService {
   async findAll() {
     try {
       const news = await this.prisma.news.findMany({
-        where : { isActive : true }
+        where: { isActive: true },
       });
       return { status: 'success', items: news };
     } catch (error) {
@@ -70,7 +70,9 @@ export class NewsService {
 
   async delete(id: number) {
     try {
-      const deletedNews = await this.prisma.news.delete({ where: { newsId: id } });
+      const deletedNews = await this.prisma.news.delete({
+        where: { newsId: id },
+      });
       return {
         status: 'success',
         item: deletedNews,

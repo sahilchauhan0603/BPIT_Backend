@@ -9,27 +9,52 @@ export class SocietyStudentsService {
   constructor(private prisma: PrismaService) {}
 
   async addNewStudent(dto: CreateStudentDto) {
-    // Directly create a new society member
+    // Validate the existence of the user
+    const user = await this.prisma.user.findUnique({
+      where: { userId: dto.userId },
+    });
+
+    if (!user) {
+      throw new Error(`User with ID ${dto.userId} does not exist`);
+    }
+
+    // Validate the existence of the society
+    const society = await this.prisma.societyProfile.findUnique({
+      where: { societyId: dto.societyId },
+    });
+
+    if (!society) {
+      throw new Error(`Society with ID ${dto.societyId} does not exist`);
+    }
+
+    // Create the new society member
     const newSocietyMember = await this.prisma.societyMember.create({
       data: {
-        userId: dto.userId, // Assuming `userId` exists in the DTO
-        societyId: dto.societyId, // Assuming `societyId` exists in the DTO
+        userId: dto.userId,
+        societyId: dto.societyId,
         societyPosition: dto.societyPosition,
         domainExpertise: dto.domainExpertise,
         memberType: dto.memberType,
         studentContributions: dto.studentContributions,
-        isApproved: dto.isApproved || true, // Default value for approval status
-        isActiveMember: dto.isActiveMember || true, // Default value for active member status
-        dateJoined: dto.dateJoined, // Date when the student joined
-        dateResigned: dto.dateResigned || null, // Resigned date can be null initially
+        isApproved: dto.isApproved ?? true, // Default to true if not provided
+        isActiveMember: dto.isActiveMember ?? true, // Default to true if not provided
+        dateJoined: dto.dateJoined,
+        dateResigned: dto.dateResigned ?? null, // Default to null if not provided
+        // society: {
+        //   connect: { societyId: dto.societyId }, // Correct connection to existing society
+        // },
+      },
+      include: {
+        user: true,
+        society: true,
       },
     });
 
-    // Return a success response with the newly created society member
+    // Return the newly created society member
     return {
       status: 'success',
       item: newSocietyMember,
-      message: 'Society member added successfully',
+      message: 'Society member created successfully',
     };
   }
 
@@ -37,21 +62,32 @@ export class SocietyStudentsService {
     enrollmentNo: number,
     updateStudentDto: UpdateStudentDto,
   ): Promise<any> {
-    // Find the student using the provided enrollment number
-    const student = await this.prisma.societyMember.findUnique({
-      where: { enrollmentNo },
+    // Find the user by enrollmentNo to get userId
+    const user = await this.prisma.user.findUnique({
+      where: { enrollmentNumber: enrollmentNo },
     });
 
-    // Check if the student exists
+    // Check if the user exists
+    if (!user) {
+      return { status: 'error', message: 'User not found!' };
+    }
+
+    // Find the corresponding society member using userId
+    const student = await this.prisma.societyMember.findUnique({
+      where: { userId: user.userId },
+    });
+
+    // Check if the student exists in societyMember
     if (!student) {
-      return { status: 'error', message: 'Student not found!' };
+      return { status: 'error', message: 'Student not found in society!' };
     }
 
     // Update the student with the provided data
     const updatedStudent = await this.prisma.societyMember.update({
-      where: { enrollmentNo },
+      where: { userId: user.userId },
       data: updateStudentDto,
     });
+
     // Return a success response with the updated student
     return {
       status: 'success',
@@ -64,9 +100,20 @@ export class SocietyStudentsService {
     return await this.prisma.societyMember.findMany();
   }
 
-  async fetchStudent(enrollmentNo: number): Promise<SocietyMember> {
+  async fetchStudent(enrollmentNo: number): Promise<SocietyMember | null> {
+    // Find the user by enrollmentNo to get userId
+    const user = await this.prisma.user.findUnique({
+      where: { enrollmentNumber: enrollmentNo },
+    });
+
+    // Check if the user exists
+    if (!user) {
+      return null; // or you can throw an error if required
+    }
+
+    // Fetch the corresponding society member using userId
     return await this.prisma.societyMember.findUnique({
-      where: { enrollmentNo },
+      where: { userId: user.userId },
     });
   }
 
@@ -78,13 +125,25 @@ export class SocietyStudentsService {
   // }
 
   async removeStudent(enrollmentNo: number): Promise<{ message: string }> {
-    await this.prisma.societyMember.delete({
-      where: { enrollmentNo },
+    // Find the user by enrollmentNo to get userId
+    const user = await this.prisma.user.findUnique({
+      where: { enrollmentNumber: enrollmentNo },
     });
+
+    // Check if the user exists
+    if (!user) {
+      return { message: 'User not found' }; // or throw an error if needed
+    }
+
+    // Delete the corresponding society member using userId
+    await this.prisma.societyMember.delete({
+      where: { userId: user.userId },
+    });
+
     return { message: 'Student successfully deleted' };
   }
 
-  async fetchStudentsBySocietyID(societyID: string): Promise<SocietyMember[]> {
+  async fetchStudentsBySocietyID(societyID: number): Promise<SocietyMember[]> {
     return await this.prisma.societyMember.findMany({
       where: { societyId: Number(societyID) },
     });
@@ -110,7 +169,7 @@ export class SocietyStudentsService {
     });
   }
 
-  async fetchStudentsSocietyAdmin(societyID: string): Promise<any[]> {
+  async fetchStudentsSocietyAdmin(societyID: number): Promise<any[]> {
     return await this.prisma.societyMember.findMany({
       where: { societyId: Number(societyID) },
       include: {

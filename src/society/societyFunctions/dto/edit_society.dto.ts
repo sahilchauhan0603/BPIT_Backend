@@ -8,6 +8,9 @@ import {
 } from 'class-validator';
 
 export class EditSocietyDTO {
+  @IsOptional() // Optional because it can be manually provided
+  societyId?: number;
+
   @IsOptional()
   @IsString()
   societyType?: string;

@@ -35,7 +35,7 @@ export class UpdateUserDto {
 
   @IsString()
   @IsOptional()
-  enrollmentNumber: string;
+  enrollmentNumber: number;
 
   @IsString()
   @IsOptional()

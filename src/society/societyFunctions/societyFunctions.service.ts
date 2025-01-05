@@ -11,6 +11,7 @@ export class SocietyService {
     // Directly create a new society
     const newSociety = await this.prisma.societyProfile.create({
       data: {
+        societyId: dto.societyId,
         societyType: dto.societyType,
         societyName: dto.societyName,
         societyHead: dto.societyHead,
@@ -46,6 +47,7 @@ export class SocietyService {
         societyId,
       },
       data: {
+        societyId: dto.societyId,
         societyType: dto.societyType,
         societyName: dto.societyName,
         societyHead: dto.societyHead,
@@ -81,7 +83,7 @@ export class SocietyService {
   }
 
   async fetchSocietyById(id: number) {
-    return await this.prisma.societyProfile.findUnique({
+    return await this.prisma.societyProfile.findMany({
       where: { societyId: id },
       include: {
         testimonials: true,

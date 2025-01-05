@@ -5,6 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [NewsController],
-  providers: [NewsService, PrismaService]
+  providers: [NewsService, PrismaService],
 })
 export class NewsModule {}

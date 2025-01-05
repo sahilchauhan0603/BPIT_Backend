@@ -10,8 +10,8 @@ export class CreateStudentDto {
   @IsInt()
   userId: number;
 
-  @IsInt()
-  enrollmentNo: number;
+  @IsOptional()
+  enrollmentNo?: number;
 
   @IsInt()
   societyId: number;

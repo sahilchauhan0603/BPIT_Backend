@@ -25,7 +25,10 @@ export class SocietyController {
     @Param('societyId') societyId: number,
     @Body() updateSocietyDto: EditSocietyDTO,
   ) {
-    return await this.societyService.updateSociety(societyId, updateSocietyDto);
+    return await this.societyService.updateSociety(
+      Number(societyId),
+      updateSocietyDto,
+    );
   }
 
   @Get()
@@ -35,11 +38,11 @@ export class SocietyController {
 
   @Get(':societyId')
   async fetchSocietyById(@Param('societyId') societyId: number) {
-    return await this.societyService.fetchSocietyById(societyId);
+    return await this.societyService.fetchSocietyById(Number(societyId));
   }
 
   @Delete(':societyId')
   async removeSocietyById(@Param('societyId') societyId: number) {
-    return await this.societyService.removeSocietyById(societyId);
+    return await this.societyService.removeSocietyById(Number(societyId));
   }
 }

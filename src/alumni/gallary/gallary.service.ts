@@ -31,7 +31,9 @@ export class GallaryService {
 
   async findById(id: number) {
     try {
-      const gallery = await this.prisma.gallary.findUnique({ where: { gallaryId: id } });
+      const gallery = await this.prisma.gallary.findUnique({
+        where: { gallaryId: id },
+      });
       if (!gallery) {
         throw new HttpException(
           { status: 'error', message: 'Gallery item not found' },
@@ -68,7 +70,9 @@ export class GallaryService {
 
   async delete(id: number) {
     try {
-      const deletedGallery = await this.prisma.gallary.delete({ where: { gallaryId: id } });
+      const deletedGallery = await this.prisma.gallary.delete({
+        where: { gallaryId: id },
+      });
       return {
         status: 'success',
         item: deletedGallery,
@@ -92,7 +96,7 @@ export class GallaryService {
         _count: true,
         _min: { imageUrl: true },
       });
-      return groupedImages.map(group => ({
+      return groupedImages.map((group) => ({
         title: group.imageTitle,
         randomImageUrl: group._min.imageUrl,
         totalCount: group._count,
@@ -104,7 +108,9 @@ export class GallaryService {
 
   async findByImageTitle(title: string) {
     try {
-      const images = await this.prisma.gallary.findMany({ where: { imageTitle: title } });
+      const images = await this.prisma.gallary.findMany({
+        where: { imageTitle: title },
+      });
       return { status: 'success', items: images };
     } catch (error) {
       handleError(error);

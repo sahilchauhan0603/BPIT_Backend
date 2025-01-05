@@ -115,7 +115,7 @@ model User {
   lastName                 String
   email                    String                    @unique
   mobile                   String                    @unique
-  enrollmentNumber         String                    @unique
+  enrollmentNumber         Int                    @unique
   password                 String
   section                  String
   role                     Role
@@ -258,7 +258,7 @@ model News {
 }
 
 model SocietyProfile {
-  societyId          Int      @id @default(autoincrement())
+  societyId          Int      @id 
   societyType        String
   societyName        String
   societyHead        String
@@ -315,7 +315,7 @@ model SocietyAchievement{
 }
 
 model StudentAchievement {
-  enrollmentNo  Int      @id @default(autoincrement())
+  enrollmentNo  Int      @id 
   societyId     Int
   achievementId Int
   title         String
@@ -327,7 +327,7 @@ model StudentAchievement {
 }
 
 model StudentMarking {
-  enrollmentNo  Int      @id @default(autoincrement())
+  enrollmentNo  Int      @id 
   societyId     Int
   markingId     Int
   studentGrades String
@@ -338,8 +338,7 @@ model StudentMarking {
 
 
 model SocietyMember{
-  userId  Int
-  enrollmentNo Int @id @default(autoincrement())
+  userId  Int @id @default(autoincrement())
   user User @relation("SocietyMember",fields: [userId], references: [userId])
   societyId Int
   society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])

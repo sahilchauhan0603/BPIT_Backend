@@ -11,7 +11,6 @@ export class UpdateStudentDto {
   @IsOptional()
   userId?: number;
 
-  @IsInt()
   @IsOptional()
   enrollmentNo?: number;
 

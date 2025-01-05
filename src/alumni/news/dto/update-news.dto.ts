@@ -1,28 +1,27 @@
-import { IsBoolean, IsDateString, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class UpdateNewsDto {
+  @IsString()
+  @IsOptional()
+  newsTitle?: string;
 
-    @IsString()
-    @IsOptional()
-    newsTitle?: string;
+  @IsString()
+  @IsOptional()
+  newsDescription?: string;
 
-    @IsString()
-    @IsOptional()
-    newsDescription?: string;
+  @IsString()
+  @IsOptional()
+  newsImage?: string;
 
-    @IsString()
-    @IsOptional()
-    newsImage?: string;
+  @IsDateString()
+  @IsOptional()
+  newsDate?: Date;
 
-    @IsDateString()
-    @IsOptional()
-    newsDate?: Date;
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 
-    @IsBoolean()
-    @IsOptional()
-    isActive?: boolean;
-
-    @IsString()
-    @IsOptional()
-    author?: string;
+  @IsString()
+  @IsOptional()
+  author?: string;
 }

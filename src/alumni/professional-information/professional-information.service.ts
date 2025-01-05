@@ -138,7 +138,7 @@ export class ProfessionalInformationService {
             },
           },
         },
-      }); 
+      });
       // If no current company is found, find the most recent past company
       if (!currentCompany) {
         currentCompany = await this.prisma.professionalInformation.findFirst({

@@ -31,7 +31,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  enrollmentNumber: string;
+  enrollmentNumber: number;
 
   @IsString()
   @IsNotEmpty()

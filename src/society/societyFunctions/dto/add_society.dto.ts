@@ -8,6 +8,9 @@ import {
 } from 'class-validator';
 
 export class AddSocietyDto {
+  @IsOptional()
+  societyId?: number;
+
   @IsString()
   societyType: string;
 

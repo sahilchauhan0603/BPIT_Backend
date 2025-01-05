@@ -5,6 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [GallaryController],
-  providers: [GallaryService, PrismaService]
+  providers: [GallaryService, PrismaService],
 })
 export class GallaryModule {}

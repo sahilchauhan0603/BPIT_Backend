@@ -29,7 +29,7 @@ export class SocietyStudentsController {
     @Body() updateStudentDto: UpdateStudentDto,
   ): Promise<SocietyMember> {
     return this.societyStudentsService.updateStudent(
-      enrollmentNo,
+      Number(enrollmentNo),
       updateStudentDto,
     );
   }
@@ -43,7 +43,7 @@ export class SocietyStudentsController {
   async fetchStudent(
     @Param('enrollmentNo') enrollmentNo: number,
   ): Promise<SocietyMember> {
-    return this.societyStudentsService.fetchStudent(enrollmentNo);
+    return this.societyStudentsService.fetchStudent(Number(enrollmentNo));
   }
 
   // @Get('contributions/:enrollmentNo')
@@ -57,14 +57,16 @@ export class SocietyStudentsController {
   async removeStudent(
     @Param('enrollmentNo') enrollmentNo: number,
   ): Promise<{ message: string }> {
-    return this.societyStudentsService.removeStudent(enrollmentNo);
+    return this.societyStudentsService.removeStudent(Number(enrollmentNo));
   }
 
   @Get('/admin/societyStudents/:societyID')
   async fetchStudentsBySocietyID(
-    @Param('societyID') societyID: string,
-  ): Promise<SocietyMember[]> {
-    return this.societyStudentsService.fetchStudentsBySocietyID(societyID);
+    @Param('societyID') societyID: number,
+  ): Promise<any[]> {
+    return this.societyStudentsService.fetchStudentsBySocietyID(
+      Number(societyID),
+    );
   }
 
   // ADMIN PANEL
@@ -75,8 +77,10 @@ export class SocietyStudentsController {
 
   @Get('admin/societyStudents/:societyID')
   async fetchStudentsSocietyAdmin(
-    @Param('societyID') societyID: string,
+    @Param('societyID') societyID: number,
   ): Promise<any[]> {
-    return this.societyStudentsService.fetchStudentsSocietyAdmin(societyID);
+    return this.societyStudentsService.fetchStudentsSocietyAdmin(
+      Number(societyID),
+    );
   }
 }
