@@ -11,6 +11,7 @@ export class SocietyAchievementsService {
     // Directly create a new society achievement
     const newAchievement = await this.prisma.societyAchievement.create({
       data: {
+        societyAchievementId: createSocietyAchievementDto.societyAchievementId,
         societyId: createSocietyAchievementDto.societyId, // Assuming `societyId` exists in the DTO
         title: createSocietyAchievementDto.title, // Assuming `title` exists in the DTO
         description: createSocietyAchievementDto.description,
@@ -44,6 +45,7 @@ export class SocietyAchievementsService {
     const updatedAchievement = await this.prisma.societyAchievement.update({
       where: { societyAchievementId: achievementID }, // Use the correct field name
       data: {
+        societyAchievementId: updateSocietyAchievementDto.societyAchievementId,
         societyId: updateSocietyAchievementDto.societyId, // Assuming `societyId` is part of the DTO
         title: updateSocietyAchievementDto.title, // Assuming `title` is part of the DTO
         description: updateSocietyAchievementDto.description,

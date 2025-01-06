@@ -8,6 +8,9 @@ import {
 
 export class CreateStudentDto {
   @IsInt()
+  memberId: number;
+
+  @IsInt()
   userId: number;
 
   @IsOptional()

@@ -9,27 +9,10 @@ export class SocietyStudentsService {
   constructor(private prisma: PrismaService) {}
 
   async addNewStudent(dto: CreateStudentDto) {
-    // Validate the existence of the user
-    const user = await this.prisma.user.findUnique({
-      where: { userId: dto.userId },
-    });
-
-    if (!user) {
-      throw new Error(`User with ID ${dto.userId} does not exist`);
-    }
-
-    // Validate the existence of the society
-    const society = await this.prisma.societyProfile.findUnique({
-      where: { societyId: dto.societyId },
-    });
-
-    if (!society) {
-      throw new Error(`Society with ID ${dto.societyId} does not exist`);
-    }
-
     // Create the new society member
     const newSocietyMember = await this.prisma.societyMember.create({
       data: {
+        memberId: dto.memberId,
         userId: dto.userId,
         societyId: dto.societyId,
         societyPosition: dto.societyPosition,
@@ -40,13 +23,6 @@ export class SocietyStudentsService {
         isActiveMember: dto.isActiveMember ?? true, // Default to true if not provided
         dateJoined: dto.dateJoined,
         dateResigned: dto.dateResigned ?? null, // Default to null if not provided
-        // society: {
-        //   connect: { societyId: dto.societyId }, // Correct connection to existing society
-        // },
-      },
-      include: {
-        user: true,
-        society: true,
       },
     });
 
@@ -59,12 +35,12 @@ export class SocietyStudentsService {
   }
 
   async updateStudent(
-    enrollmentNo: number,
+    memberId: number,
     updateStudentDto: UpdateStudentDto,
   ): Promise<any> {
     // Find the user by enrollmentNo to get userId
-    const user = await this.prisma.user.findUnique({
-      where: { enrollmentNumber: enrollmentNo },
+    const user = await this.prisma.societyMember.findUnique({
+      where: { memberId: memberId },
     });
 
     // Check if the user exists
@@ -72,19 +48,9 @@ export class SocietyStudentsService {
       return { status: 'error', message: 'User not found!' };
     }
 
-    // Find the corresponding society member using userId
-    const student = await this.prisma.societyMember.findUnique({
-      where: { userId: user.userId },
-    });
-
-    // Check if the student exists in societyMember
-    if (!student) {
-      return { status: 'error', message: 'Student not found in society!' };
-    }
-
     // Update the student with the provided data
     const updatedStudent = await this.prisma.societyMember.update({
-      where: { userId: user.userId },
+      where: { memberId: memberId },
       data: updateStudentDto,
     });
 
@@ -100,20 +66,10 @@ export class SocietyStudentsService {
     return await this.prisma.societyMember.findMany();
   }
 
-  async fetchStudent(enrollmentNo: number): Promise<SocietyMember | null> {
-    // Find the user by enrollmentNo to get userId
-    const user = await this.prisma.user.findUnique({
-      where: { enrollmentNumber: enrollmentNo },
-    });
-
-    // Check if the user exists
-    if (!user) {
-      return null; // or you can throw an error if required
-    }
-
-    // Fetch the corresponding society member using userId
-    return await this.prisma.societyMember.findUnique({
-      where: { userId: user.userId },
+  // Fetch by userId
+  async fetchStudent(userId: number) {
+    return this.prisma.societyMember.findMany({
+      where: { userId: userId },
     });
   }
 
@@ -124,20 +80,21 @@ export class SocietyStudentsService {
   //   });
   // }
 
-  async removeStudent(enrollmentNo: number): Promise<{ message: string }> {
+  // removeStudent by member id
+  async removeStudent(memberId: number): Promise<{ message: string }> {
     // Find the user by enrollmentNo to get userId
-    const user = await this.prisma.user.findUnique({
-      where: { enrollmentNumber: enrollmentNo },
+    const student = await this.prisma.societyMember.findUnique({
+      where: { memberId: memberId },
     });
 
     // Check if the user exists
-    if (!user) {
+    if (!student) {
       return { message: 'User not found' }; // or throw an error if needed
     }
 
     // Delete the corresponding society member using userId
     await this.prisma.societyMember.delete({
-      where: { userId: user.userId },
+      where: { memberId: memberId },
     });
 
     return { message: 'Student successfully deleted' };

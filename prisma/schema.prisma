@@ -257,6 +257,7 @@ model News {
   updatedAt       DateTime @updatedAt
 }
 
+//done
 model SocietyProfile {
   societyId          Int      @id 
   societyType        String
@@ -279,6 +280,17 @@ model SocietyProfile {
   users              User[] @relation("SocietyUsers")
   studentAchievements StudentAchievement[] @relation("AchievementOfStudent")
   studentMarking     StudentMarking[] @relation("StudentMarkings")
+}
+
+//done
+model SocietyAchievement{
+  societyAchievementId Int @id 
+  societyId           Int
+  society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
+  title               String
+  description         String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 model SocietyCoordinator {
   coordinatorId Int @id @default(autoincrement())
@@ -303,27 +315,13 @@ model SocietyTestimonial {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-model SocietyAchievement{
-  societyAchievementId Int @id @default(autoincrement())
-  societyId           Int
-  society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
-  title               String
-  description         String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-}
-
 model StudentAchievement {
-  enrollmentNo  Int      @id 
   societyId     Int
-  achievementId Int
+  achievementId Int @id
   title         String
   description   String
   dateAchieved  DateTime
   society       SocietyProfile @relation("AchievementOfStudent",fields: [societyId], references: [societyId])
-
-  @@index([enrollmentNo, societyId])
 }
 
 model StudentMarking {
@@ -338,7 +336,8 @@ model StudentMarking {
 
 
 model SocietyMember{
-  userId  Int @id @default(autoincrement())
+  memberId Int @id @default(autoincrement())
+  userId  Int 
   user User @relation("SocietyMember",fields: [userId], references: [userId])
   societyId Int
   society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])

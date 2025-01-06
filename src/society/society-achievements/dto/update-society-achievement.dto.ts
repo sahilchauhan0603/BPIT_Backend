@@ -1,6 +1,9 @@
 import { IsOptional, IsString, IsInt } from 'class-validator';
 
 export class UpdateSocietyAchievementDto {
+  @IsInt()
+  societyAchievementId: number;
+
   @IsOptional()
   @IsString()
   title?: string;

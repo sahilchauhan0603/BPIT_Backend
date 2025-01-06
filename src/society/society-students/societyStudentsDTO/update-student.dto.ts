@@ -8,6 +8,9 @@ import {
 
 export class UpdateStudentDto {
   @IsInt()
+  memberId: number;
+
+  @IsInt()
   @IsOptional()
   userId?: number;
 

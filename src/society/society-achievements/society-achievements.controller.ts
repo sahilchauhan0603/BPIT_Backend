@@ -32,7 +32,7 @@ export class SocietyAchievementsController {
     @Body() updateSocietyAchievementDto: UpdateSocietyAchievementDto,
   ) {
     return await this.societyAchievementsService.update(
-      achievementID,
+      Number(achievementID),
       updateSocietyAchievementDto,
     );
   }
@@ -45,18 +45,22 @@ export class SocietyAchievementsController {
 
   @Get('/admin/achievements/:societyID')
   async getAchievementsBySocietyID(@Param('societyID') societyID: number) {
-    return await this.societyAchievementsService.findBySocietyID(societyID);
-  }
-
-  @Delete('/achievements/:achievementID')
-  async removeAchievementByID(@Param('achievementID') achievementID: number) {
-    return await this.societyAchievementsService.removeByAchievementID(
-      achievementID,
+    return await this.societyAchievementsService.findBySocietyID(
+      Number(societyID),
     );
   }
 
-  @Delete('/achievements/:societyID')
+  @Delete('/achievements/achievement/:achievementID')
+  async removeAchievementByID(@Param('achievementID') achievementID: number) {
+    return await this.societyAchievementsService.removeByAchievementID(
+      Number(achievementID),
+    );
+  }
+
+  @Delete('/achievements/society/:societyID')
   async removeAchievementsBySocietyID(@Param('societyID') societyID: number) {
-    return await this.societyAchievementsService.removeBySocietyID(societyID);
+    return await this.societyAchievementsService.removeBySocietyID(
+      Number(societyID),
+    );
   }
 }

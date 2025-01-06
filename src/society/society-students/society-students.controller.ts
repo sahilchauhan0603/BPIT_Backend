@@ -39,11 +39,9 @@ export class SocietyStudentsController {
     return this.societyStudentsService.fetchAllStudents();
   }
 
-  @Get('/societyStudents/:enrollmentNo')
-  async fetchStudent(
-    @Param('enrollmentNo') enrollmentNo: number,
-  ): Promise<SocietyMember> {
-    return this.societyStudentsService.fetchStudent(Number(enrollmentNo));
+  @Get('/societyStudents/user/:userId')
+  async fetchStudent(@Param('userId') userId: number) {
+    return this.societyStudentsService.fetchStudent(Number(userId));
   }
 
   // @Get('contributions/:enrollmentNo')
@@ -53,14 +51,14 @@ export class SocietyStudentsController {
   //   return this.societyStudentsService.fetchContributions(enrollmentNo);
   // }
 
-  @Delete('/societyStudents/:enrollmentNo')
+  @Delete('/societyStudents/:memberId')
   async removeStudent(
-    @Param('enrollmentNo') enrollmentNo: number,
+    @Param('memberId') memberId: number,
   ): Promise<{ message: string }> {
-    return this.societyStudentsService.removeStudent(Number(enrollmentNo));
+    return this.societyStudentsService.removeStudent(Number(memberId));
   }
 
-  @Get('/admin/societyStudents/:societyID')
+  @Get('/societyStudents/society/:societyID')
   async fetchStudentsBySocietyID(
     @Param('societyID') societyID: number,
   ): Promise<any[]> {
