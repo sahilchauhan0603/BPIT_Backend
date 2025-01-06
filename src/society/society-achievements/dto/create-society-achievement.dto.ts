@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsInt } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt, IsDate } from 'class-validator';
 
 export class CreateSocietyAchievementDto {
   @IsInt()
@@ -15,4 +15,7 @@ export class CreateSocietyAchievementDto {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @IsDate()
+  dateAchieved: Date;
 }

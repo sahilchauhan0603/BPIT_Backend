@@ -15,6 +15,7 @@ export class SocietyAchievementsService {
         societyId: createSocietyAchievementDto.societyId, // Assuming `societyId` exists in the DTO
         title: createSocietyAchievementDto.title, // Assuming `title` exists in the DTO
         description: createSocietyAchievementDto.description,
+        dateAchieved: createSocietyAchievementDto.dateAchieved, // Assuming
       },
     });
 
@@ -49,6 +50,7 @@ export class SocietyAchievementsService {
         societyId: updateSocietyAchievementDto.societyId, // Assuming `societyId` is part of the DTO
         title: updateSocietyAchievementDto.title, // Assuming `title` is part of the DTO
         description: updateSocietyAchievementDto.description,
+        dateAchieved: updateSocietyAchievementDto.dateAchieved,
       },
     });
 

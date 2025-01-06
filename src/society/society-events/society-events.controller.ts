@@ -15,12 +15,12 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class SocietyEventsController {
   constructor(private readonly societyEventsService: SocietyEventsService) {}
 
-  @Post('/events')
+  @Post('/societyEvents')
   async addNewEvent(@Body() createEventDto: CreateEventDto) {
     return await this.societyEventsService.addEvent(createEventDto);
   }
 
-  @Put('/events/:eventID')
+  @Put('/societyEvents/:eventID')
   async updateEvent(
     @Param('eventID') eventID: number,
     @Body() updateEventDto: UpdateEventDto,
@@ -28,27 +28,27 @@ export class SocietyEventsController {
     return await this.societyEventsService.updateEvent(eventID, updateEventDto);
   }
 
-  @Get('/events')
+  @Get('/societyEvents')
   async getAllEvents() {
     return await this.societyEventsService.fetchAllEvents();
   }
 
-  @Get('/events/:eventID')
+  @Get('/societyEvents/:eventID')
   async getEventById(@Param('eventID') eventID: number) {
     return await this.societyEventsService.fetchEventById(eventID);
   }
 
-  @Get('/events/society/:societyID')
+  @Get('/societyEvents/society/:societyID')
   async getEventsBySocietyId(@Param('societyID') societyID: number) {
     return await this.societyEventsService.fetchEventsBySocietyId(societyID);
   }
 
-  @Delete('/events/delete/:eventID')
+  @Delete('/societyEvents/delete/:eventID')
   async removeEvent(@Param('eventID') eventID: number) {
     return await this.societyEventsService.removeEvent(eventID);
   }
 
-  @Delete('/events/delete-by-society/:societyID')
+  @Delete('/societyEvents/deleteBySociety/:societyID')
   async removeEventsBySocietyId(@Param('societyID') societyID: number) {
     return await this.societyEventsService.removeEventsBySocietyId(societyID);
   }

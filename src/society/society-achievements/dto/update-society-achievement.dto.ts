@@ -15,4 +15,8 @@ export class UpdateSocietyAchievementDto {
   @IsOptional()
   @IsInt()
   societyId?: number; // You can optionally update the societyId, if required
+
+  @IsOptional()
+  @IsString()
+  dateAchieved?: Date;
 }

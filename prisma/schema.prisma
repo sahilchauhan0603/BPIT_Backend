@@ -289,6 +289,7 @@ model SocietyAchievement{
   society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
   title               String
   description         String
+  dateAchieved        DateTime
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
@@ -334,7 +335,7 @@ model StudentMarking {
   @@index([enrollmentNo, societyId])
 }
 
-
+//done
 model SocietyMember{
   memberId Int @id @default(autoincrement())
   userId  Int 
