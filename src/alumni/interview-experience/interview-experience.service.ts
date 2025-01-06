@@ -28,11 +28,18 @@ export class InterviewExperienceService {
   }
 
   // Get all approved interview experiences
-  async findAll() {
+  async findAll(role?: string) {
     try {
+      const whereClause: any = { isApproved: true };
+
+      if (role === 'alumni') {
+        whereClause.user = { role: 'alumni' };
+      } else if (role === 'student') {
+        whereClause.user = { role: 'student' };
+      }
       const interviewExperiences =
         await this.prisma.interviewExperience.findMany({
-          where: { isApproved: true },
+          where: whereClause,
           include: {
             user: {
               select: {

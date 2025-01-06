@@ -18,11 +18,10 @@ ALTER TABLE `societyachievement` MODIFY `societyAchievementId` INTEGER NOT NULL;
 -- AlterTable
 ALTER TABLE `societymember` DROP PRIMARY KEY,
     DROP COLUMN `enrollmentNo`,
-    ADD COLUMN `memberId` INTEGER NOT NULL,
-    ADD PRIMARY KEY (`memberId`);
+    ADD COLUMN `memberId` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY;
 
--- AlterTable
-ALTER TABLE `societyprofile` MODIFY `societyId` INTEGER NOT NULL;
+-- -- AlterTable
+-- ALTER TABLE `societyprofile` MODIFY `societyId` INTEGER NOT NULL;
 
 -- AlterTable
 ALTER TABLE `studentachievement` DROP PRIMARY KEY,

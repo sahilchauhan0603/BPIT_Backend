@@ -37,9 +37,25 @@ export class UsersService {
     }
   }
 
-  async findAll() {
+  async findAll(role?: string) {
     try {
-      const users = await this.prisma.user.findMany();
+      const query: any = { 
+        where: { isApproved: true },
+        include: {
+          achievements: true,
+          professionalInformations: true,
+          alumniAchievements: true,
+          interviewExperiences: true,
+          eventsAttended: true,
+          societyMember: true,
+          jobPosting: true,
+        },
+      };
+      if (role) {
+        query.where.role = role;
+      }
+      // Fetch users from the database
+      const users = await this.prisma.user.findMany(query);
       return { status: 'success', items: users };
     } catch (error) {
       handleError(error);
@@ -48,7 +64,18 @@ export class UsersService {
 
   async findOne(id: number) {
     try {
-      const user = await this.prisma.user.findUnique({ where: { userId: id } });
+      const user = await this.prisma.user.findUnique({ 
+        where: { userId: id },
+        include: {
+          achievements: true,
+          professionalInformations: true,
+          alumniAchievements: true,
+          interviewExperiences: true,
+          eventsAttended: true,
+          societyMember: true,
+          jobPosting: true,
+        },
+      });
 
       if (!user) {
         throw new HttpException(

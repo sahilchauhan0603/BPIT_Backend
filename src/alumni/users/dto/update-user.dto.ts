@@ -1,6 +1,6 @@
 import {
-  IS_LENGTH,
   IsBoolean,
+  IsInt,
   IsNumber,
   IsNumberString,
   IsOptional,
@@ -33,7 +33,7 @@ export class UpdateUserDto {
   @IsOptional()
   passingYear: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
   enrollmentNumber: number;
 
