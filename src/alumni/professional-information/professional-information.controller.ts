@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   Delete,
+  Query,
   BadRequestException,
 } from '@nestjs/common';
 import { ProfessionalInformationService } from './professional-information.service';
@@ -30,8 +31,8 @@ export class ProfessionalInformationController {
   }
 
   @Get()
-  async findAll() {
-    return await this.professionalInformationService.findAll();
+  async findAll(@Query('role') role?: string) {
+    return await this.professionalInformationService.findAll(role);
   }
 
   @Get(':id')

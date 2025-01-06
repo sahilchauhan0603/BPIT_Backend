@@ -30,11 +30,18 @@ export class ProfessionalInformationService {
   }
 
   // Get all professional information entries (approved only)
-  async findAll() {
+  async findAll(role?: string) {
     try {
+      const whereClause: any = { isApproved: true };
+
+    if (role === 'alumni') {
+      whereClause.user = { role: 'alumni' };
+    } else if (role === 'student') {
+      whereClause.user = { role: 'student' };
+    }
       const professionalInfos =
         await this.prisma.professionalInformation.findMany({
-          where: { isApproved: true },
+          where: whereClause,
           include: {
             user: {
               select: {

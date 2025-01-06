@@ -7,6 +7,7 @@ import {
   Param,
   Put,
   Delete,
+  Query,
   BadRequestException,
 } from '@nestjs/common';
 import { InterviewExperienceService } from './interview-experience.service';
@@ -33,8 +34,8 @@ export class InterviewExperienceController {
 
   // Get all interview experiences (only approved ones)
   @Get()
-  async findAll() {
-    return await this.interviewExperienceService.findAll();
+  async findAll(@Query('role') role?: string) {
+    return await this.interviewExperienceService.findAll(role);
   }
 
   // Get a specific interview experience by ID

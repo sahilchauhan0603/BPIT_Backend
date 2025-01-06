@@ -1,5 +1,4 @@
 import {
-  isInt,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -29,7 +28,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   branch: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   enrollmentNumber: number;
 

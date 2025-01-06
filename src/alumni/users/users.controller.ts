@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
@@ -20,8 +21,8 @@ export class UsersController {
   }
 
   @Get()
-  async findAll() {
-    return await this.usersService.findAll();
+  async findAll(@Query('role') role?: string) {
+    return await this.usersService.findAll(role);
   }
 
   @Get(':id')
