@@ -105,6 +105,7 @@ model Faculty {
   users      User[]  @relation("FacultyUsers")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  facultySociety SocietyProfile[] @relation("SocietyFaculty")
 }
 
 model User {
@@ -149,6 +150,7 @@ model User {
   societyMember            SocietyMember[] @relation("SocietyMember")
   societyUser              SocietyProfile[] @relation("SocietyUsers")
   jobPosting               JobsPosting[] @relation("UserJobsPosting")
+  societyStudentAchievement StudentAchievement[] @relation("SocietyStudentAchievement")
 }
 
 model AlumniAchievement {
@@ -259,6 +261,7 @@ model News {
 //done
 model SocietyProfile {
   societyId          Int      @id 
+  facultyId          Int 
   societyType        String
   societyName        String
   societyHead        String
@@ -278,6 +281,7 @@ model SocietyProfile {
   users              User[] @relation("SocietyUsers")
   studentAchievements StudentAchievement[] @relation("AchievementOfStudent")
   studentMarking     StudentMarking[] @relation("StudentMarkings")
+  society       Faculty @relation("SocietyFaculty",fields: [facultyId], references: [facultyId])
 }
 
 //done
@@ -316,10 +320,12 @@ model SocietyTestimonial {
 }
 model StudentAchievement {
   societyId     Int
+  userId Int
   achievementId Int @id
   title         String
   description   String
   dateAchieved  DateTime
+  users         User @relation("SocietyStudentAchievement", fields: [userId], references: [userId])
   society       SocietyProfile @relation("AchievementOfStudent",fields: [societyId], references: [societyId])
 }
 

@@ -6,6 +6,7 @@ import { SocietyFunctionsModule } from './societyFunctions/societyFunctions.modu
 import { SocietyStudentsModule } from './society-students/society-students.module';
 import { SocietyAchievementsModule } from './society-achievements/society-achievements.module';
 import { SocietyEventsModule } from './society-events/society-events.module';
+import { SocietyStudentsAchievementsModule } from './society-students-achievements/society-students-achievements.module';
 
 @Module({
   providers: [SocietyService, PrismaService],
@@ -15,6 +16,7 @@ import { SocietyEventsModule } from './society-events/society-events.module';
     SocietyStudentsModule,
     SocietyAchievementsModule,
     SocietyEventsModule,
+    SocietyStudentsAchievementsModule,
   ],
 })
 export class SocietyModule {}
