@@ -71,17 +71,67 @@ export class SocietyEventsService {
   async fetchAllEvents() {
     return this.prisma.event.findMany({
       orderBy: { eventId: 'asc' },
+      select: {
+        society: {
+          select: {
+            societyName: true,
+          },
+        },
+        societyId: true,
+        eventId: true,
+        eventName: true,
+        eventDescription: true,
+        eventType: true,
+        eventMode: true,
+        eventLocation: true,
+        linkToRegister: true,
+        eventDate: true,
+      },
     });
   }
 
   async fetchEventById(eventID: number) {
     return this.prisma.event.findMany({
-      where: { societyId: eventID },
+      where: { eventId: eventID },
+      select: {
+        society: {
+          select: {
+            societyName: true,
+          },
+        },
+        societyId: true,
+        eventId: true,
+        eventName: true,
+        eventDescription: true,
+        eventType: true,
+        eventMode: true,
+        eventLocation: true,
+        linkToRegister: true,
+        eventDate: true,
+      },
     });
   }
 
   async fetchEventsBySocietyId(societyID: number) {
-    return this.prisma.event.findMany({ where: { societyId: societyID } });
+    return this.prisma.event.findMany({
+      where: { societyId: societyID },
+      select: {
+        society: {
+          select: {
+            societyName: true,
+          },
+        },
+        societyId: true,
+        eventId: true,
+        eventName: true,
+        eventDescription: true,
+        eventType: true,
+        eventMode: true,
+        eventLocation: true,
+        linkToRegister: true,
+        eventDate: true,
+      },
+    });
   }
 
   async removeEvent(eventID: number): Promise<{ message: string }> {

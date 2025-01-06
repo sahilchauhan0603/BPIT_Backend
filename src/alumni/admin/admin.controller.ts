@@ -1,9 +1,16 @@
-import { Controller, Patch, Param, Get, Query, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Patch,
+  Param,
+  Get,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
 export class AdminController {
-    constructor(private readonly adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   // Get approved or unapproved Interview Experiences
   @Get('interview-experiences')
@@ -13,7 +20,6 @@ export class AdminController {
   ) {
     return await this.adminService.getInterviewExperiences(isApproved, role);
   }
-
 
   // Get approved or unapproved Professional Information
   @Get('professional-information')
@@ -43,9 +49,11 @@ export class AdminController {
     if (isNaN(experienceId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.adminService.handleInterviewExperienceApproval(experienceId, isApproved);
+    return await this.adminService.handleInterviewExperienceApproval(
+      experienceId,
+      isApproved,
+    );
   }
-
 
   // Approve Professional Information by ID
   @Patch('professional-information/:id/handleApprove')
@@ -57,9 +65,11 @@ export class AdminController {
     if (isNaN(infoId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.adminService.handleProfessionalInformationApproval(infoId, isApproved);
+    return await this.adminService.handleProfessionalInformationApproval(
+      infoId,
+      isApproved,
+    );
   }
-
 
   // Approve User by ID
   @Patch('users/:id/handleApprove')
@@ -73,5 +83,4 @@ export class AdminController {
     }
     return await this.adminService.handleUserApproval(userId, isApproved);
   }
-
 }

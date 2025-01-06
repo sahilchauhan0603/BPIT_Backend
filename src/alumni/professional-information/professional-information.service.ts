@@ -34,11 +34,11 @@ export class ProfessionalInformationService {
     try {
       const whereClause: any = { isApproved: true };
 
-    if (role === 'alumni') {
-      whereClause.user = { role: 'alumni' };
-    } else if (role === 'student') {
-      whereClause.user = { role: 'student' };
-    }
+      if (role === 'alumni') {
+        whereClause.user = { role: 'alumni' };
+      } else if (role === 'student') {
+        whereClause.user = { role: 'student' };
+      }
       const professionalInfos =
         await this.prisma.professionalInformation.findMany({
           where: whereClause,

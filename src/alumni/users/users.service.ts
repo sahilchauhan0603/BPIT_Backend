@@ -39,7 +39,7 @@ export class UsersService {
 
   async findAll(role?: string) {
     try {
-      const query: any = { 
+      const query: any = {
         where: { isApproved: true },
         include: {
           achievements: true,
@@ -64,7 +64,7 @@ export class UsersService {
 
   async findOne(id: number) {
     try {
-      const user = await this.prisma.user.findUnique({ 
+      const user = await this.prisma.user.findUnique({
         where: { userId: id },
         include: {
           achievements: true,

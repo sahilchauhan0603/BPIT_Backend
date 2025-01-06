@@ -105,7 +105,6 @@ model Faculty {
   users      User[]  @relation("FacultyUsers")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  societyfaculty SocietyCoordinator[] @relation("Faculty")
 }
 
 model User {
@@ -271,7 +270,6 @@ model SocietyProfile {
   societyWebsite     String
   isApproved         Boolean @default(false)
   testimonials        SocietyTestimonial[] @relation("ProfileOfSociety")
-  coordinator        SocietyCoordinator[] @relation("CoordinatorOfSociety")
   societyAchievements SocietyAchievement[] @relation("AchievementOfSociety")
   societyMembers     SocietyMember[] @relation("MemberOfSociety")
   gallery            SocietyGallery[] @relation("GallerySociety")
@@ -293,18 +291,18 @@ model SocietyAchievement{
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
-model SocietyCoordinator {
-  coordinatorId Int @id @default(autoincrement())
-  societyId Int
-  society SocietyProfile @relation("CoordinatorOfSociety",fields: [societyId], references: [societyId])
-  facultyId Int
-  faculty Faculty @relation("Faculty",fields: [facultyId], references: [facultyId])
-  startDate DateTime
-  endDate DateTime
-  isActiveCoordinator Boolean @default(true)
-  crestedAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model SocietyCoordinator {
+//   coordinatorId Int @id @default(autoincrement())
+//   societyId Int
+//   society SocietyProfile @relation("CoordinatorOfSociety",fields: [societyId], references: [societyId])
+//   facultyId Int
+//   faculty Faculty @relation("Faculty",fields: [facultyId], references: [facultyId])
+//   startDate DateTime
+//   endDate DateTime
+//   isActiveCoordinator Boolean @default(true)
+//   crestedAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 model SocietyTestimonial {
   userId  Int
   user User @relation("UserinSocietyTestimonial",fields: [userId], references: [userId])
