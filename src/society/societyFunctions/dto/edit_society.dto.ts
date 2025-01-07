@@ -16,6 +16,9 @@ export class EditSocietyDTO {
   societyType?: string;
 
   @IsOptional()
+  facultyId?: number;
+
+  @IsOptional()
   @IsString()
   societyName?: string;
 

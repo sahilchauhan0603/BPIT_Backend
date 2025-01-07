@@ -11,6 +11,7 @@ export class SocietyService {
     // Directly create a new society
     const newSociety = await this.prisma.societyProfile.create({
       data: {
+        facultyId: dto.facultyId,
         societyId: dto.societyId,
         societyType: dto.societyType,
         societyName: dto.societyName,

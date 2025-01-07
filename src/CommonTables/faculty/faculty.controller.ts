@@ -12,26 +12,26 @@ import { FacultyService } from './faculty.service';
 import { CreateFacultyDto } from './dto/create-faculty.dto';
 import { UpdateFacultyDto } from './dto/update-faculty.dto';
 
-@Controller('api/v1/faculty')
+@Controller('api/v1')
 export class FacultyController {
   constructor(private readonly facultyService: FacultyService) {}
 
-  @Post()
+  @Post('/faculty')
   async createFaculty(@Body() createFacultyDto: CreateFacultyDto) {
     return this.facultyService.createFaculty(createFacultyDto);
   }
 
-  @Get()
+  @Get('/faculty')
   async getAllFaculties() {
     return this.facultyService.getAllFaculties();
   }
 
-  @Get(':id')
+  @Get('/faculty/:id')
   async getFacultyById(@Param('id', ParseIntPipe) id: number) {
     return this.facultyService.getFacultyById(Number(id));
   }
 
-  @Put(':id')
+  @Put('/faculty/:id')
   async updateFaculty(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFacultyDto: UpdateFacultyDto,
@@ -39,8 +39,45 @@ export class FacultyController {
     return this.facultyService.updateFaculty(Number(id), updateFacultyDto);
   }
 
-  @Delete(':id')
+  @Delete('/faculty/:id')
   async deleteFaculty(@Param('id', ParseIntPipe) id: number) {
     return this.facultyService.deleteFaculty(Number(id));
+  }
+
+  @Get('/societyCoordinator')
+  async getAllCoordinators() {
+    return await this.facultyService.fetchAllCoordinatorsSociety();
+  }
+
+  @Get('/societyCoordinator/:societyId')
+  async getCoordinatorsBySocietyId(
+    @Param('societyId', ParseIntPipe) societyId: number,
+  ) {
+    return await this.facultyService.fetchCoordinatorBySocietyId(
+      Number(societyId),
+    );
+  }
+
+  @Get('/societyCoordinator/:coordinatorId')
+  async getCoordinatorById(
+    @Param('coordinatorId', ParseIntPipe) coordinatorId: number,
+  ) {
+    return await this.facultyService.fetchCoordinatorById(
+      Number(coordinatorId),
+    );
+  }
+
+  @Get('/admin/societyCoordinator')
+  async getAllCoordinatorsAdmin() {
+    return await this.facultyService.fetchAllCoordinatorsAdmin();
+  }
+
+  @Get('/admin/societyCoordinator/:societyId')
+  async getCoordinatorsAdminBySocietyId(
+    @Param('societyId', ParseIntPipe) societyId: number,
+  ) {
+    return await this.facultyService.fetchCoordinatorAdminBySocietyId(
+      Number(societyId),
+    );
   }
 }

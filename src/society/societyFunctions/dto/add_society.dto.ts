@@ -5,6 +5,7 @@ import {
   IsBoolean,
   IsUrl,
   IsEmail,
+  IsInt,
 } from 'class-validator';
 
 export class AddSocietyDto {
@@ -13,6 +14,9 @@ export class AddSocietyDto {
 
   @IsString()
   societyType: string;
+
+  @IsInt()
+  facultyId: number;
 
   @IsString()
   societyName: string;
