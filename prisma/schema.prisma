@@ -301,12 +301,11 @@ model SocietyTestimonial {
   user User @relation("UserinSocietyTestimonial",fields: [userId], references: [userId])
   societyId Int
   society SocietyProfile @relation("ProfileOfSociety",fields: [societyId], references: [societyId])
-  societyTestimonialId Int @id @default(autoincrement())
-  title String
+  societyTestimonialId Int @id 
   description String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
+
+//done
 model StudentAchievement {
   societyId     Int
   userId Int

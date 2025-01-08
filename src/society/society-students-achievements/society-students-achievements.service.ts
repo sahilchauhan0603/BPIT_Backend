@@ -42,6 +42,18 @@ export class StudentAchievementService {
   async getAllAchievements() {
     return this.prisma.studentAchievement.findMany({
       orderBy: { achievementId: 'asc' },
+      select: {
+        societyId: true,
+        achievementId: true, // Include specific fields from studentAchievement
+        title: true,
+        description: true,
+        dateAchieved: true,
+        users: {
+          select: {
+            enrollmentNumber: true, // Only include enrollmentNo from the users table
+          },
+        },
+      },
     });
   }
 
@@ -53,8 +65,17 @@ export class StudentAchievementService {
           enrollmentNumber: enrollmentNo, // Assuming `enrollmentNo` is a field in the users table
         },
       },
-      include: {
-        users: true, // Include user details if needed
+      select: {
+        societyId: true,
+        achievementId: true, // Include specific fields from studentAchievement
+        title: true,
+        description: true,
+        dateAchieved: true,
+        users: {
+          select: {
+            enrollmentNumber: true, // Only include enrollmentNo from the users table
+          },
+        },
       },
     });
 
@@ -70,6 +91,18 @@ export class StudentAchievementService {
   async getAchievementsBySocietyId(societyId: number) {
     const achievements = await this.prisma.studentAchievement.findMany({
       where: { societyId: societyId },
+      select: {
+        societyId: true,
+        achievementId: true, // Include specific fields from studentAchievement
+        title: true,
+        description: true,
+        dateAchieved: true,
+        users: {
+          select: {
+            enrollmentNumber: true, // Only include enrollmentNo from the users table
+          },
+        },
+      },
     });
 
     if (achievements.length === 0) {

@@ -7,6 +7,7 @@ import { SocietyStudentsModule } from './society-students/society-students.modul
 import { SocietyAchievementsModule } from './society-achievements/society-achievements.module';
 import { SocietyEventsModule } from './society-events/society-events.module';
 import { SocietyStudentsAchievementsModule } from './society-students-achievements/society-students-achievements.module';
+import { SocietyStudentsTestimonialsModule } from './society-students-testimonials/society-students-testimonials.module';
 
 @Module({
   providers: [SocietyService, PrismaService],
@@ -17,6 +18,7 @@ import { SocietyStudentsAchievementsModule } from './society-students-achievemen
     SocietyAchievementsModule,
     SocietyEventsModule,
     SocietyStudentsAchievementsModule,
+    SocietyStudentsTestimonialsModule,
   ],
 })
 export class SocietyModule {}
