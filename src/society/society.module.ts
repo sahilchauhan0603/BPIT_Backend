@@ -9,6 +9,7 @@ import { SocietyEventsModule } from './society-events/society-events.module';
 import { SocietyStudentsAchievementsModule } from './society-students-achievements/society-students-achievements.module';
 import { SocietyStudentsTestimonialsModule } from './society-students-testimonials/society-students-testimonials.module';
 import { SocietyStudentsMarkingModule } from './society-students-marking/society-students-marking.module';
+import { SocietyGalleryModule } from './society-gallery/society-gallery.module';
 
 @Module({
   providers: [SocietyService, PrismaService],
@@ -21,6 +22,7 @@ import { SocietyStudentsMarkingModule } from './society-students-marking/society
     SocietyStudentsAchievementsModule,
     SocietyStudentsTestimonialsModule,
     SocietyStudentsMarkingModule,
+    SocietyGalleryModule,
   ],
 })
 export class SocietyModule {}
