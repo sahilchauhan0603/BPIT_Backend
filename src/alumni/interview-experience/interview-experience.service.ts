@@ -32,10 +32,10 @@ export class InterviewExperienceService {
     try {
       const whereClause: any = { isApproved: true };
 
-      if (role === 'alumni') {
-        whereClause.user = { role: 'alumni' };
-      } else if (role === 'student') {
-        whereClause.user = { role: 'student' };
+      if (role === 'ALUMNI') {
+        whereClause.user = { role: 'ALUMNI' };
+      } else if (role === 'STUDENT') {
+        whereClause.user = { role: 'STUDENT' };
       }
       const interviewExperiences =
         await this.prisma.interviewExperience.findMany({

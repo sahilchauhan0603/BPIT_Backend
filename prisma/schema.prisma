@@ -151,6 +151,7 @@ model User {
   societyUser              SocietyProfile[] @relation("SocietyUsers")
   jobPosting               JobsPosting[] @relation("UserJobsPosting")
   societyStudentAchievement StudentAchievement[] @relation("SocietyStudentAchievement")
+  studentMarkings StudentMarking[] @relation("SocietyStudentMarking")
 }
 
 model AlumniAchievement {
@@ -168,6 +169,8 @@ model Gallary {
   imageUrl         String
   imageTitle       String
   imageDescription String
+  societyId Int?
+  society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -254,6 +257,8 @@ model News {
   newsDate        DateTime
   isActive        Boolean @default(true)
   author          String
+  societyId Int?
+  society SocietyProfile? @relation("NewsSociety",fields: [societyId], references: [societyId])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -275,8 +280,8 @@ model SocietyProfile {
   testimonials        SocietyTestimonial[] @relation("ProfileOfSociety")
   societyAchievements SocietyAchievement[] @relation("AchievementOfSociety")
   societyMembers     SocietyMember[] @relation("MemberOfSociety")
-  gallery            SocietyGallery[] @relation("GallerySociety")
-  news               SocietyNews[] @relation("NewsSociety")
+  gallery            Gallary[] @relation("GallerySociety")
+  news               News[] @relation("NewsSociety")
   events             Event[] @relation("EventsOfSociety")
   users              User[] @relation("SocietyUsers")
   studentAchievements StudentAchievement[] @relation("AchievementOfStudent")
@@ -318,13 +323,13 @@ model StudentAchievement {
 }
 
 model StudentMarking {
-  enrollmentNo  Int      @id 
+  userId        Int       
   societyId     Int
-  markingId     Int
+  markingId     Int     @id @default(autoincrement())
   studentGrades String
   society       SocietyProfile @relation("StudentMarkings",fields: [societyId], references: [societyId])
+  user User @relation("SocietyStudentMarking",fields: [userId], references: [userId])
 
-  @@index([enrollmentNo, societyId])
 }
 
 //done
@@ -346,29 +351,29 @@ model SocietyMember{
   updatedAt DateTime @updatedAt
 }
 
-model SocietyGallery {
-  societyGalleryId Int @id @default(autoincrement())
-  societyId Int
-  society SocietyProfile @relation("GallerySociety",fields: [societyId], references: [societyId])
-  imageUrl String
-  imageTitle String
-  imageDescription String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model SocietyGallery {
+//   societyGalleryId Int @id @default(autoincrement())
+//   societyId Int
+//   society SocietyProfile @relation("GallerySociety",fields: [societyId], references: [societyId])
+//   imageUrl String
+//   imageTitle String
+//   imageDescription String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
-model SocietyNews {
-  societyNewsId Int @id @default(autoincrement())
-  societyId Int
-  society SocietyProfile @relation("NewsSociety",fields: [societyId], references: [societyId])
-  newsTitle String
-  newsDescription String
-  dateOfNews DateTime
-  author String
-  anyImageUrl String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model SocietyNews {
+//   societyNewsId Int @id @default(autoincrement())
+//   societyId Int
+//   society SocietyProfile @relation("NewsSociety",fields: [societyId], references: [societyId])
+//   newsTitle String
+//   newsDescription String
+//   dateOfNews DateTime
+//   author String
+//   anyImageUrl String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model Equipment {
   equipmentId        Int                @id @default(autoincrement())
