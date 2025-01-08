@@ -4,6 +4,7 @@ import { SocietyModule } from './society/society.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { AlumniModule } from './alumni/alumni.module';
 import { FacultyModule } from './CommonTables/faculty/faculty.module';
+import { MailServiceModule } from './mail-service/mail-service.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { FacultyModule } from './CommonTables/faculty/faculty.module';
     AchievementModule,
     AlumniModule,
     FacultyModule,
+    MailServiceModule,
   ],
 })
 export class AppModule {}
