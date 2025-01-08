@@ -49,8 +49,8 @@ export class AdminController {
     if (isNaN(experienceId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    let temp : boolean = true;
-    if(isApproved.toLocaleLowerCase()==='false') temp = false;
+    let temp: boolean = true;
+    if (isApproved.toLocaleLowerCase() === 'false') temp = false;
     return await this.adminService.handleInterviewExperienceApproval(
       experienceId,
       temp,
@@ -67,8 +67,8 @@ export class AdminController {
     if (isNaN(infoId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    let temp : boolean = true;
-    if(isApproved.toLocaleLowerCase()==='false') temp = false;
+    let temp: boolean = true;
+    if (isApproved.toLocaleLowerCase() === 'false') temp = false;
     return await this.adminService.handleProfessionalInformationApproval(
       infoId,
       temp,
@@ -85,8 +85,8 @@ export class AdminController {
     if (isNaN(userId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    let temp : boolean = true;
-    if(isApproved.toLocaleLowerCase()==='false') temp = false;
+    let temp: boolean = true;
+    if (isApproved.toLocaleLowerCase() === 'false') temp = false;
     return await this.adminService.handleUserApproval(userId, temp);
   }
 }
