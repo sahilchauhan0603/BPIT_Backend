@@ -59,7 +59,7 @@ export class SocietyTestimonialsService {
   }
 
   async fetchTestimonialById(testimonialId: number) {
-    const testimonial = await this.prisma.societyTestimonial.findUnique({
+    const testimonial = await this.prisma.societyTestimonial.findMany({
       where: { societyTestimonialId: testimonialId },
       select: {
         societyId: true,
