@@ -11,10 +11,12 @@ import { SocietyStudentsTestimonialsModule } from './society-students-testimonia
 import { SocietyStudentsMarkingModule } from './society-students-marking/society-students-marking.module';
 import { SocietyGalleryModule } from './society-gallery/society-gallery.module';
 import { SocietyNewsModule } from './society-news/society-news.module';
+import { FeedbackController } from './society-feedback/society-feedback.controller';
+import { FeedbackService } from './society-feedback/society-feedback.service';
 
 @Module({
-  providers: [SocietyService, PrismaService],
-  controllers: [SocietyController],
+  providers: [SocietyService, PrismaService, FeedbackService],
+  controllers: [SocietyController, FeedbackController],
   imports: [
     SocietyFunctionsModule,
     SocietyStudentsModule,
