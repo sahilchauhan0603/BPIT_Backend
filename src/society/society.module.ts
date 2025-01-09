@@ -19,6 +19,10 @@ import { BecomeMemberController } from './society-become-member/society-become-m
 import { BecomeMemberService } from './society-become-member/society-become-member.service';
 import { CreateSocietyController } from './society-create-society-form/society-create-society-form.controller';
 import { CreateSocietyService } from './society-create-society-form/society-create-society-form.service';
+import { RegisterEventsController } from './society-register-events-form/society-register-events-form.controller';
+import { RegisterEventsService } from './society-register-events-form/society-register-events-form.service';
+import { SocietyQueryController } from './society-query-form/society-query-form.controller';
+import { SocietyQueryService } from './society-query-form/society-query-form.service';
 
 @Module({
   providers: [
@@ -28,6 +32,8 @@ import { CreateSocietyService } from './society-create-society-form/society-crea
     ContactService,
     BecomeMemberService,
     CreateSocietyService,
+    RegisterEventsService,
+    SocietyQueryService,
   ],
   controllers: [
     SocietyController,
@@ -35,6 +41,8 @@ import { CreateSocietyService } from './society-create-society-form/society-crea
     ContactController,
     BecomeMemberController,
     CreateSocietyController,
+    RegisterEventsController,
+    SocietyQueryController,
   ],
   imports: [
     SocietyFunctionsModule,
