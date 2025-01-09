@@ -8,6 +8,8 @@ import { AlumniService } from './alumni.service';
 import { AdminModule } from './admin/admin.module';
 import { GallaryModule } from './gallary/gallary.module';
 import { NewsModule } from './news/news.module';
+import { EventsModule } from './events/events.module';
+import { AchievementsModule } from './achievements/achievements.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { NewsModule } from './news/news.module';
     AdminModule,
     GallaryModule,
     NewsModule,
+    EventsModule,
+    AchievementsModule,
   ],
   controllers: [AlumniController],
   providers: [AlumniService],
