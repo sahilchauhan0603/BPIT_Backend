@@ -237,14 +237,15 @@ model Event {
   subcategory      String
   linkToRegister   String
   attendees        EventAttendee[] @relation("EventToAttendees")
-  societyId        Int
-  society          SocietyProfile @relation("EventsOfSociety",fields: [societyId], references: [societyId])
+  societyId        Int?
+  society          SocietyProfile? @relation("EventsOfSociety",fields: [societyId], references: [societyId])
 }
 
 model EventAttendee {
   eventAttendeeId Int   @id @default(autoincrement())
   eventId         Int
   userId          Int
+  role            String // e.g Speaker Attende Mentor etc.
   event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId])
   user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId])
 }
@@ -287,6 +288,7 @@ model SocietyProfile {
   studentAchievements StudentAchievement[] @relation("AchievementOfStudent")
   studentMarking     StudentMarking[] @relation("StudentMarkings")
   society       Faculty @relation("SocietyFaculty",fields: [facultyId], references: [facultyId])
+  Roles SocietyRole[] @relation("RoleSociety")
 }
 
 //done
@@ -374,6 +376,20 @@ model SocietyMember{
 //   createdAt DateTime @default(now())
 //   updatedAt DateTime @updatedAt
 // }
+
+model SocietyRole {
+  societyRoleId Int @id @default(autoincrement())
+  societyId Int
+  roleType String
+  roleName String
+  roleDescription String
+  lastDateToApply DateTime
+  Responsibilities String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  society SocietyProfile @relation("RoleSociety",fields: [societyId], references:[societyId])
+
+}
 
 model Equipment {
   equipmentId        Int                @id @default(autoincrement())
