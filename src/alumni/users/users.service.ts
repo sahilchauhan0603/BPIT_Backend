@@ -44,7 +44,6 @@ export class UsersService {
         include: {
           achievements: true,
           professionalInformations: true,
-          alumniAchievements: true,
           interviewExperiences: true,
           eventsAttended: true,
           societyMember: true,
@@ -69,7 +68,6 @@ export class UsersService {
         include: {
           achievements: true,
           professionalInformations: true,
-          alumniAchievements: true,
           interviewExperiences: true,
           eventsAttended: true,
           societyMember: true,

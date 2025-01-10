@@ -25,7 +25,6 @@ model Achievement {
   dateModified      DateTime           @updatedAt
   images            AchievementImage[]
   user              User               @relation("UserAchievements", fields: [userId], references: [userId])
-  alumniAchievement AlumniAchievement? @relation("AchievementAlumniAchievements")
 }
 
 model AchievementImage {
@@ -142,7 +141,6 @@ model User {
   faculty                  Faculty                @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
   achievements             Achievement[]             @relation("UserAchievements")
   professionalInformations ProfessionalInformation[] @relation("UserProfessionalInformation")
-  alumniAchievements       AlumniAchievement[] @relation("UserAlumniAchievements")
   interviewExperiences     InterviewExperience[] @relation("UserInterviewExperience")
   eventsAttended           EventAttendee[] @relation("UserToEventAttendees")
   equipmentComplaints      EquipmentHistory[] @relation("UserToEquipment")
@@ -154,15 +152,6 @@ model User {
   studentMarkings StudentMarking[] @relation("SocietyStudentMarking")
 }
 
-model AlumniAchievement {
-  alumniAchievementsId Int      @id @default(autoincrement())
-  alumniId             Int
-  achievementId        Int      @unique
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  alumni               User        @relation("UserAlumniAchievements", fields: [alumniId], references: [userId])
-  achievement          Achievement @relation("AchievementAlumniAchievements", fields: [achievementId], references: [achievementId])
-}
 
 model Gallary {
   gallaryId        Int      @id @default(autoincrement())

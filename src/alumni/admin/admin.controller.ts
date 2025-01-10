@@ -89,4 +89,25 @@ export class AdminController {
     if (isApproved.toLocaleLowerCase() === 'false') temp = false;
     return await this.adminService.handleUserApproval(userId, temp);
   }
+
+  // Get Achievements
+  @Get('achievements')
+  async getAchievements(
+    @Query('status') status: string,
+    @Query('role') role?: string,
+  ) {
+    return await this.adminService.getAchievements(status,role)
+  }
+
+  @Patch('achievement/:id/handleApprove')
+  async handleAchievementApproval(
+    @Param('id') id: string,
+    @Query('isApproved') isStatus: string,
+  ){
+    const achievementId = parseInt(id, 10);
+    if (isNaN(achievementId)) {
+      throw new BadRequestException('Invalid ID format');
+    }
+    return await this.adminService.handleAchievementApproval(achievementId,isStatus);
+  }
 }
