@@ -37,5 +37,4 @@ export class EditAchievementDTO {
   @IsString()
   @IsOptional()
   status: Status;
-
 }

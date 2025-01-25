@@ -33,5 +33,4 @@ export class AddAchievementDTO {
   @IsString()
   @IsNotEmpty()
   result: string;
-
 }

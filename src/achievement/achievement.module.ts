@@ -9,6 +9,11 @@ import { NotificationsModule } from './notifications/notifications.module';
 @Module({
   controllers: [AchievementController],
   providers: [AchievementService],
-  imports: [AchievementsModule, AnnouncementsModule, RequestsModule, NotificationsModule]
+  imports: [
+    AchievementsModule,
+    AnnouncementsModule,
+    RequestsModule,
+    NotificationsModule,
+  ],
 })
 export class AchievementModule {}

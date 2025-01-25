@@ -8,7 +8,6 @@ datasource db {
 }
 
 // Achievement Schema
-
 model Achievement {
   achievementId     Int                @id @default(autoincrement())
   userId            Int
@@ -26,7 +25,6 @@ model Achievement {
   dateModified      DateTime           @updatedAt
   images            AchievementImage[]
   user              User               @relation("UserAchievements", fields: [userId], references: [userId])
-  alumniAchievement AlumniAchievement? @relation("AchievementAlumniAchievements")
 }
 
 model AchievementImage {
@@ -66,19 +64,29 @@ model Notification {
   dateModified DateTime @updatedAt
 }
 
+// For Achievements project
 enum Mode {
   ONLINE
   OFFLINE
 }
-
 enum Status {
   PENDING
   ACCEPTED
   REJECTED
 }
 
-// Combined Schema
+// For Society project
+enum SocietyStatus {
+  ACTIVE
+  INACTIVE
+}
+enum SocietyType {
+  TECHNICAL
+  NON_TECHNICAL
+}
 
+
+// Combined Schema
 model Faculty {
   facultyId         Int      @id @default(autoincrement())
   name              String
@@ -91,23 +99,26 @@ model Faculty {
   position          String
   designation       String
   profilePictureUrl String
-  others            String
-  isActiveFaculty   Boolean  @default(true)
-  users             User[]   @relation("FacultyUsers")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  others String
+  isActiveFaculty Boolean @default(true)
+  users      User[]  @relation("FacultyUsers")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  facultySociety SocietyProfile[] @relation("SocietyFaculty")
 }
 
 model User {
   userId                   Int                       @id @default(autoincrement())
+  societyId                Int
   firstName                String
   lastName                 String
   email                    String                    @unique
   mobile                   String                    @unique
-  enrollmentNumber         String                    @unique
+  enrollmentNumber         Int                    @unique
   password                 String
-  role                     Role
   section                  String
+  role                     Role
+  branch                   String
   passingYear              Int
   fathersName              String
   mothersName              String
@@ -127,49 +138,28 @@ model User {
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
   facultyId                Int
-  faculty                  Faculty                   @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
+  faculty                  Faculty                @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
   achievements             Achievement[]             @relation("UserAchievements")
   professionalInformations ProfessionalInformation[] @relation("UserProfessionalInformation")
-  alumniAchievements       AlumniAchievement[]       @relation("UserAlumniAchievements")
-  interviewExperiences     InterviewExperience[]     @relation("UserInterviewExperience")
-  eventsAttended           EventAttendee[]           @relation("UserToEventAttendees")
-  equipmentComplaints      EquipmentHistory[]        @relation("UserToEquipment")
+  interviewExperiences     InterviewExperience[] @relation("UserInterviewExperience")
+  eventsAttended           EventAttendee[] @relation("UserToEventAttendees")
+  equipmentComplaints      EquipmentHistory[] @relation("UserToEquipment")
+  societyTestimonials      SocietyTestimonial[] @relation("UserinSocietyTestimonial")
+  societyMember            SocietyMember[] @relation("SocietyMember")
+  societyUser              SocietyProfile[] @relation("SocietyUsers")
+  jobPosting               JobsPosting[] @relation("UserJobsPosting")
+  societyStudentAchievement StudentAchievement[] @relation("SocietyStudentAchievement")
+  studentMarkings StudentMarking[] @relation("SocietyStudentMarking")
 }
 
-// model Achievement {
-//   achievementId Int @id @default(autoincrement())
-//   userId Int
-//   title String
-//   description String
-//   location String
-//   dateAchieved DateTime
-//   mode Boolean
-//   isTechnical Boolean
-//   isVerified Boolean @default(false)
-//   proofUrl String
-//   imageUrl String?
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-//   user User @relation("UserAchievements", fields: [userId], references: [userId])
-//   alumniAchievement AlumniAchievement? @relation("AchievementAlumniAchievements")
-// }
-
-model AlumniAchievement {
-  alumniAchievementsId Int      @id @default(autoincrement())
-  alumniId             Int
-  achievementId        Int      @unique
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-
-  alumni      User        @relation("UserAlumniAchievements", fields: [alumniId], references: [userId])
-  achievement Achievement @relation("AchievementAlumniAchievements", fields: [achievementId], references: [achievementId])
-}
 
 model Gallary {
   gallaryId        Int      @id @default(autoincrement())
   imageUrl         String
   imageTitle       String
   imageDescription String
+  societyId Int?
+  society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -187,6 +177,23 @@ model ProfessionalInformation {
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime  @updatedAt
   user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId])
+}
+
+model JobsPosting {
+  jobsPostingId Int @id @default(autoincrement())
+  userId        Int
+  jobTitle      String
+  jobDescription String
+  companyName String
+  companyLocation String
+  jobMode   String      // Remote , Onsite, Hybrid
+  jobType       String  // Full-time, Part-time, Internship
+  jobCategory   String  // Techincal, Non-tech etc..
+  expectedSalary String
+  applyLink String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation("UserJobsPosting", fields: [userId], references: [userId])
 }
 
 model InterviewExperience {
@@ -219,82 +226,158 @@ model Event {
   subcategory      String
   linkToRegister   String
   attendees        EventAttendee[] @relation("EventToAttendees")
+  societyId        Int?
+  society          SocietyProfile? @relation("EventsOfSociety",fields: [societyId], references: [societyId])
 }
 
 model EventAttendee {
   eventAttendeeId Int   @id @default(autoincrement())
   eventId         Int
   userId          Int
+  role            String // e.g Speaker Attende Mentor etc.
   event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId])
   user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId])
 }
 
 model News {
-  newsId          Int      @id @default(autoincrement())
+  newsId          Int @id @default(autoincrement())
   newsTitle       String
   newsDescription String
   newsImage       String
   newsDate        DateTime
-  isActive        Boolean  @default(true)
+  isActive        Boolean @default(true)
   author          String
+  societyId Int?
+  society SocietyProfile? @relation("NewsSociety",fields: [societyId], references: [societyId])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
 
+//done
 model SocietyProfile {
-  societyId          Int      @id @default(autoincrement())
+  societyId          Int      @id 
+  facultyId          Int 
   societyType        String
   societyName        String
+  societyHead        String
   dateOfRegistration DateTime
   societyDescription String
   societyImage       String
-  societyEmail       String   @unique
+  societyEmail       String @unique
   societyHeadMobile  String
   societyWebsite     String
-  isApproved         Boolean  @default(false)
+  isApproved         Boolean @default(false)
+  testimonials        SocietyTestimonial[] @relation("ProfileOfSociety")
+  societyAchievements SocietyAchievement[] @relation("AchievementOfSociety")
+  societyMembers     SocietyMember[] @relation("MemberOfSociety")
+  gallery            Gallary[] @relation("GallerySociety")
+  news               News[] @relation("NewsSociety")
+  events             Event[] @relation("EventsOfSociety")
+  users              User[] @relation("SocietyUsers")
+  studentAchievements StudentAchievement[] @relation("AchievementOfStudent")
+  studentMarking     StudentMarking[] @relation("StudentMarkings")
+  society       Faculty @relation("SocietyFaculty",fields: [facultyId], references: [facultyId])
+  Roles SocietyRole[] @relation("RoleSociety")
 }
 
-model SocietyCoordinator {
-  coordinatorId       Int      @id @default(autoincrement())
+//done
+model SocietyAchievement{
+  societyAchievementId Int @id 
   societyId           Int
-  facultyId           Int
-  startDate           DateTime
-  endDate             DateTime
-  isActiveCoordinator Boolean  @default(true)
-  crestedAt           DateTime @default(now())
+  society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
+  title               String
+  description         String
+  dateAchieved        DateTime
+  createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
 
 model SocietyTestimonial {
-  societyTestimonialId Int      @id @default(autoincrement())
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  userId  Int
+  user User @relation("UserinSocietyTestimonial",fields: [userId], references: [userId])
+  societyId Int
+  society SocietyProfile @relation("ProfileOfSociety",fields: [societyId], references: [societyId])
+  societyTestimonialId Int @id 
+  description String
 }
 
-model SocietyAchievment {
-  societyAchievmentId Int @id @default(autoincrement())
-}
-
-model Testimonials {
-  testimonialId          Int      @id @default(autoincrement())
-  testimonialTitle       String
-  testimonialDescription String
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-}
-
-model SocietyGallery {
-  societyGalleryId Int @id @default(autoincrement())
-  societyId        Int
-}
-
-model SocietyNews {
-  societyNewsId Int      @id @default(autoincrement())
+//done
+model StudentAchievement {
   societyId     Int
-  isActive      Boolean  @default(true)
-  visibility    String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  userId Int
+  achievementId Int @id
+  title         String
+  description   String
+  dateAchieved  DateTime
+  users         User @relation("SocietyStudentAchievement", fields: [userId], references: [userId])
+  society       SocietyProfile @relation("AchievementOfStudent",fields: [societyId], references: [societyId])
+}
+
+model StudentMarking {
+  userId        Int       
+  societyId     Int
+  markingId     Int     @id @default(autoincrement())
+  studentGrades String
+  society       SocietyProfile @relation("StudentMarkings",fields: [societyId], references: [societyId])
+  user User @relation("SocietyStudentMarking",fields: [userId], references: [userId])
+
+}
+
+//done
+model SocietyMember{
+  memberId Int @id @default(autoincrement())
+  userId  Int 
+  user User @relation("SocietyMember",fields: [userId], references: [userId])
+  societyId Int
+  society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])
+  societyPosition String
+  domainExpertise String
+  memberType String
+  studentContributions String
+  isApproved Boolean @default(true)
+  isActiveMember Boolean @default(true)
+  dateJoined DateTime
+  dateResigned DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model SocietyGallery {
+//   societyGalleryId Int @id @default(autoincrement())
+//   societyId Int
+//   society SocietyProfile @relation("GallerySociety",fields: [societyId], references: [societyId])
+//   imageUrl String
+//   imageTitle String
+//   imageDescription String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model SocietyNews {
+//   societyNewsId Int @id @default(autoincrement())
+//   societyId Int
+//   society SocietyProfile @relation("NewsSociety",fields: [societyId], references: [societyId])
+//   newsTitle String
+//   newsDescription String
+//   dateOfNews DateTime
+//   author String
+//   anyImageUrl String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+model SocietyRole {
+  societyRoleId Int @id @default(autoincrement())
+  societyId Int
+  roleType String
+  roleName String
+  roleDescription String
+  lastDateToApply DateTime
+  Responsibilities String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  society SocietyProfile @relation("RoleSociety",fields: [societyId], references:[societyId])
+
 }
 
 model Equipment {

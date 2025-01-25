@@ -1,4 +1,4 @@
 export enum Mode {
-    ONLINE = 'ONLINE',
-    OFFLINE = 'OFFLINE',
-  }
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE',
+}
