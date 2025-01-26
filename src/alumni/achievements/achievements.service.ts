@@ -25,7 +25,7 @@ export class AchievementsService {
     }
     
       // Get all approved achievements
-      async findAll(role?: string) {
+      async findAll(page: number,role?: string) {
         try {
           const whereClause: any = { status: 'ACCEPTED' };
     
@@ -37,6 +37,8 @@ export class AchievementsService {
           const achievements =
             await this.prisma.achievement.findMany({
               where: whereClause,
+              skip: (page-1) * 10,
+              take: 10,
               include: {
                 user: {
                   select: {
@@ -59,7 +61,17 @@ export class AchievementsService {
                 }
               },
             });
-          return { status: 'success', items: achievements };
+            const count = await this.prisma.achievement.count({
+              where: whereClause
+            });
+          return { status: 'success', items: achievements,
+            meta : {
+              totalItems: count,
+              totalPages: Math.ceil(count / 10),
+              currentPage: page,
+              itemsPerPage: 10
+            }
+           };
         } catch (error) {
           handleError(error);
         }

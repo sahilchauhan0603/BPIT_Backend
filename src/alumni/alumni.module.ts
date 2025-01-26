@@ -10,6 +10,9 @@ import { GallaryModule } from './gallary/gallary.module';
 import { NewsModule } from './news/news.module';
 import { EventsModule } from './events/events.module';
 import { AchievementsModule } from './achievements/achievements.module';
+import { NoticeModule } from './notice/notice.module';
+import { MailservicesController } from './mailservices/mailservices.controller';
+import { MailservicesService } from './mailservices/mailservices.service';
 
 @Module({
   imports: [
@@ -22,8 +25,9 @@ import { AchievementsModule } from './achievements/achievements.module';
     NewsModule,
     EventsModule,
     AchievementsModule,
+    NoticeModule,
   ],
-  controllers: [AlumniController],
+  controllers: [AlumniController, MailservicesController],
   providers: [AlumniService],
 })
 export class AlumniModule {}

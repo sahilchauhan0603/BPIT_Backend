@@ -25,13 +25,15 @@ export class EventsService {
       }
     
       // Get all Event Not Associated with any Society
-      async findAll() {
+      async findAll(page: number) {
         try {
           let whereClause: any = { societyId: IsNull };
           
           const events =
             await this.prisma.event.findMany({
               where: whereClause,
+              skip: (page - 1) * 10,
+              take: 10,
               include: {
                 attendees: {
                   select: {
@@ -52,7 +54,15 @@ export class EventsService {
                 },
               },
             });
-          return { status: 'success', items: events };
+
+          const count = await this.prisma.event.count({ where: whereClause}); 
+          return { status: 'success', items: events, 
+            meta: {
+              totalItems: count,
+              currentPage: page,
+              totalPages: Math.ceil(count / 10),
+              itemsPerPage: 10,
+          } };
         } catch (error) {
           handleError(error);
         }

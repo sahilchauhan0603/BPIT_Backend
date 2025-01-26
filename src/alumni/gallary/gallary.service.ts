@@ -20,10 +20,25 @@ export class GallaryService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number) {
     try {
-      const galleries = await this.prisma.gallary.findMany();
-      return { status: 'success', items: galleries };
+      const galleries = await this.prisma.gallary.findMany(
+        {
+          take: 10,
+          skip: (page - 1) * 10,
+        }
+      );
+      const totalImages = await this.prisma.gallary.count();
+      return { 
+        status: 'success', 
+        items: galleries,
+        meta: {
+          totalItems: totalImages,
+          currentPage: page,
+          totalPages: Math.ceil(totalImages / 10),
+          itemsPerPage: 10,
+        }
+       };
     } catch (error) {
       handleError(error);
     }
