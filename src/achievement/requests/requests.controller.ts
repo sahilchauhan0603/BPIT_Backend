@@ -1,6 +1,6 @@
-
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {RequestsService } from './requests.service'
+import { Body, Controller, Get } from '@nestjs/common';
 @Controller('requests')
 export class RequestsController {
     constructor(private readonly requestService: RequestsService) {}
