@@ -20,7 +20,7 @@ model Achievement {
   isTechnical       Boolean
   result            String
   certificate       String?
-  status            Status
+  status            Status             @default(PENDING)
   dateCreated       DateTime           @default(now())
   dateModified      DateTime           @updatedAt
   images            AchievementImage[]
@@ -50,7 +50,7 @@ model VerificationRequest {
   achievementId Int
   studentId     Int
   mentorId      Int
-  status        Status
+  status        Status @default(PENDING)
   dateCreated   DateTime @default(now())
   dateModified  DateTime @updatedAt
 }
