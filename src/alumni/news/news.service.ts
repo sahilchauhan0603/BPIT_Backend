@@ -20,12 +20,22 @@ export class NewsService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number) {
     try {
       const news = await this.prisma.news.findMany({
         where: { isActive: true },
+        skip: (page - 1) * 10,
+        take: 10,
       });
-      return { status: 'success', items: news };
+      const total = await this.prisma.news.count({ where: { isActive: true } });
+      return { status: 'success', items: news,
+        meta: {
+          totalItems: total,
+          totalPages: Math.ceil(total / 10),
+          currentPage: page,
+          itemsPerPage: 10,
+        }
+       };
     } catch (error) {
       handleError(error);
     }

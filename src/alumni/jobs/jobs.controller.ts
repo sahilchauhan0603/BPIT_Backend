@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobPostingDto, UpdateJobPostingDto } from './dto/index';
@@ -23,8 +24,9 @@ export class JobsController {
 
   // Get all job postings
   @Get()
-  async findAll() {
-    return await this.JobsService.findAll();
+  async findAll(@Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.JobsService.findAll(pageNumber);
   }
   // Get a job posting by ID
   @Get(':id')
@@ -51,12 +53,13 @@ export class JobsController {
 
   // Get all job postings by user ID
   @Get('user/:userId')
-  async findByUserId(@Param('userId') userId: string) {
+  async findByUserId(@Param('userId') userId: string, @Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
     const userIdInt = parseInt(userId, 10);
     if (isNaN(userIdInt)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.JobsService.findByUserId(userIdInt);
+    return await this.JobsService.findByUserId(userIdInt, pageNumber);
   }
   // Delete a job posting by ID
   @Delete(':id')

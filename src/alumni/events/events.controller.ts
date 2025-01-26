@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { AddEventDto, AddEventAttendeDto, UpdateEventDto, UpdateEventAttendeDto } from './dto/index';
 
@@ -23,8 +23,9 @@ export class EventsController {
         return await this.eventsService.AddRole(AddEventAttendeDto);
     }
     @Get()
-    async findAll(){
-        return await this.eventsService.findAll();
+    async findAll(@Query('page') page: string = '1'){
+        const pageNumber = parseInt(page, 10) || 1;
+        return await this.eventsService.findAll(pageNumber);
     }
     @Get(':id')
     async find(

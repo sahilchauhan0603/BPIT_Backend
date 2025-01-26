@@ -25,8 +25,8 @@ export class NoticeService {
     async getAll(page: number) {
         try {
             const notices = await this.prisma.notice.findMany({
-                skip: (page - 1) * 20,
-                take: 20,
+                skip: (page - 1) * 10,
+                take: 10,
                 orderBy: {
                     createdAt: 'desc',
                 }
@@ -37,10 +37,10 @@ export class NoticeService {
                 status: 'success',
                 items: notices,
                 meta: {
-                totalItems: totalNotices,
-                currentPage: page,
-                totalPages: Math.ceil(totalNotices / 20),
-                itemsPerPage: 20,
+                  totalItems: totalNotices,
+                  currentPage: page,
+                  totalPages: Math.ceil(totalNotices / 10),
+                  itemsPerPage: 10,
                 }
             } 
         } catch (error) {

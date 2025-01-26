@@ -28,6 +28,6 @@ import { MailservicesService } from './mailservices/mailservices.service';
     NoticeModule,
   ],
   controllers: [AlumniController, MailservicesController],
-  providers: [AlumniService, MailservicesService],
+  providers: [AlumniService],
 })
 export class AlumniModule {}

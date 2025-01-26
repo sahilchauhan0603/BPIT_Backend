@@ -15,9 +15,10 @@ export class AchievementsController {
     // Get All Achievment
     @Get()
     async getAllAchievement(
-        @Query('role') role?: string
+        @Query('role') role?: string, @Query('page') page: string = '1'
     ) {
-        return await this.achievementsService.findAll(role);
+        const pageNumber = parseInt(page, 10) || 1;
+        return await this.achievementsService.findAll(pageNumber, role);
     }
     // Get Achievement By Id
     @Get(':id')
