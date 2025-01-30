@@ -79,9 +79,6 @@ export class SocietyAchievementsService {
         itemsPerPage: 10,
       },
     };
-    // return this.prisma.societyAchievement.findMany({
-    //   orderBy: { societyAchievementId: 'asc' },
-    // });
   }
 
   async findBySocietyID(societyID: number) {

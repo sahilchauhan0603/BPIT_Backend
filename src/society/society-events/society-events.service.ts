@@ -68,9 +68,11 @@ export class SocietyEventsService {
     };
   }
 
-  async fetchAllEvents() {
-    return this.prisma.event.findMany({
+  async fetchAllEvents(page: number) {
+    const events = await this.prisma.event.findMany({
       orderBy: { eventId: 'asc' },
+      skip: (page - 1) * 10,
+      take: 10,
       select: {
         society: {
           select: {
@@ -88,6 +90,17 @@ export class SocietyEventsService {
         eventDate: true,
       },
     });
+    const count = await this.prisma.achievement.count({});
+    return {
+      status: 'success',
+      items: events,
+      meta: {
+        totalItems: count,
+        totalPages: Math.ceil(count / 10),
+        currentPage: page,
+        itemsPerPage: 10,
+      },
+    };
   }
 
   async fetchEventById(eventID: number) {

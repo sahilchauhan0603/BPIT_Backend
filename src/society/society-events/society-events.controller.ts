@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 import { SocietyEventsService } from './society-events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -32,8 +33,9 @@ export class SocietyEventsController {
   }
 
   @Get('/societyEvents')
-  async getAllEvents() {
-    return await this.societyEventsService.fetchAllEvents();
+  async getAllEvents(@Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.societyEventsService.fetchAllEvents(pageNumber);
   }
 
   @Get('/societyEvents/:eventID')
