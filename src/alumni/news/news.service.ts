@@ -28,14 +28,16 @@ export class NewsService {
         take: 10,
       });
       const total = await this.prisma.news.count({ where: { isActive: true } });
-      return { status: 'success', items: news,
+      return {
+        status: 'success',
+        items: news,
         meta: {
           totalItems: total,
           totalPages: Math.ceil(total / 10),
           currentPage: page,
           itemsPerPage: 10,
-        }
-       };
+        },
+      };
     } catch (error) {
       handleError(error);
     }

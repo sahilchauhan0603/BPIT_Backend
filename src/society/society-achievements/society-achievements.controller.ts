@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 import { SocietyAchievementsService } from './society-achievements.service';
 import { CreateSocietyAchievementDto } from './dto/create-society-achievement.dto';
@@ -39,8 +40,9 @@ export class SocietyAchievementsController {
 
   //admin panel
   @Get('/admin/achievements')
-  async getAllAchievements() {
-    return await this.societyAchievementsService.findAll();
+  async getAllAchievements(@Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.societyAchievementsService.findAll(pageNumber);
   }
 
   @Get('/admin/achievements/:societyID')

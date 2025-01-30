@@ -62,10 +62,26 @@ export class SocietyAchievementsService {
     };
   }
 
-  async findAll() {
-    return this.prisma.societyAchievement.findMany({
+  async findAll(page: number) {
+    const societyAchievement = await this.prisma.societyAchievement.findMany({
       orderBy: { societyAchievementId: 'asc' },
+      skip: (page - 1) * 10,
+      take: 10,
     });
+    const count = await this.prisma.societyAchievement.count({});
+    return {
+      status: 'success',
+      items: societyAchievement,
+      meta: {
+        totalItems: count,
+        totalPages: Math.ceil(count / 10),
+        currentPage: page,
+        itemsPerPage: 10,
+      },
+    };
+    // return this.prisma.societyAchievement.findMany({
+    //   orderBy: { societyAchievementId: 'asc' },
+    // });
   }
 
   async findBySocietyID(societyID: number) {

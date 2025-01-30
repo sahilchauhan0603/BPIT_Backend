@@ -53,7 +53,10 @@ export class JobsController {
 
   // Get all job postings by user ID
   @Get('user/:userId')
-  async findByUserId(@Param('userId') userId: string, @Query('page') page: string = '1') {
+  async findByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page: string = '1',
+  ) {
     const pageNumber = parseInt(page, 10) || 1;
     const userIdInt = parseInt(userId, 10);
     if (isNaN(userIdInt)) {

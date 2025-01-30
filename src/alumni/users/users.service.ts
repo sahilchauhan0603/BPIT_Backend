@@ -41,7 +41,7 @@ export class UsersService {
     try {
       const limit = 10;
       const skip = (page - 1) * limit;
-  
+
       const query: any = {
         where: { isApproved: true },
         include: {
@@ -55,23 +55,23 @@ export class UsersService {
         skip,
         take: limit,
       };
-  
+
       if (role) {
         query.where.role = role;
       }
-  
+
       // Fetch users from the database
       const users = await this.prisma.user.findMany(query);
-  
+
       // Exclude the password field from each user
       const sanitizedUsers = users.map((user) => {
         const { password, ...rest } = user;
         return rest;
       });
-  
+
       // Count total users for pagination metadata
       const totalUsers = await this.prisma.user.count(query.where);
-  
+
       return {
         status: 'success',
         items: sanitizedUsers,
@@ -86,7 +86,6 @@ export class UsersService {
       handleError(error);
     }
   }
-  
 
   async findOne(id: number) {
     try {

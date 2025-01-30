@@ -59,15 +59,19 @@ export class ProfessionalInformationService {
           skip: (page - 1) * 10,
           take: 10,
         });
-      const total = await this.prisma.professionalInformation.count({where:whereClause})
-      return { status: 'success', items: professionalInfos,
-        meta:{
+      const total = await this.prisma.professionalInformation.count({
+        where: whereClause,
+      });
+      return {
+        status: 'success',
+        items: professionalInfos,
+        meta: {
           totalItems: total,
           totalPages: Math.ceil(total / 10),
           currentPage: page,
           itemsPerPage: 10,
-        }
-       };
+        },
+      };
     } catch (error) {
       handleError(error);
     }
@@ -134,14 +138,16 @@ export class ProfessionalInformationService {
       const totalItems = await this.prisma.professionalInformation.count({
         where: { userId },
       });
-      return { status: 'success', items: professionalInfos,
+      return {
+        status: 'success',
+        items: professionalInfos,
         meta: {
           totalItems: totalItems,
           totalPages: Math.ceil(totalItems / 10),
           currentPage: page,
           itemsPerPage: 10,
-        }
-       };
+        },
+      };
     } catch (error) {
       handleError(error);
     }

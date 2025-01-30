@@ -14,7 +14,7 @@ export class CreateNoticeDto {
   noticeDescription?: string;
   @IsDateString()
   @IsNotEmpty()
-  noticeDate:  string;
+  noticeDate: string;
   @IsString()
   @IsNotEmpty()
   noticeLink: string;

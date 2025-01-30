@@ -1,5 +1,11 @@
 export const EmailTemplates = {
-    contactUs: (name: string, message: string, email: string, phone: string, subject: string) => `
+  contactUs: (
+    name: string,
+    message: string,
+    email: string,
+    phone: string,
+    subject: string,
+  ) => `
         <!DOCTYPE html>
         <html>
             <head>
@@ -47,7 +53,7 @@ export const EmailTemplates = {
             </body>
         </html>`,
 
-    feedback : (name: string, email: string, feedback: string) => `
+  feedback: (name: string, email: string, feedback: string) => `
         <!DOCTYPE html>
         <html>
             <head>
@@ -93,9 +99,8 @@ export const EmailTemplates = {
             </body>
         </html>`,
 
-    news: (title: string, content: string) => `
+  news: (title: string, content: string) => `
       <h1>${title}</h1>
       <p>${content}</p>
     `,
 };
-  

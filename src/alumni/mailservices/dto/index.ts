@@ -1,2 +1,2 @@
 export * from './ContactUs.dto';
-export * from './Feedback.dto'
+export * from './Feedback.dto';

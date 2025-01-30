@@ -21,7 +21,10 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(@Query('role') role?: string, @Query('page') page: string = '1') {
+  async findAll(
+    @Query('role') role?: string,
+    @Query('page') page: string = '1',
+  ) {
     const pageNumber = parseInt(page, 10) || 1;
     return await this.usersService.findAll(role, pageNumber);
   }

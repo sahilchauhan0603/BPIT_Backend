@@ -7,7 +7,11 @@ import { AddAchievementDTO, EditAchievementDTO } from './dto';
 export class AchievementsService {
   constructor(private prisma: PrismaService) {}
 
-  async addAchievement(dto: AddAchievementDTO, userId: number, mentorId: number) {
+  async addAchievement(
+    dto: AddAchievementDTO,
+    userId: number,
+    mentorId: number,
+  ) {
     let item: any;
     // check if achievement already exists
     item = await this.prisma.achievement.findFirst({
@@ -20,7 +24,11 @@ export class AchievementsService {
       },
     });
     if (item)
-      return { status: 'error',item: {}, message: 'Achievement already exists!' };
+      return {
+        status: 'error',
+        item: {},
+        message: 'Achievement already exists!',
+      };
     // create an achievement if it doesn't exist yet
     item = await this.prisma.achievement.create({
       data: {
@@ -41,14 +49,15 @@ export class AchievementsService {
       data: {
         achievementId: item.id,
         studentId: userId,
-        mentorId
-      }
-    })
-    if(!request) return {
-      status: 'error',
-      item: {},
-      message: 'Failed to send verification request to the mentor'
-    }
+        mentorId,
+      },
+    });
+    if (!request)
+      return {
+        status: 'error',
+        item: {},
+        message: 'Failed to send verification request to the mentor',
+      };
     return {
       status: 'success',
       item: {},
@@ -63,19 +72,19 @@ export class AchievementsService {
     // upload certificate logic
     const certificateUrl = '';
     if (!achievement)
-      return { status: 'error',item: {}, message: 'Achievement not found!' };
+      return { status: 'error', item: {}, message: 'Achievement not found!' };
     const certificate = await this.prisma.achievement.update({
       where: { achievementId },
       data: {
         certificate: certificateUrl,
       },
     });
-    if(!certificate){
+    if (!certificate) {
       return {
         status: 'error',
         item: {},
-        message: 'Failed to add certificate'
-      }
+        message: 'Failed to add certificate',
+      };
     }
     return {
       status: 'success',

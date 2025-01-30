@@ -15,7 +15,11 @@ export class MailServiceService {
     });
   }
 
-  async sendMail(to: string, subject: string, html: string): Promise<{ success: boolean; message: string }> {
+  async sendMail(
+    to: string,
+    subject: string,
+    html: string,
+  ): Promise<{ success: boolean; message: string }> {
     try {
       const mailOptions = {
         from: process.env.MAIL_USER,
@@ -23,15 +27,16 @@ export class MailServiceService {
         subject,
         html,
       };
-  
+
       await this.transporter.sendMail(mailOptions);
-  
+
       return {
         success: true,
         message: `Email successfully sent to ${to}`,
       };
     } catch (error) {
-      const errorMessage = (error instanceof Error) ? error.message : 'Unknown error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('Error sending email:', errorMessage);
 
       return {
@@ -45,13 +50,13 @@ export class MailServiceService {
     recipients: string[],
     subject: string,
     html: string,
-    attachments: { filename: string; path: string }[] = []
+    attachments: { filename: string; path: string }[] = [],
   ): Promise<{ success: boolean; message: string }> {
     try {
       if (!recipients || recipients.length === 0) {
         throw new Error('Recipients list cannot be empty');
       }
-  
+
       const mailOptions = {
         from: process.env.MAIL_USER,
         to: undefined, // Leave undefined to use BCC for bulk emails
@@ -60,23 +65,22 @@ export class MailServiceService {
         html,
         attachments, // Optional attachments
       };
-  
+
       await this.transporter.sendMail(mailOptions);
-  
+
       return {
         success: true,
         message: `Emails successfully sent to ${recipients.length} recipients.`,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('Error sending bulk emails:', errorMessage);
-  
+
       return {
         success: false,
         message: `Failed to send emails: ${errorMessage}`,
       };
     }
   }
-  
-  
 }

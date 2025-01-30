@@ -31,9 +31,12 @@ export class ProfessionalInformationController {
   }
 
   @Get()
-  async findAll(@Query('role') role?: string, @Query('page') page: string = '1') {
+  async findAll(
+    @Query('role') role?: string,
+    @Query('page') page: string = '1',
+  ) {
     const pageNumber = parseInt(page, 10) || 1;
-    return await this.professionalInformationService.findAll(pageNumber,role);
+    return await this.professionalInformationService.findAll(pageNumber, role);
   }
 
   @Get(':id')
@@ -46,13 +49,19 @@ export class ProfessionalInformationController {
   }
 
   @Get('user/:userId')
-  async findAllByUserId(@Param('userId') userId: string, @Query('page') page: string = '1') {
+  async findAllByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page: string = '1',
+  ) {
     const pageNumber = parseInt(page, 10) || 1;
     const userIdInt = parseInt(userId, 10);
     if (isNaN(userIdInt)) {
       throw new BadRequestException('Invalid User ID format');
     }
-    return await this.professionalInformationService.findAllByUserId(userIdInt, pageNumber);
+    return await this.professionalInformationService.findAllByUserId(
+      userIdInt,
+      pageNumber,
+    );
   }
 
   @Get('current-company/:userId')

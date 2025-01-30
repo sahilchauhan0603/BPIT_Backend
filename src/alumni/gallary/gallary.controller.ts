@@ -22,7 +22,7 @@ export class GallaryController {
   }
 
   @Get()
-  async findAll(@Query('page') page: string = '1' ) {
+  async findAll(@Query('page') page: string = '1') {
     const pageNumber = parseInt(page, 10) || 1;
     return await this.GallaryService.findAll(pageNumber);
   }

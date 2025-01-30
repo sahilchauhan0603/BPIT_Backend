@@ -14,7 +14,7 @@ export class UpdateNoticeDto {
   noticeDescription?: string;
   @IsDateString()
   @IsOptional()
-  noticeDate:  string;
+  noticeDate: string;
   @IsString()
   @IsOptional()
   noticeLink: string;
