@@ -7,14 +7,18 @@ import { Status } from '../achievements/enum';
 export class RequestsService {
   constructor(private prisma: PrismaService) {}
   // MENTOR ROUTES
-  async getUnverifiedRequests(mentorId: number, page: number = 1, limit: number = 10) {
+  async getUnverifiedRequests(
+    mentorId: number,
+    page: number = 1,
+    limit: number = 10,
+  ) {
     const skip = (page - 1) * limit;
 
     const [requests, totalRequests] = await Promise.all([
       this.prisma.verificationRequest.findMany({
         where: {
           mentorId,
-          status: Status.PENDING
+          status: Status.PENDING,
         },
         skip,
         take: limit,
@@ -37,36 +41,39 @@ export class RequestsService {
   }
 
   async verifyRequest(requestId: number, status: string) {
-    
     const request = await this.prisma.verificationRequest.update({
-        where:{
-            id:requestId
-        },
-        data: {
-            status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED
-        }
-    })
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED,
+      },
+    });
     await this.prisma.achievement.update({
-        where: {
-            achievementId:request.achievementId
-        },
-        data: {
-            status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED
-        }
-    })
+      where: {
+        achievementId: request.achievementId,
+      },
+      data: {
+        status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED,
+      },
+    });
     return {
-        status: 'success',
-        message: 'Request verified successfully',
-    }
+      status: 'success',
+      message: 'Request verified successfully',
+    };
   }
 
-  async getVerifiedRequests(mentorId: number, page: number = 1, limit: number = 10) {
+  async getVerifiedRequests(
+    mentorId: number,
+    page: number = 1,
+    limit: number = 10,
+  ) {
     const skip = (page - 1) * limit;
 
     const [requests, totalRequests] = await Promise.all([
       this.prisma.verificationRequest.findMany({
         where: {
-          mentorId
+          mentorId,
         },
         skip,
         take: limit,
@@ -88,31 +95,31 @@ export class RequestsService {
     };
   }
 
-  async changeStatus(mentorId: number, requestId: number, status: string){
+  async changeStatus(mentorId: number, requestId: number, status: string) {
     const request = await this.prisma.verificationRequest.update({
-        where: {
-            id: requestId
-        },
-        data: {
-            status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED
-        }
-    })
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED,
+      },
+    });
     await this.prisma.achievement.update({
-        where: {
-            achievementId:request.achievementId
-        },
-        data: {
-            status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED
-        }
-    })
+      where: {
+        achievementId: request.achievementId,
+      },
+      data: {
+        status: status === 'accepted' ? Status.ACCEPTED : Status.REJECTED,
+      },
+    });
     return {
-        status: 'success',
-        message: 'Request verified successfully',
-    }
+      status: 'success',
+      message: 'Request verified successfully',
+    };
   }
 
-//   ADMIN ROUTES
-async getAllRequests(page: number = 1, limit: number = 10) {
+  //   ADMIN ROUTES
+  async getAllRequests(page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
     const [requests, totalRequests] = await Promise.all([
@@ -132,5 +139,4 @@ async getAllRequests(page: number = 1, limit: number = 10) {
       message: 'Requests fetched successfully',
     };
   }
-
 }

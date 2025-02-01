@@ -30,7 +30,7 @@ export class ProfessionalInformationService {
   }
 
   // Get all professional information entries (approved only)
-  async findAll(role?: string) {
+  async findAll(page: number, role?: string) {
     try {
       const whereClause: any = { isApproved: true };
 
@@ -56,8 +56,22 @@ export class ProfessionalInformationService {
               },
             },
           },
+          skip: (page - 1) * 10,
+          take: 10,
         });
-      return { status: 'success', items: professionalInfos };
+      const total = await this.prisma.professionalInformation.count({
+        where: whereClause,
+      });
+      return {
+        status: 'success',
+        items: professionalInfos,
+        meta: {
+          totalItems: total,
+          totalPages: Math.ceil(total / 10),
+          currentPage: page,
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }
@@ -99,7 +113,7 @@ export class ProfessionalInformationService {
   }
 
   // Get all professional information for a user
-  async findAllByUserId(userId: number) {
+  async findAllByUserId(userId: number, page: number) {
     try {
       const professionalInfos =
         await this.prisma.professionalInformation.findMany({
@@ -118,8 +132,22 @@ export class ProfessionalInformationService {
               },
             },
           },
+          take: 10,
+          skip: (page - 1) * 10,
         });
-      return { status: 'success', items: professionalInfos };
+      const totalItems = await this.prisma.professionalInformation.count({
+        where: { userId },
+      });
+      return {
+        status: 'success',
+        items: professionalInfos,
+        meta: {
+          totalItems: totalItems,
+          totalPages: Math.ceil(totalItems / 10),
+          currentPage: page,
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }

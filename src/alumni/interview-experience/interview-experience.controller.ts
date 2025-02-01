@@ -34,8 +34,12 @@ export class InterviewExperienceController {
 
   // Get all interview experiences (only approved ones)
   @Get()
-  async findAll(@Query('role') role?: string) {
-    return await this.interviewExperienceService.findAll(role);
+  async findAll(
+    @Query('role') role?: string,
+    @Query('page') page: string = '1',
+  ) {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.interviewExperienceService.findAll(pageNumber, role);
   }
 
   // Get a specific interview experience by ID
@@ -50,12 +54,19 @@ export class InterviewExperienceController {
 
   // Get all interview experiences for a user (approved and non-approved)
   @Get('user/:userId')
-  async findByUserId(@Param('userId') userId: string) {
+  async findByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page: string = '1',
+  ) {
+    const pageNumber = parseInt(page, 10) || 1;
     const userIdInt = parseInt(userId, 10);
     if (isNaN(userIdInt)) {
       throw new BadRequestException('Invalid User ID format');
     }
-    return await this.interviewExperienceService.findByUserId(userIdInt);
+    return await this.interviewExperienceService.findByUserId(
+      userIdInt,
+      pageNumber,
+    );
   }
 
   // Update an interview experience by ID

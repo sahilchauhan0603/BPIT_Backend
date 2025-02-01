@@ -25,7 +25,7 @@ export class JobsService {
   }
 
   // Get all job postings with associated user data
-  async findAll() {
+  async findAll(page: number) {
     try {
       const jobPostings = await this.prisma.jobsPosting.findMany({
         include: {
@@ -39,8 +39,20 @@ export class JobsService {
             },
           },
         },
+        skip: (page - 1) * 10,
+        take: 10,
       });
-      return { status: 'success', items: jobPostings };
+      const totalItems = await this.prisma.jobsPosting.count();
+      return {
+        status: 'success',
+        items: jobPostings,
+        meta: {
+          totalItems: totalItems,
+          totalPages: Math.ceil(totalItems / 10),
+          currenPage: page,
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }
@@ -78,7 +90,7 @@ export class JobsService {
   }
 
   // Get all job postings by user ID
-  async findByUserId(userId: number) {
+  async findByUserId(userId: number, page: number) {
     try {
       const jobPostings = await this.prisma.jobsPosting.findMany({
         where: { userId: userId },
@@ -93,8 +105,23 @@ export class JobsService {
             },
           },
         },
+        skip: (page - 1) * 10,
+        take: 10,
       });
-      return jobPostings;
+      const count = await this.prisma.jobsPosting.count({
+        where: { userId: userId },
+      });
+
+      return {
+        status: 'success',
+        items: jobPostings,
+        meta: {
+          totalItems: count,
+          totalPages: Math.ceil(count / 10),
+          currentPage: page,
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }

@@ -1,11 +1,11 @@
-/* eslint-disable prettier/prettier */
-import {RequestsService } from './requests.service'
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { RequestsService } from './requests.service';
+
 @Controller('requests')
 export class RequestsController {
-    constructor(private readonly requestService: RequestsService) {}
-    @Get()
-    async getUnverifiedRequests(@Body() mentorId: number) {
-        return this.requestService.getUnverifiedRequests(mentorId);
-    }
+  constructor(private readonly requestService: RequestsService) {}
+  @Get()
+  async getUnverifiedRequests(@Body() mentorId: number) {
+    return this.requestService.getUnverifiedRequests(mentorId);
+  }
 }

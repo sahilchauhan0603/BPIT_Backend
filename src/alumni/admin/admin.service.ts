@@ -192,36 +192,35 @@ export class AdminService {
     }
   }
 
-  // get All Achievements 
+  // get All Achievements
   async getAchievements(STATUS: string, role?: string) {
     try {
-      const whereClause: any = { status : STATUS };
+      const whereClause: any = { status: STATUS };
       if (role) {
         whereClause.user = { role };
       }
 
-      const Achievements =
-        await this.prisma.achievement.findMany({
-          where: whereClause,
-          include: {
-            user: {
-              select: {
-                firstName: true,
-                lastName: true,
-                passingYear: true,
-                role: true,
-                branch: true,
-                section: true,
-                email: true,
-                mobile: true,
-                enrollmentNumber: true,
-                githubProfileUrl: true,
-                linkedInProfileUrl: true,
-                instagramProfileUrl: true,
-              },
+      const Achievements = await this.prisma.achievement.findMany({
+        where: whereClause,
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              passingYear: true,
+              role: true,
+              branch: true,
+              section: true,
+              email: true,
+              mobile: true,
+              enrollmentNumber: true,
+              githubProfileUrl: true,
+              linkedInProfileUrl: true,
+              instagramProfileUrl: true,
             },
           },
-        });
+        },
+      });
 
       return { status: 'success', items: Achievements };
     } catch (error) {
@@ -231,7 +230,7 @@ export class AdminService {
   // Handle Accepted/Rejected state of Achievement
   async handleAchievementApproval(id: number, isStatus: string) {
     try {
-      if (isStatus = Status.ACCEPTED) {
+      if ((isStatus = Status.ACCEPTED)) {
         const updated = await this.prisma.achievement.update({
           where: { achievementId: id },
           data: { status: Status.ACCEPTED },
@@ -241,7 +240,7 @@ export class AdminService {
           item: updated,
           message: 'Achievement approved successfully',
         };
-      } else if(isStatus = Status.REJECTED) {
+      } else if ((isStatus = Status.REJECTED)) {
         await this.prisma.achievement.delete({
           where: { achievementId: id },
         });

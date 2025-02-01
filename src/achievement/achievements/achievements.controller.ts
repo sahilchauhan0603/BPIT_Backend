@@ -22,7 +22,7 @@ export class AchievementsController {
   async addAchievement(
     @Body() dto: AddAchievementDTO,
     @GetUser('id') userId: number,
-    @GetUser('mentor') mentorId: number
+    @GetUser('mentor') mentorId: number,
   ) {
     return this.achievementsService.addAchievement(dto, userId, mentorId);
   }

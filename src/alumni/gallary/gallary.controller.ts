@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { GallaryService } from './gallary.service';
 import { CreateGalleryDto, UpdateGalleryDto } from './dto/index';
@@ -21,8 +22,9 @@ export class GallaryController {
   }
 
   @Get()
-  async findAll() {
-    return await this.GallaryService.findAll();
+  async findAll(@Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.GallaryService.findAll(pageNumber);
   }
 
   @Get(':id')

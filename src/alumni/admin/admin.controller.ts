@@ -96,18 +96,21 @@ export class AdminController {
     @Query('status') status: string,
     @Query('role') role?: string,
   ) {
-    return await this.adminService.getAchievements(status,role)
+    return await this.adminService.getAchievements(status, role);
   }
 
   @Patch('achievement/:id/handleApprove')
   async handleAchievementApproval(
     @Param('id') id: string,
     @Query('isApproved') isStatus: string,
-  ){
+  ) {
     const achievementId = parseInt(id, 10);
     if (isNaN(achievementId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.adminService.handleAchievementApproval(achievementId,isStatus);
+    return await this.adminService.handleAchievementApproval(
+      achievementId,
+      isStatus,
+    );
   }
 }

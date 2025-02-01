@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { CreateNewsDto, UpdateNewsDto } from './dto/index';
@@ -21,8 +22,9 @@ export class NewsController {
   }
 
   @Get()
-  async findAll() {
-    return await this.newsService.findAll();
+  async findAll(@Query('page') page: string = '1') {
+    const pageNumber = parseInt(page, 10) || 1;
+    return await this.newsService.findAll(pageNumber);
   }
 
   @Get(':id')

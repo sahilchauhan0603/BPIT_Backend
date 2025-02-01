@@ -37,8 +37,11 @@ export class UsersService {
     }
   }
 
-  async findAll(role?: string) {
+  async findAll(role?: string, page: number = 1) {
     try {
+      const limit = 10;
+      const skip = (page - 1) * limit;
+
       const query: any = {
         where: { isApproved: true },
         include: {
@@ -49,13 +52,36 @@ export class UsersService {
           societyMember: true,
           jobPosting: true,
         },
+        skip,
+        take: limit,
       };
+
       if (role) {
         query.where.role = role;
       }
+
       // Fetch users from the database
       const users = await this.prisma.user.findMany(query);
-      return { status: 'success', items: users };
+
+      // Exclude the password field from each user
+      const sanitizedUsers = users.map((user) => {
+        const { password, ...rest } = user;
+        return rest;
+      });
+
+      // Count total users for pagination metadata
+      const totalUsers = await this.prisma.user.count(query.where);
+
+      return {
+        status: 'success',
+        items: sanitizedUsers,
+        meta: {
+          totalItems: totalUsers,
+          currentPage: page,
+          totalPages: Math.ceil(totalUsers / limit),
+          itemsPerPage: limit,
+        },
+      };
     } catch (error) {
       handleError(error);
     }

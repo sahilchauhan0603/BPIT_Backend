@@ -5,6 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [AchievementsController],
-  providers: [AchievementsService, PrismaService]
+  providers: [AchievementsService, PrismaService],
 })
 export class AchievementsModule {}

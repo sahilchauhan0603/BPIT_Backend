@@ -28,7 +28,7 @@ export class InterviewExperienceService {
   }
 
   // Get all approved interview experiences
-  async findAll(role?: string) {
+  async findAll(page: number, role?: string) {
     try {
       const whereClause: any = { isApproved: true };
 
@@ -52,8 +52,22 @@ export class InterviewExperienceService {
               },
             },
           },
+          skip: (page - 1) * 10,
+          take: 10,
         });
-      return { status: 'success', items: interviewExperiences };
+      const count = await this.prisma.interviewExperience.count({
+        where: whereClause,
+      });
+      return {
+        status: 'success',
+        items: interviewExperiences,
+        meta: {
+          totalItems: count,
+          currentPage: page,
+          totalPages: Math.ceil(count / 10),
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }
@@ -93,7 +107,7 @@ export class InterviewExperienceService {
   }
 
   // Get all interview experiences by user ID (approved and non-approved)
-  async findByUserId(userId: number) {
+  async findByUserId(userId: number, page: number) {
     try {
       const interviewExperiences =
         await this.prisma.interviewExperience.findMany({
@@ -110,8 +124,23 @@ export class InterviewExperienceService {
               },
             },
           },
+          skip: (page - 1) * 10,
+          take: 10,
         });
-      return interviewExperiences;
+      const totalInterviewExperiences =
+        await this.prisma.interviewExperience.count({
+          where: { userId: userId },
+        });
+      return {
+        status: 'success',
+        items: interviewExperiences,
+        meta: {
+          totalItems: totalInterviewExperiences,
+          totalPages: Math.ceil(totalInterviewExperiences / 10),
+          currentPage: page,
+          itemsPerPage: 10,
+        },
+      };
     } catch (error) {
       handleError(error);
     }
