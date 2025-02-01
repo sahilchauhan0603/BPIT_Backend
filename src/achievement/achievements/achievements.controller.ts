@@ -57,4 +57,9 @@ export class AchievementsController {
   async getAllAchievements(@GetUser('id') userId: number) {
     return this.achievementsService.getAllAchievements(userId);
   }
+
+  @Get('export')
+  async exportUserAchievements(@GetUser('id') userId: number) {
+    return this.achievementsService.exportUserAchievements(userId);
+  }
 }
