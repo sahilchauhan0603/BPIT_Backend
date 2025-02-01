@@ -51,7 +51,6 @@ export class AchievementsService {
     const request = await this.prisma.verificationRequest.create({
       data: {
         achievementId: item.id,
-        studentId: userId,
         mentorId,
       },
     });

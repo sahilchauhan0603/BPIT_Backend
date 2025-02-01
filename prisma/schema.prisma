@@ -25,6 +25,8 @@ model Achievement {
   dateModified      DateTime           @updatedAt
   images            AchievementImage[]
   user              User               @relation("UserAchievements", fields: [userId], references: [userId])
+  announcements     AchievementAnnouncement[]
+  verificationRequests VerificationRequest[]
 }
 
 model AchievementImage {
@@ -38,21 +40,25 @@ model AchievementImage {
 
 model AchievementAnnouncement {
   id            Int      @id @default(autoincrement())
-  userId        Int
   achievementId Int
   mentorId      Int
   dateCreated   DateTime @default(now())
   dateModified  DateTime @updatedAt
+  achievement  Achievement  @relation(fields: [achievementId], references: [achievementId])
+
+  @@map("achievementAnnouncements")
 }
 
 model VerificationRequest {
   id            Int      @id @default(autoincrement())
   achievementId Int
-  studentId     Int
   mentorId      Int
   status        Status @default(PENDING)
   dateCreated   DateTime @default(now())
   dateModified  DateTime @updatedAt
+  achievement  Achievement  @relation(fields: [achievementId], references: [achievementId])
+
+  @@map("verificationRequests")
 }
 
 model Notification {
@@ -265,7 +271,7 @@ model Notice {
 
 //done
 model SocietyProfile {
-  societyId          Int      @id 
+  societyId          Int      @id @default(autoincrement())
   facultyId          Int 
   societyType        String
   societyName        String
