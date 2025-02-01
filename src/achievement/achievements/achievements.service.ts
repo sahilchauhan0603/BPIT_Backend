@@ -1,12 +1,15 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Status } from './enum';
 import { AddAchievementDTO, EditAchievementDTO } from './dto';
+import { parse } from 'json2csv';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class AchievementsService {
   constructor(private prisma: PrismaService) {}
-
   async addAchievement(
     dto: AddAchievementDTO,
     userId: number,
@@ -64,7 +67,7 @@ export class AchievementsService {
       message: 'Achievement added successfully',
     };
   }
-
+  // TODO: Integrate it with the add achievement api and one for the update achievement api
   async addCertificate(achievementId: number) {
     const achievement = await this.prisma.achievement.findUnique({
       where: { achievementId },
@@ -172,6 +175,7 @@ export class AchievementsService {
       where: {
         userId,
       },
+      // TODO: show only the required fields for the frontend
       select: {
         achievementId: true,
         title: true,
@@ -191,6 +195,63 @@ export class AchievementsService {
     return {
       status: 'success',
       achievements,
+      message: 'Achievements found successfully!',
+    };
+  }
+
+  async exportUserAchievements(userId: number) {
+    const achievements = await this.prisma.achievement.findMany({
+      where: { userId },
+      select: {
+        title: true,
+        description: true,
+        certificate: true,
+        startDate: true,
+        endDate: true,
+        organizedBy: true,
+        isTechnical: true,
+        mode: true,
+        result: true,
+        status: true,
+      },
+    });
+
+    if (achievements.length === 0) {
+      throw new Error('No achievements found for the user.');
+    }
+
+    const formattedAchievements = achievements.map(ach => ({
+      ...ach,
+      certificate: ach.certificate ? 'Submitted' : 'Not Submitted',
+    }));
+
+    const fields = [
+      { label: 'Title', value: 'title' },
+      { label: 'Description', value: 'description' },
+      { label: 'Certificate', value: 'certificate' },
+      { label: 'Start Date', value: 'startDate' },
+      { label: 'End Date', value: 'endDate' },
+      { label: 'Organized By', value: 'organizedBy' },
+      { label: 'Technical', value: 'isTechnical' },
+      { label: 'Mode', value: 'mode' },
+      { label: 'Result', value: 'result' },
+      { label: 'Status', value: 'status' },
+    ];
+
+    const csv = parse(formattedAchievements, { fields });
+
+    const fileName = `achievements_${userId}.csv`;
+    const exportPath = path.join(__dirname, '..', '..', 'public', 'exports');
+    const filePath = path.join(exportPath, fileName);
+
+    if (!fs.existsSync(exportPath)) {
+      fs.mkdirSync(exportPath, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, csv);
+    return {
+      status: 'success',
+      url: `/exports/${fileName}`,
       message: 'Achievements found successfully!',
     };
   }

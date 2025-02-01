@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -55,5 +56,10 @@ export class AchievementsController {
   @Get('all')
   async getAllAchievements(@GetUser('id') userId: number) {
     return this.achievementsService.getAllAchievements(userId);
+  }
+
+  @Get('export')
+  async exportUserAchievements(@GetUser('id') userId: number) {
+    return this.achievementsService.exportUserAchievements(userId);
   }
 }
