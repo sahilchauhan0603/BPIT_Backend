@@ -436,3 +436,18 @@ enum Role {
   STUDENT
   ALUMNI
 }
+
+model Issue {
+  id Int @default(autoincrement()) @id
+  Designation String
+  Name String
+  Enrollmentno String
+  Location String
+  Area String
+  Floorno String
+  Roomno String
+  Itemtype String
+  Equipmentid String
+  Issuedescription String
+  Status String
+}
