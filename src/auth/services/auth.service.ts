@@ -9,13 +9,13 @@ import { AuthResponseDto } from '../dto/auth-response.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
 
   // Register (signup)
   async signup(createUserDto: CreateUserDto): Promise<AuthResponseDto> {
-    const user = await this.usersService.create(createUserDto); // Assuming user service exists
+    const user = await this.prismaService.create(createUserDto); // Assuming user service exists
 
     const payload = { email: user.email, sub: user.userId };
     const accessToken = this.jwtService.generateAccessToken(payload);
