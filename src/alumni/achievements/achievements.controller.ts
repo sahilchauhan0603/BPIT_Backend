@@ -20,12 +20,12 @@ import {
 @Controller('alumni/achievements')
 export class AchievementsController {
   constructor(private readonly achievementsService: AchievementsService) {}
-  // create new Achievment
+  // create new Achievement
   @Post()
   async createAchievement(@Body() createAchievementDto: AddAchievemntDto) {
     return this.achievementsService.create(createAchievementDto);
   }
-  // Get All Achievment
+  // Get All Achievement
   @Get()
   async getAllAchievement(
     @Query('role') role?: string,
@@ -72,7 +72,7 @@ export class AchievementsController {
   }
 
   // Add Image
-  @Post()
+  @Post('/image')
   async addImage(@Body() addAchievementImageDto: AddAchievementImageDto) {
     return await this.achievementsService.addImage(addAchievementImageDto);
   }
@@ -119,6 +119,6 @@ export class AchievementsController {
     if (isNaN(achievementId)) {
       throw new BadRequestException('Invalid ID format');
     }
-    return await this.achievementsService.removeImage(achievementId);
+    return await this.achievementsService.removeImages(achievementId);
   }
 }

@@ -1,6 +1,17 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
-export class UpdateGalleryDto {
+export class UpdateAlbumDto {
+  @IsString()
+  @IsOptional()
+  albumName?: string
+  @IsString()
+  @IsOptional()
+  albumDescription?: string
+  @IsString()
+  @IsOptional()
+  albumThumbnail?: string
+}
+export class UpdateImageDto {
   @IsString()
   @IsOptional()
   imageUrl?: string;
@@ -12,4 +23,8 @@ export class UpdateGalleryDto {
   @IsString()
   @IsOptional()
   imageDescription?: string;
+
+  @IsInt()
+  @IsOptional()
+  albumId: number;
 }

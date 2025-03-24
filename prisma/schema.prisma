@@ -24,7 +24,7 @@ model Achievement {
   dateCreated       DateTime           @default(now())
   dateModified      DateTime           @updatedAt
   images            AchievementImage[]
-  user              User               @relation("UserAchievements", fields: [userId], references: [userId])
+  user              User               @relation("UserAchievements", fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model AchievementImage {
@@ -105,6 +105,7 @@ model Faculty {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   facultySociety SocietyProfile[] @relation("SocietyFaculty")
+  mentorshipPrograms MentorshipProgram[] @relation("FacultyToMentorship")
 }
 
 model User {
@@ -150,6 +151,9 @@ model User {
   jobPosting               JobsPosting[] @relation("UserJobsPosting")
   societyStudentAchievement StudentAchievement[] @relation("SocietyStudentAchievement")
   studentMarkings StudentMarking[] @relation("SocietyStudentMarking")
+  jobsApplication JobApplication[] @relation("UserToJobsApplication")
+  mentorshipPrograms MentorshipProgram[] @relation("UserToMentorship")
+  mentorshipApplications MentorshipApplication[] @relation("UserMentorshipApplication")
 }
 
 
@@ -159,11 +163,25 @@ model Gallary {
   imageTitle       String
   imageDescription String
   societyId Int?
-  society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId])
+  society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId], onDelete: Cascade)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
-
+model Album {
+  albumId        Int      @id @default(autoincrement())
+  albumName      String
+  albumDescription String
+  albumThumbnail String
+  images AlumniImages[] @relation("AlbumImages")
+}
+model AlumniImages {
+  imageId Int      @id @default(autoincrement())
+  imageTitle String
+  imageDescription String
+  imageUrl String
+  albumId Int 
+  album Album @relation("AlbumImages", fields: [albumId], references: [albumId], onDelete: Cascade)
+} 
 model ProfessionalInformation {
   professionalInformationId Int       @id @default(autoincrement())
   userId                    Int
@@ -176,7 +194,7 @@ model ProfessionalInformation {
   isApproved                Boolean   @default(false)
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime  @updatedAt
-  user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId])
+  user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model JobsPosting {
@@ -191,9 +209,33 @@ model JobsPosting {
   jobCategory   String  // Techincal, Non-tech etc..
   expectedSalary String
   applyLink String
+  requiredSkills    String      // Comma-separated skills
+  qualifications    String
+  responsibilities  String
+  isActive Boolean   @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user User @relation("UserJobsPosting", fields: [userId], references: [userId])
+  user User @relation("UserJobsPosting", fields: [userId], references: [userId], onDelete: Cascade)
+  applications JobApplication[] @relation("JobsPostingApplications")
+}
+model JobApplication {
+    jobApplicationId Int      @id @default(autoincrement())
+    jobPostingId     Int
+    userId           Int
+    status           ApplicationStatus @default(PENDING) // Pending, Shortlisted, Rejected, Hired
+    resumeUrl        String // Resume link
+    coverLetter      String?
+    appliedAt        DateTime @default(now())
+
+    jobPosting       JobsPosting @relation("JobsPostingApplications",fields: [jobPostingId], references: [jobsPostingId], onDelete: Cascade)
+    user             User        @relation("UserToJobsApplication",fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+enum ApplicationStatus {
+    PENDING
+    SHORTLISTED
+    REJECTED
+    HIRED
 }
 
 model InterviewExperience {
@@ -210,7 +252,7 @@ model InterviewExperience {
   anyTips               String?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
-  user                  User     @relation("UserInterviewExperience", fields: [userId], references: [userId])
+  user                  User     @relation("UserInterviewExperience", fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model Event {
@@ -235,8 +277,8 @@ model EventAttendee {
   eventId         Int
   userId          Int
   role            String // e.g Speaker Attende Mentor etc.
-  event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId])
-  user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId])
+  event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId], onDelete: Cascade)
+  user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model News {
@@ -261,6 +303,55 @@ model Notice {
   noticeLink      String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model MentorshipProgram {
+  id              Int    @id @default(autoincrement())
+  title           String
+  mentorType      MentorType
+  mentorId        Int
+  description     String
+  category        String
+  duration        String
+  prerequisites   String?
+  schedule        String
+  status          ProgramStatus
+  applications    MentorshipApplication[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Mentor can be either Faculty or Alumni
+  facultyMentor   Faculty?  @relation("FacultyToMentorship",fields: [mentorId], references: [facultyId], onDelete: Cascade,  map: "MentorshipProgram_facultyMentor_fkey")
+  alumniMentor    User?   @relation("UserToMentorship",fields: [mentorId], references: [userId], onDelete: Cascade, map: "MentorshipProgram_alumniMentor_fkey")
+}
+
+// Enum to specify whether mentor is a Faculty or an Alumni
+enum MentorType {
+  FACULTY
+  ALUMNI
+}
+
+enum ProgramStatus {
+  ACTIVE
+  UPCOMING
+  COMPLETED
+}
+
+model MentorshipApplication {
+  id                String    @id @default(uuid())
+  userId            Int
+  user              User      @relation("UserMentorshipApplication",fields: [userId], references: [userId],onDelete: Cascade)
+  mentorshipId      Int
+  mentorship        MentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
+  status            ApplStatus
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum ApplStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 //done

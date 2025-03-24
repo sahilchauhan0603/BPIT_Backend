@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { CreateGalleryDto, UpdateGalleryDto } from './dto/index';
+import { CreateAlbumDto, UpdateAlbumDto, AddImageDto, UpdateImageDto } from './dto/index';
 import { handleError, isPrismaError } from '../helper/exception.helper';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -7,29 +7,35 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class GallaryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateGalleryDto) {
+  async createAlbum(dto: CreateAlbumDto) {
     try {
-      const gallery = await this.prisma.gallary.create({ data: dto });
+      const gallery = await this.prisma.album.create({ data: dto });
       return {
         status: 'success',
         item: gallery,
-        message: 'Gallery item created successfully',
+        message: 'Album created successfully',
       };
     } catch (error) {
       handleError(error);
     }
   }
 
-  async findAll(page: number) {
+  async getAllAlbums(page: number) {
     try {
-      const galleries = await this.prisma.gallary.findMany({
+      const albums = await this.prisma.album.findMany({
+        include: {
+          images: true,
+        },
         take: 10,
         skip: (page - 1) * 10,
       });
-      const totalImages = await this.prisma.gallary.count();
+      const totalImages = await this.prisma.album.count();
       return {
         status: 'success',
-        items: galleries,
+        items: albums.map((album) => ({
+          ...album,
+          totalImages: album.images.length,
+        })),
         meta: {
           totalItems: totalImages,
           currentPage: page,
@@ -42,38 +48,22 @@ export class GallaryService {
     }
   }
 
-  async findById(id: number) {
-    try {
-      const gallery = await this.prisma.gallary.findUnique({
-        where: { gallaryId: id },
-      });
-      if (!gallery) {
-        throw new HttpException(
-          { status: 'error', message: 'Gallery item not found' },
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      return { status: 'success', item: gallery };
-    } catch (error) {
-      handleError(error);
-    }
-  }
 
-  async update(id: number, dto: UpdateGalleryDto) {
+  async updateAlbum(id: number, dto: UpdateAlbumDto) {
     try {
-      const updatedGallery = await this.prisma.gallary.update({
-        where: { gallaryId: id },
+      const updatedAlbum = await this.prisma.album.update({
+        where: { albumId: id },
         data: dto,
       });
       return {
         status: 'success',
-        item: updatedGallery,
-        message: 'Gallery item updated successfully',
+        item: updatedAlbum,
+        message: 'album item updated successfully',
       };
     } catch (error) {
       if (isPrismaError(error) && error.code === 'P2025') {
         throw new HttpException(
-          { status: 'error', message: 'Gallery item not found' },
+          { status: 'error', message: 'Album item not found' },
           HttpStatus.NOT_FOUND,
         );
       }
@@ -81,20 +71,20 @@ export class GallaryService {
     }
   }
 
-  async delete(id: number) {
+  async deleteAlbum(id: number) {
     try {
-      const deletedGallery = await this.prisma.gallary.delete({
-        where: { gallaryId: id },
+      const deletedGallery = await this.prisma.album.delete({
+        where: { albumId: id },
       });
       return {
         status: 'success',
         item: deletedGallery,
-        message: 'Gallery item deleted successfully',
+        message: 'Album item deleted successfully',
       };
     } catch (error) {
       if (isPrismaError(error) && error.code === 'P2025') {
         throw new HttpException(
-          { status: 'error', message: 'Gallery item not found' },
+          { status: 'error', message: 'Album item not found' },
           HttpStatus.NOT_FOUND,
         );
       }
@@ -102,30 +92,93 @@ export class GallaryService {
     }
   }
 
-  async groupByImageTitle() {
+  async addImage(dto: AddImageDto) {
     try {
-      const groupedImages = await this.prisma.gallary.groupBy({
-        by: ['imageTitle'],
-        _count: true,
-        _min: { imageUrl: true },
-      });
-      return groupedImages.map((group) => ({
-        title: group.imageTitle,
-        randomImageUrl: group._min.imageUrl,
-        totalCount: group._count,
-      }));
+      const image = await this.prisma.alumniImages.create({ data: dto });
+      return {
+        status: 'success',
+        item: image,
+        message: 'Image Added successfully',
+      };
     } catch (error) {
       handleError(error);
     }
   }
 
-  async findByImageTitle(title: string) {
+  async getAlbumImages(albumId: number) {
     try {
-      const images = await this.prisma.gallary.findMany({
-        where: { imageTitle: title },
+      const images = await this.prisma.alumniImages.findMany({
+        where: {
+          albumId: albumId,
+        }
       });
-      return { status: 'success', items: images };
+      return {
+        status: 'success',
+        items: images,
+      };
     } catch (error) {
+      handleError(error);
+    }
+  }
+
+
+  async updateImage(id: number, dto: UpdateImageDto) {
+    try {
+      const updatedAlbum = await this.prisma.alumniImages.update({
+        where: { imageId: id },
+        data: dto,
+      });
+      return {
+        status: 'success',
+        item: updatedAlbum,
+        message: 'Image item updated successfully',
+      };
+    } catch (error) {
+      if (isPrismaError(error) && error.code === 'P2025') {
+        throw new HttpException(
+          { status: 'error', message: 'Image item not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      handleError(error);
+    }
+  }
+
+  async deleteImage(id: number,imageId: number) {
+    try {
+      await this.prisma.alumniImages.delete({
+        where: { imageId: id },
+      });
+      return {
+        status: 'success',
+        message: 'Image deleted successfully',
+      };
+    } catch (error) {
+      if (isPrismaError(error) && error.code === 'P2025') {
+        throw new HttpException(
+          { status: 'error', message: 'Album item not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      handleError(error);
+    }
+  }
+  async deleteAllImages(albumId: number) {
+    try {
+      await this.prisma.alumniImages.deleteMany({
+        where: { albumId: albumId },
+      });
+      return {
+        status: 'success',
+        message: 'All Images deleted successfully',
+      };
+    } catch (error) {
+      if (isPrismaError(error) && error.code === 'P2025') {
+        throw new HttpException(
+          { status: 'error', message: 'Album item not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
       handleError(error);
     }
   }

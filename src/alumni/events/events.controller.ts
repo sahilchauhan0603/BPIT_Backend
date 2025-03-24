@@ -25,7 +25,7 @@ export class EventsController {
   async create(@Body() AddEventDto: AddEventDto) {
     return await this.eventsService.create(AddEventDto);
   }
-  @Post('/role')
+  @Post('/apply')
   async createRole(@Body() AddEventAttendeDto: AddEventAttendeDto) {
     return await this.eventsService.AddRole(AddEventAttendeDto);
   }
@@ -38,17 +38,26 @@ export class EventsController {
   async find(@Param('id') id: string) {
     const eventId = parseInt(id, 10);
     if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid User ID format');
+      throw new BadRequestException('Invalid event ID format');
     }
     return await this.eventsService.findOne(eventId);
   }
-  @Get('/roles/:id')
+  @Get('/applied/:id')
   async findAllRoles(@Param('id') id: string) {
     const eventId = parseInt(id, 10);
     if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid User ID format');
+      throw new BadRequestException('Invalid event ID format');
     }
-    return await this.eventsService.findOne(eventId);
+    return await this.eventsService.getAllRole(eventId);
+  }
+
+  @Get('/user/:id')
+  async findAllEvents(@Param('id') id: string) {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+      throw new BadRequestException('Invalid event ID format');
+    }
+    return await this.eventsService.getAllEventByUserId(userId);
   }
 
   @Put(':id')
@@ -58,12 +67,12 @@ export class EventsController {
   ) {
     const eventId = parseInt(id, 10);
     if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid User ID format');
+      throw new BadRequestException('Invalid event ID format');
     }
     return await this.eventsService.update(eventId, updateEventDto);
   }
 
-  @Put('/role/:id')
+  @Put('/apply/:id')
   async updateRole(
     @Param('id') id: string,
     @Body() updateEventAttendeDto: UpdateEventAttendeDto,
@@ -87,7 +96,7 @@ export class EventsController {
     return await this.eventsService.removeEvent(eventId);
   }
 
-  @Delete('/role/:id')
+  @Delete('/apply/:id')
   async removeRole(@Param('id') id: string) {
     const eventAttendeId = parseInt(id, 10);
     if (isNaN(eventAttendeId)) {

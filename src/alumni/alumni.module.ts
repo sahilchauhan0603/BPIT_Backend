@@ -13,6 +13,9 @@ import { AchievementsModule } from './achievements/achievements.module';
 import { NoticeModule } from './notice/notice.module';
 import { MailservicesController } from './mailservices/mailservices.controller';
 import { MailservicesService } from './mailservices/mailservices.service';
+import { JobApplicationsModule } from './job-applications/job-applications.module';
+import { MentorshipProgramModule } from './mentorship-program/mentorship-program.module';
+import { MentorshipApplicationsModule } from './mentorship-applications/mentorship-applications.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { MailservicesService } from './mailservices/mailservices.service';
     EventsModule,
     AchievementsModule,
     NoticeModule,
+    JobApplicationsModule,
+    MentorshipProgramModule,
+    MentorshipApplicationsModule,
   ],
   controllers: [AlumniController, MailservicesController],
   providers: [AlumniService],

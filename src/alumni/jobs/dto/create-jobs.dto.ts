@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsBoolean } from 'class-validator';
 
 export class CreateJobPostingDto {
   @IsNotEmpty()
@@ -37,5 +37,19 @@ export class CreateJobPostingDto {
   @IsString()
   applyLink: string;
 
+  @IsNotEmpty()
+  @IsString()
+  requiredSkills: string;      // Comma-separated skills
+  @IsNotEmpty()
+  @IsString()
+  qualifications: string;
+  
+  @IsNotEmpty()
+  @IsString()
+  responsibilities: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean = true;
   userId: number; // User who posted the job
 }

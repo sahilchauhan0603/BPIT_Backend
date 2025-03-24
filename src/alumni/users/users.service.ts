@@ -29,7 +29,7 @@ export class UsersService {
 
       return {
         status: 'success',
-        item: newUser,
+        // item: newUser,
         message: 'User added successfully',
       };
     } catch (error) {
@@ -70,7 +70,9 @@ export class UsersService {
       });
 
       // Count total users for pagination metadata
-      const totalUsers = await this.prisma.user.count(query.where);
+      const totalUsers = await this.prisma.user.count({
+        where: query.where,
+      });
 
       return {
         status: 'success',
