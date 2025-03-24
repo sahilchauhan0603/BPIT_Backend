@@ -32,7 +32,7 @@ export class EventsService {
   // Get all Event Not Associated with any Society
   async findAll(page: number) {
     try {
-      const whereClause: any = { societyId: IsNull };
+      const whereClause: any = { societyId: null };
 
       const events = await this.prisma.event.findMany({
         where: whereClause,
@@ -252,6 +252,41 @@ export class EventsService {
           HttpStatus.NOT_FOUND,
         );
       }
+      handleError(error);
+    }
+  }
+
+  async getAllEventByUserId(userId: number) {
+    try {
+      const events = await this.prisma.eventAttendee.findMany({
+        where: { userId: userId },
+        include: {
+          event: {
+            select : {
+              eventId: true,
+              eventName: true,
+              eventDate: true,
+              eventDescription: true,
+              eventLocation: true,
+              eventMode: true,
+              eventType: true,
+              eventImage: true,
+              category: true,
+              subcategory: true
+            }
+          },
+        },
+      });
+
+      if (!events) {
+        throw new HttpException(
+          { status: 'error', message: 'roles not found' },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return { status: 'success', item: events };
+    } catch (error) {
       handleError(error);
     }
   }

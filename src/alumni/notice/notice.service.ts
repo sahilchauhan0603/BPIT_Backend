@@ -29,7 +29,7 @@ export class NoticeService {
           createdAt: 'desc',
         },
       });
-      const totalNotices = await this.prisma.user.count();
+      const totalNotices = await this.prisma.notice.count();
 
       return {
         status: 'success',

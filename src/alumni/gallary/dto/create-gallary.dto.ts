@@ -1,15 +1,30 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateGalleryDto {
+export class CreateAlbumDto {
   @IsString()
   @IsNotEmpty()
-  imageUrl: string;
-
-  @IsString()
-  @IsNotEmpty()
-  imageTitle: string;
+  albumName: string;
 
   @IsString()
   @IsNotEmpty()
-  imageDescription: string;
+  albumDescription: string;
+
+  @IsString()
+  @IsNotEmpty()
+  albumThumbnail: string;
+}
+
+export class AddImageDto {
+  @IsString()
+  @IsNotEmpty()
+  imageTitle: string
+  @IsString()
+  @IsNotEmpty()
+  imageDescription: string
+  @IsString()
+  @IsNotEmpty()
+  imageUrl: string
+  @IsInt()
+  @IsNotEmpty()
+  albumId: number
 }
