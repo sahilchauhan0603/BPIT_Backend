@@ -309,7 +309,6 @@ model MentorshipProgram {
   id              Int    @id @default(autoincrement())
   title           String
   mentorType      MentorType
-  mentorId        Int
   description     String
   category        String
   duration        String
@@ -321,8 +320,11 @@ model MentorshipProgram {
   updatedAt       DateTime  @updatedAt
 
   // Mentor can be either Faculty or Alumni
-  facultyMentor   Faculty?  @relation("FacultyToMentorship",fields: [mentorId], references: [facultyId], onDelete: Cascade,  map: "MentorshipProgram_facultyMentor_fkey")
-  alumniMentor    User?   @relation("UserToMentorship",fields: [mentorId], references: [userId], onDelete: Cascade, map: "MentorshipProgram_alumniMentor_fkey")
+  facultyMentorId Int?
+  alumniMentorId  Int? 
+
+  facultyMentor   Faculty?  @relation("FacultyToMentorship",fields: [facultyMentorId], references: [facultyId], onDelete: Cascade,  map: "MentorshipProgram_facultyMentor_fkey")
+  alumniMentor    User?   @relation("UserToMentorship",fields: [alumniMentorId], references: [userId], onDelete: Cascade, map: "MentorshipProgram_alumniMentor_fkey")
 }
 
 // Enum to specify whether mentor is a Faculty or an Alumni

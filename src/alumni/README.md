@@ -19,7 +19,8 @@ Working of API's for managing alumni profiles, events, professional information,
     - [News API](#news-endpoints)
     - [Notice API](#notice-endpoints)
     - [Album API](#album-endpoints)
-    - [Jobs Api](#jobs-management-endpoints)
+    - [Jobs Api](#jobs-posting-endpoints)
+    - [Jobs Applications Api](#job-application-endpoints)
 
 
 ## Running the Application
@@ -2399,4 +2400,594 @@ Create a `.env` file in the root directory of the project with the following str
 ---
 ---
 
-#### Jobs Management Endpoints
+### Jobs Posting Endpoints
+#### ADD Job Posting
+- **URL**: `/job-postings`
+- **Method**: `POST`
+- **Function**: `to add a new job posting`
+- **Parameter**: `No parameter`
+- **Request Body**: 
+    ```json
+    {
+        "jobTitle": "Frontend Devloper",
+        "jobDescription": "Join our team to work on our industry based project for real world applications.",
+        "companyName": "Josh Technology",
+        "companyLocation": "Gurugram, delhi",
+        "jobMode": "Offline",
+        "jobType": "Full-Time",
+        "jobCategory": "Devloper",
+        "expectedSalary": "70000-85000",
+        "requiredSkills": "HTML, CSS, JS, React, Bootstrap",
+        "qualifications": "Bteh graduate 2026",
+        "responsibilities": "Making responsive pages, handling integration",
+        "applyLink": "https://datawizards.com/careers/data-scientist",
+        "userId": 2
+    }
+    ```
+- **Response**: `201 Created`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobsPostingId": 5,
+            "userId": 2,
+            "jobTitle": "Frontend Devloper",
+            "jobDescription": "Join our team to work on our industry based project for real world applications.",
+            "companyName": "Josh Technology",
+            "companyLocation": "Gurugram, delhi",
+            "jobMode": "Offline",
+            "jobType": "Full-Time",
+            "jobCategory": "Devloper",
+            "expectedSalary": "70000-85000",
+            "applyLink": "https://datawizards.com/careers/data-scientist",
+            "requiredSkills": "HTML, CSS, JS, React, Bootstrap",
+            "qualifications": "Bteh graduate 2026",
+            "responsibilities": "Making responsive pages, handling integration",
+            "isActive": true,
+            "createdAt": "2025-03-26T13:19:05.629Z",
+            "updatedAt": "2025-03-26T13:19:05.629Z"
+        },
+        "message": "Job posting created successfully"
+    }
+    ```
+
+#### Get All Jobs Posting
+- **URL**: `/job-postings`
+- **Method**: `GET`
+- **Function**: `to get all job postings`
+- **Parameter**: `No parameter`
+- **Query Paramete**: `page={value}`
+    - `page`: `string` (optional) (default value is 1)
+- **Request Body**: `No request body`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "jobsPostingId": 1,
+                "userId": 2,
+                "jobTitle": "Data Scientist",
+                "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                "companyName": "Data Wizards LLC",
+                "companyLocation": "New York, NY",
+                "jobMode": "Remote",
+                "jobType": "Full-Time",
+                "jobCategory": "Data Science",
+                "expectedSalary": "10000-35000",
+                "applyLink": "https://datawizards.com/careers/data-scientist",
+                "requiredSkills": "Python, Data Science",
+                "qualifications": "Bteh graduate 2026",
+                "responsibilities": "Managind Data",
+                "isActive": true,
+                "createdAt": "2025-03-26T13:13:40.363Z",
+                "updatedAt": "2025-03-26T13:13:40.363Z",
+                "user": {
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "passingYear": 2025,
+                    "branch": "CSE",
+                    "userId": 2
+                }
+            },
+            {
+                "jobsPostingId": 3,
+                "userId": 3,
+                "jobTitle": "Data Scientist",
+                "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                "companyName": "Data Wizards LLC",
+                "companyLocation": "New York, NY",
+                "jobMode": "Remote",
+                "jobType": "Full-Time",
+                "jobCategory": "Data Science",
+                "expectedSalary": "10000-35000",
+                "applyLink": "https://datawizards.com/careers/data-scientist",
+                "requiredSkills": "Python, Data Science",
+                "qualifications": "Bteh graduate 2026",
+                "responsibilities": "Managind Data",
+                "isActive": true,
+                "createdAt": "2025-03-26T13:14:45.086Z",
+                "updatedAt": "2025-03-26T13:14:45.086Z",
+                "user": {
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "passingYear": 2024,
+                    "branch": "ECE",
+                    "userId": 3
+                }
+            }
+        ],
+        "meta": {
+            "totalItems": 2,
+            "totalPages": 1,
+            "currenPage": 1,
+            "itemsPerPage": 10
+        }
+    }
+    ```
+#### Get a Job Posting by ID
+- **URL**: `/job-postings/{id}`
+- **Method**: `GET`
+- **Function**: `to get job posting by id`
+- **Parameter**: `jobPostingId`
+- **Request Body**: `No request body`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobsPostingId": 1,
+            "userId": 2,
+            "jobTitle": "Data Scientist",
+            "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+            "companyName": "Data Wizards LLC",
+            "companyLocation": "New York, NY",
+            "jobMode": "Remote",
+            "jobType": "Full-Time",
+            "jobCategory": "Data Science",
+            "expectedSalary": "10000-35000",
+            "applyLink": "https://datawizards.com/careers/data-scientist",
+            "requiredSkills": "Python, Data Science",
+            "qualifications": "Bteh graduate 2026",
+            "responsibilities": "Managind Data",
+            "isActive": true,
+            "createdAt": "2025-03-26T13:13:40.363Z",
+            "updatedAt": "2025-03-26T13:13:40.363Z",
+            "user": {
+                "firstName": "John",
+                "lastName": "Doe",
+                "passingYear": 2025,
+                "branch": "CSE",
+                "userId": 2
+            }
+        }
+    }
+    ```
+#### Get all jobs postings by user ID
+- **URL**: `/job-postings/user/{id}`
+- **Method**: `GET`
+- **Function**: `to get all job postings by user id`
+- **Parameter**: `userId`
+- **Query Parameters**: `page={value}`
+    - `page`: `string` (optional) (default value is 1)
+- **Request Body**: `No request body`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "jobsPostingId": 3,
+                "userId": 3,
+                "jobTitle": "Data Scientist",
+                "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                "companyName": "Data Wizards LLC",
+                "companyLocation": "New York, NY",
+                "jobMode": "Remote",
+                "jobType": "Full-Time",
+                "jobCategory": "Data Science",
+                "expectedSalary": "10000-35000",
+                "applyLink": "https://datawizards.com/careers/data-scientist",
+                "requiredSkills": "Python, Data Science",
+                "qualifications": "Bteh graduate 2026",
+                "responsibilities": "Managind Data",
+                "isActive": true,
+                "createdAt": "2025-03-26T13:14:45.086Z",
+                "updatedAt": "2025-03-26T13:14:45.086Z",
+                "user": {
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "passingYear": 2024,
+                    "branch": "ECE",
+                    "userId": 3
+                }
+            },
+            {
+                "jobsPostingId": 4,
+                "userId": 3,
+                "jobTitle": "Data Scientist",
+                "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                "companyName": "Data Wizards LLC",
+                "companyLocation": "New York, NY",
+                "jobMode": "Remote",
+                "jobType": "Full-Time",
+                "jobCategory": "Data Science",
+                "expectedSalary": "10000-35000",
+                "applyLink": "https://datawizards.com/careers/data-scientist",
+                "requiredSkills": "Python, Data Science",
+                "qualifications": "Bteh graduate 2026",
+                "responsibilities": "Managind Data",
+                "isActive": true,
+                "createdAt": "2025-03-26T13:14:51.090Z",
+                "updatedAt": "2025-03-26T13:14:51.090Z",
+                "user": {
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "passingYear": 2024,
+                    "branch": "ECE",
+                    "userId": 3
+                }
+            }
+        ],
+        "meta": {
+            "totalItems": 2,
+            "totalPages": 1,
+            "currentPage": 1,
+            "itemsPerPage": 10
+        }
+    }
+    ```
+
+#### Update Job Postings
+- **URL**: `job-postings/{id}`
+- **Method**: `PUT`
+- **Parameter**: `jobPostingId`
+- **Function**: `to update a job posting by its id`
+- **Request Body**: 
+    ```json
+    {
+        "jobTitle": "Senior Software Engineer",
+        "expectedSalary": "110000-180000"
+    }
+    ```
+- **Response**: 
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobsPostingId": 3,
+            "userId": 3,
+            "jobTitle": "Senior Software Engineer",
+            "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+            "companyName": "Data Wizards LLC",
+            "companyLocation": "New York, NY",
+            "jobMode": "Remote",
+            "jobType": "Full-Time",
+            "jobCategory": "Data Science",
+            "expectedSalary": "110000-180000",
+            "applyLink": "https://datawizards.com/careers/data-scientist",
+            "requiredSkills": "Python, Data Science",
+            "qualifications": "Bteh graduate 2026",
+            "responsibilities": "Managind Data",
+            "isActive": true,
+            "createdAt": "2025-03-26T13:14:45.086Z",
+            "updatedAt": "2025-03-26T13:32:26.647Z"
+        },
+        "message": "Job posting updated successfully"
+    }
+    ```
+
+#### Delete Job Posting
+- **URL**: `job-postings/{id}`
+- **Method**: `DELETE`
+- **Parameter**: `jobPostingId`
+- **Function**: `to delete a job posting by its id`
+- **Response**: `200 Ok`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobsPostingId": 4,
+            "userId": 3,
+            "jobTitle": "Data Scientist",
+            "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+            "companyName": "Data Wizards LLC",
+            "companyLocation": "New York, NY",
+            "jobMode": "Remote",
+            "jobType": "Full-Time",
+            "jobCategory": "Data Science",
+            "expectedSalary": "10000-35000",
+            "applyLink": "https://datawizards.com/careers/data-scientist",
+            "requiredSkills": "Python, Data Science",
+            "qualifications": "Bteh graduate 2026",
+            "responsibilities": "Managind Data",
+            "isActive": true,
+            "createdAt": "2025-03-26T13:14:51.090Z",
+            "updatedAt": "2025-03-26T13:14:51.090Z"
+        },
+        "message": "Job posting deleted successfully"
+    }
+    ```
+
+### Job Application Endpoints
+#### Create Job Application
+- **URL**: `job-applications`
+- **Method**: `POST`
+- **Parameter**: `No Parameters`
+- **Function**: `to create a new job application`
+- **Request Body**: 
+    ```json
+    {
+        "jobPostingId": 3,
+        "userId": 3,
+        "resumeUrl": "https://drive.google.com/resume-mohit.pdf"
+    }
+    ```
+- **Response**: `201 Created`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobApplicationId": 3,
+            "jobPostingId": 3,
+            "userId": 3,
+            "status": "PENDING",
+            "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+            "coverLetter": null,
+            "appliedAt": "2025-03-26T13:39:50.251Z"
+        },
+        "message": "Job application submitted successfully"
+    }
+    ```
+#### Get Job Application By Id
+- **URL**: `job-applications/:id`
+- **Method**: `GET`
+- **Parameter**: `id` (Job Application ID)
+- **Function**: `to get a job application by id`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobApplicationId": 1,
+            "jobPostingId": 1,
+            "userId": 2,
+            "status": "PENDING",
+            "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+            "coverLetter": null,
+            "appliedAt": "2025-03-26T13:39:25.840Z",
+            "user": {
+                "userId": 2,
+                "firstName": "John",
+                "lastName": "Doe",
+                "branch": "CSE",
+                "passingYear": 2025,
+                "email": "john.doe@example.com"
+            },
+            "jobPosting": {
+                "jobsPostingId": 1,
+                "userId": 2,
+                "jobTitle": "Data Scientist",
+                "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                "companyName": "Data Wizards LLC",
+                "companyLocation": "New York, NY",
+                "jobMode": "Remote",
+                "jobType": "Full-Time",
+                "jobCategory": "Data Science",
+                "expectedSalary": "10000-35000",
+                "applyLink": "https://datawizards.com/careers/data-scientist",
+                "requiredSkills": "Python, Data Science",
+                "qualifications": "Bteh graduate 2026",
+                "responsibilities": "Managind Data",
+                "isActive": true,
+                "createdAt": "2025-03-26T13:13:40.363Z",
+                "updatedAt": "2025-03-26T13:13:40.363Z"
+            }
+        }
+    }
+    ```
+
+#### Get all Application of a job Posting
+- **URL**: `job-applications/job/:id`
+- **Method**: `GET`
+- **Parameter**: `id` (Job Posting ID)
+- **Function**: `to get all job applications of a job posting by id`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "jobApplicationId": 2,
+                "jobPostingId": 3,
+                "userId": 2,
+                "status": "PENDING",
+                "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+                "coverLetter": null,
+                "appliedAt": "2025-03-26T13:39:39.720Z",
+                "user": {
+                    "userId": 2,
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "branch": "CSE",
+                    "passingYear": 2025,
+                    "email": "john.doe@example.com"
+                },
+                "jobPosting": {
+                    "jobsPostingId": 3,
+                    "userId": 3,
+                    "jobTitle": "Senior Software Engineer",
+                    "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                    "companyName": "Data Wizards LLC",
+                    "companyLocation": "New York, NY",
+                    "jobMode": "Remote",
+                    "jobType": "Full-Time",
+                    "jobCategory": "Data Science",
+                    "expectedSalary": "110000-180000",
+                    "applyLink": "https://datawizards.com/careers/data-scientist",
+                    "requiredSkills": "Python, Data Science",
+                    "qualifications": "Bteh graduate 2026",
+                    "responsibilities": "Managind Data",
+                    "isActive": true,
+                    "createdAt": "2025-03-26T13:14:45.086Z",
+                    "updatedAt": "2025-03-26T13:32:26.647Z"
+                }
+            },
+            {
+                "jobApplicationId": 3,
+                "jobPostingId": 3,
+                "userId": 3,
+                "status": "PENDING",
+                "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+                "coverLetter": null,
+                "appliedAt": "2025-03-26T13:39:50.251Z",
+                "user": {
+                    "userId": 3,
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "branch": "ECE",
+                    "passingYear": 2024,
+                    "email": "jane.doe@example.com"
+                },
+                "jobPosting": {
+                    "jobsPostingId": 3,
+                    "userId": 3,
+                    "jobTitle": "Senior Software Engineer",
+                    "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                    "companyName": "Data Wizards LLC",
+                    "companyLocation": "New York, NY",
+                    "jobMode": "Remote",
+                    "jobType": "Full-Time",
+                    "jobCategory": "Data Science",
+                    "expectedSalary": "110000-180000",
+                    "applyLink": "https://datawizards.com/careers/data-scientist",
+                    "requiredSkills": "Python, Data Science",
+                    "qualifications": "Bteh graduate 2026",
+                    "responsibilities": "Managind Data",
+                    "isActive": true,
+                    "createdAt": "2025-03-26T13:14:45.086Z",
+                    "updatedAt": "2025-03-26T13:32:26.647Z"
+                }
+            }
+        ]
+    }
+    ```
+#### Get all Application of a User
+- **URL**: `/job-applications/user/:id`
+- **Method**: `GET`
+- **Parameter**: `id` (User ID)
+- **Description**: `Get all job applications of a user.`
+- **Response**: `200 OK` 
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "jobApplicationId": 3,
+                "jobPostingId": 3,
+                "userId": 3,
+                "status": "PENDING",
+                "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+                "coverLetter": null,
+                "appliedAt": "2025-03-26T13:39:50.251Z",
+                "jobPosting": {
+                    "jobsPostingId": 3,
+                    "userId": 3,
+                    "jobTitle": "Senior Software Engineer",
+                    "jobDescription": "Join our data science team to work on machine learning models and data analysis.",
+                    "companyName": "Data Wizards LLC",
+                    "companyLocation": "New York, NY",
+                    "jobMode": "Remote",
+                    "jobType": "Full-Time",
+                    "jobCategory": "Data Science",
+                    "expectedSalary": "110000-180000",
+                    "applyLink": "https://datawizards.com/careers/data-scientist",
+                    "requiredSkills": "Python, Data Science",
+                    "qualifications": "Bteh graduate 2026",
+                    "responsibilities": "Managind Data",
+                    "isActive": true,
+                    "createdAt": "2025-03-26T13:14:45.086Z",
+                    "updatedAt": "2025-03-26T13:32:26.647Z"
+                }
+            }
+        ]
+    }
+    ```
+
+#### Update Job Application
+- **URL**: `job-applications/:id`
+- **Method**: `PATCH`
+- **Parameter**: `id` (Job Application ID)
+- **Description**: `Update the details of a job application.`
+- **Request Body**: 
+    ```json
+    {
+        "coverLetter": "https://drive.google.com/resume-mohit-cover-letter.pdf"
+    }
+    ```
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobApplicationId": 1,
+            "jobPostingId": 1,
+            "userId": 2,
+            "status": "PENDING",
+            "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+            "coverLetter": "https://drive.google.com/resume-mohit-cover-letter.pdf",
+            "appliedAt": "2025-03-26T13:39:25.840Z"
+        },
+        "message": "Application updated successfully"
+    }
+    ```
+#### Update Job Application Status
+- **URL**: `job-applications/:id/status`
+- **Method**: `PATCH`
+- **Parameter**: `id` (Job Application ID)
+- **Description**: `Update the status of a job application.`
+- **Request Body**:
+    ```json
+    { "status": "HIRED"}
+    ```
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobApplicationId": 1,
+            "jobPostingId": 1,
+            "userId": 2,
+            "status": "HIRED",
+            "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+            "coverLetter": "https://drive.google.com/resume-mohit-cover-letter.pdf",
+            "appliedAt": "2025-03-26T13:39:25.840Z"
+        },
+        "message": "Application status updated"
+    }
+    ```
+
+#### Delete Job Application
+- **URL**: `job-applications/:id`
+- **Method**: `DELETE`
+- **Parameter**: `id` (Job Application ID)
+- **Description**: `Delete a job application by ID.`
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "jobApplicationId": 3,
+            "jobPostingId": 3,
+            "userId": 3,
+            "status": "PENDING",
+            "resumeUrl": "https://drive.google.com/resume-mohit.pdf",
+            "coverLetter": null,
+            "appliedAt": "2025-03-26T13:39:50.251Z"
+        },
+        "message": "Application deleted successfully"
+    }
+    ```
+### Mentorship Programs
+#### ADD NEW
+
