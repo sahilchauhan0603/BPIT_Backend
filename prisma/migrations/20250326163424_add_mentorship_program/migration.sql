@@ -49,10 +49,10 @@ DROP INDEX `JobsPosting_userId_fkey` ON `jobsposting`;
 DROP INDEX `ProfessionalInformation_userId_fkey` ON `professionalinformation`;
 
 -- AlterTable
-ALTER TABLE `jobsposting` ADD COLUMN `qualifications` VARCHAR(191) NOT NULL,
+ALTER TABLE `jobsposting` ADD COLUMN `isActive` BOOLEAN NOT NULL DEFAULT true,
+    ADD COLUMN `qualifications` VARCHAR(191) NOT NULL,
     ADD COLUMN `requiredSkills` VARCHAR(191) NOT NULL,
-    ADD COLUMN `responsibilities` VARCHAR(191) NOT NULL,
-    ADD COLUMN `isActive` BOOLEAN NOT NULL DEFAULT true;
+    ADD COLUMN `responsibilities` VARCHAR(191) NOT NULL;
 
 
 -- CreateTable
@@ -94,7 +94,6 @@ CREATE TABLE `MentorshipProgram` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
     `mentorType` ENUM('FACULTY', 'ALUMNI') NOT NULL,
-    `mentorId` INTEGER NOT NULL,
     `description` VARCHAR(191) NOT NULL,
     `category` VARCHAR(191) NOT NULL,
     `duration` VARCHAR(191) NOT NULL,
@@ -103,6 +102,8 @@ CREATE TABLE `MentorshipProgram` (
     `status` ENUM('ACTIVE', 'UPCOMING', 'COMPLETED') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
+    `facultyMentorId` INTEGER NULL,
+    `alumniMentorId` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -168,10 +169,10 @@ ALTER TABLE `EventAttendee` ADD CONSTRAINT `EventAttendee_eventId_fkey` FOREIGN 
 ALTER TABLE `EventAttendee` ADD CONSTRAINT `EventAttendee_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MentorshipProgram` ADD CONSTRAINT `MentorshipProgram_facultyMentor_fkey` FOREIGN KEY (`mentorId`) REFERENCES `Faculty`(`facultyId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `MentorshipProgram` ADD CONSTRAINT `MentorshipProgram_facultyMentor_fkey` FOREIGN KEY (`facultyMentorId`) REFERENCES `Faculty`(`facultyId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MentorshipProgram` ADD CONSTRAINT `MentorshipProgram_alumniMentor_fkey` FOREIGN KEY (`mentorId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `MentorshipProgram` ADD CONSTRAINT `MentorshipProgram_alumniMentor_fkey` FOREIGN KEY (`alumniMentorId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `MentorshipApplication` ADD CONSTRAINT `MentorshipApplication_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
