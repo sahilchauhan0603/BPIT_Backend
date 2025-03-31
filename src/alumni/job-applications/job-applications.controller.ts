@@ -6,7 +6,6 @@ import {
     Delete,
     Body,
     Param,
-    Query,
     BadRequestException
   } from '@nestjs/common';
   import { JobApplicationsService } from './job-applications.service';
