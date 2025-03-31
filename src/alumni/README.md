@@ -21,6 +21,8 @@ Working of API's for managing alumni profiles, events, professional information,
     - [Album API](#album-endpoints)
     - [Jobs Api](#jobs-posting-endpoints)
     - [Jobs Applications Api](#job-application-endpoints)
+    - [Mentorship Program Api](#mentorship-programs)
+    - [Mentorship Program Application Api](#mentorship-program-applications-endpoints)
 
 
 ## Running the Application
@@ -77,6 +79,7 @@ Create a `.env` file in the root directory of the project with the following str
         createdAt  DateTime @default(now())
         updatedAt  DateTime @updatedAt
         facultySociety SocietyProfile[] @relation("SocietyFaculty")
+        mentorshipPrograms MentorshipProgram[] @relation("FacultyToMentorship")
     }
 
     model User {
@@ -122,19 +125,26 @@ Create a `.env` file in the root directory of the project with the following str
         jobPosting               JobsPosting[] @relation("UserJobsPosting")
         societyStudentAchievement StudentAchievement[] @relation("SocietyStudentAchievement")
         studentMarkings StudentMarking[] @relation("SocietyStudentMarking")
+        jobsApplication JobApplication[] @relation("UserToJobsApplication")
+        mentorshipPrograms MentorshipProgram[] @relation("UserToMentorship")
+        mentorshipApplications MentorshipApplication[] @relation("UserMentorshipApplication")
     }
 
-
-    model Gallary {
-        gallaryId        Int      @id @default(autoincrement())
-        imageUrl         String
-        imageTitle       String
+    model Album {
+        albumId        Int      @id @default(autoincrement())
+        albumName      String
+        albumDescription String
+        albumThumbnail String
+        images AlumniImages[] @relation("AlbumImages")
+    }
+    model AlumniImages {
+        imageId Int      @id @default(autoincrement())
+        imageTitle String
         imageDescription String
-        societyId Int?
-        society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId])
-        createdAt        DateTime @default(now())
-        updatedAt        DateTime @updatedAt
-    }
+        imageUrl String
+        albumId Int 
+        album Album @relation("AlbumImages", fields: [albumId], references: [albumId], onDelete: Cascade)
+    } 
 
     model ProfessionalInformation {
         professionalInformationId Int       @id @default(autoincrement())
@@ -148,7 +158,7 @@ Create a `.env` file in the root directory of the project with the following str
         isApproved                Boolean   @default(false)
         createdAt                 DateTime  @default(now())
         updatedAt                 DateTime  @updatedAt
-        user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId])
+        user                      User      @relation("UserProfessionalInformation", fields: [userId], references: [userId], onDelete: Cascade)
     }
 
     model JobsPosting {
@@ -163,9 +173,33 @@ Create a `.env` file in the root directory of the project with the following str
         jobCategory   String  // Techincal, Non-tech etc..
         expectedSalary String
         applyLink String
+        requiredSkills    String      // Comma-separated skills
+        qualifications    String
+        responsibilities  String
+        isActive Boolean   @default(true)
         createdAt DateTime @default(now())
         updatedAt DateTime @updatedAt
-        user User @relation("UserJobsPosting", fields: [userId], references: [userId])
+        user User @relation("UserJobsPosting", fields: [userId], references: [userId], onDelete: Cascade)
+        applications JobApplication[] @relation("JobsPostingApplications")
+    }
+    model JobApplication {
+            jobApplicationId Int      @id @default(autoincrement())
+            jobPostingId     Int
+            userId           Int
+            status           ApplicationStatus @default(PENDING) // Pending, Shortlisted, Rejected, Hired
+            resumeUrl        String // Resume link
+            coverLetter      String?
+            appliedAt        DateTime @default(now())
+
+            jobPosting       JobsPosting @relation("JobsPostingApplications",fields: [jobPostingId], references: [jobsPostingId], onDelete: Cascade)
+            user             User        @relation("UserToJobsApplication",fields: [userId], references: [userId], onDelete: Cascade)
+    }
+
+    enum ApplicationStatus {
+            PENDING
+            SHORTLISTED
+            REJECTED
+            HIRED
     }
 
     model InterviewExperience {
@@ -182,7 +216,7 @@ Create a `.env` file in the root directory of the project with the following str
         anyTips               String?
         createdAt             DateTime @default(now())
         updatedAt             DateTime @updatedAt
-        user                  User     @relation("UserInterviewExperience", fields: [userId], references: [userId])
+        user                  User     @relation("UserInterviewExperience", fields: [userId], references: [userId], onDelete: Cascade)
     }
 
     model Event {
@@ -207,8 +241,8 @@ Create a `.env` file in the root directory of the project with the following str
         eventId         Int
         userId          Int
         role            String // e.g Speaker Attende Mentor etc.
-        event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId])
-        user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId])
+        event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId], onDelete: Cascade)
+        user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId], onDelete: Cascade)
     }
 
     model News {
@@ -234,6 +268,58 @@ Create a `.env` file in the root directory of the project with the following str
         createdAt       DateTime @default(now())
         updatedAt       DateTime @updatedAt
     }
+
+    model MentorshipProgram {
+        id              Int    @id @default(autoincrement())
+        title           String
+        mentorType      MentorType
+        description     String
+        category        String
+        duration        String
+        prerequisites   String?
+        schedule        String
+        status          ProgramStatus
+        applications    MentorshipApplication[]
+        createdAt       DateTime  @default(now())
+        updatedAt       DateTime  @updatedAt
+
+        // Mentor can be either Faculty or Alumni
+        facultyMentorId Int?
+        alumniMentorId  Int? 
+
+        facultyMentor   Faculty?  @relation("FacultyToMentorship",fields: [facultyMentorId], references: [facultyId], onDelete: Cascade,  map: "MentorshipProgram_facultyMentor_fkey")
+        alumniMentor    User?   @relation("UserToMentorship",fields: [alumniMentorId], references: [userId], onDelete: Cascade, map: "MentorshipProgram_alumniMentor_fkey")
+    }
+
+    // Enum to specify whether mentor is a Faculty or an Alumni
+    enum MentorType {
+        FACULTY
+        ALUMNI
+    }
+
+    enum ProgramStatus {
+        ACTIVE
+        UPCOMING
+        COMPLETED
+    }
+
+    model MentorshipApplication {
+        id                Int    @id @default(autoincrement())
+        userId            Int
+        user              User      @relation("UserMentorshipApplication",fields: [userId], references: [userId],onDelete: Cascade)
+        mentorshipId      Int
+        mentorship        MentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
+        status            ApplStatus
+        createdAt         DateTime @default(now())
+        updatedAt         DateTime @updatedAt
+    }
+
+    enum ApplStatus {
+        PENDING
+        APPROVED
+        REJECTED
+    }
+
     model Achievement {
         achievementId     Int                @id @default(autoincrement())
         userId            Int
@@ -250,7 +336,7 @@ Create a `.env` file in the root directory of the project with the following str
         dateCreated       DateTime           @default(now())
         dateModified      DateTime           @updatedAt
         images            AchievementImage[]
-        user              User               @relation("UserAchievements", fields: [userId], references: [userId])
+        user              User               @relation("UserAchievements", fields: [userId], references: [userId], onDelete: Cascade)
     }
 
     model AchievementImage {
@@ -261,6 +347,7 @@ Create a `.env` file in the root directory of the project with the following str
 
         @@map("achievementImages")
     }
+
     enum Role {
         STUDENT
         ALUMNI
@@ -2639,7 +2726,7 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 
 #### Update Job Postings
-- **URL**: `job-postings/{id}`
+- **URL**: `/job-postings/{id}`
 - **Method**: `PUT`
 - **Parameter**: `jobPostingId`
 - **Function**: `to update a job posting by its id`
@@ -2678,7 +2765,7 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 
 #### Delete Job Posting
-- **URL**: `job-postings/{id}`
+- **URL**: `/job-postings/{id}`
 - **Method**: `DELETE`
 - **Parameter**: `jobPostingId`
 - **Function**: `to delete a job posting by its id`
@@ -2711,7 +2798,7 @@ Create a `.env` file in the root directory of the project with the following str
 
 ### Job Application Endpoints
 #### Create Job Application
-- **URL**: `job-applications`
+- **URL**: `/job-applications`
 - **Method**: `POST`
 - **Parameter**: `No Parameters`
 - **Function**: `to create a new job application`
@@ -2740,7 +2827,7 @@ Create a `.env` file in the root directory of the project with the following str
     }
     ```
 #### Get Job Application By Id
-- **URL**: `job-applications/:id`
+- **URL**: `/job-applications/:id`
 - **Method**: `GET`
 - **Parameter**: `id` (Job Application ID)
 - **Function**: `to get a job application by id`
@@ -2788,7 +2875,7 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 
 #### Get all Application of a job Posting
-- **URL**: `job-applications/job/:id`
+- **URL**: `/job-applications/job/:id`
 - **Method**: `GET`
 - **Parameter**: `id` (Job Posting ID)
 - **Function**: `to get all job applications of a job posting by id`
@@ -2915,7 +3002,7 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 
 #### Update Job Application
-- **URL**: `job-applications/:id`
+- **URL**: `/job-applications/:id`
 - **Method**: `PATCH`
 - **Parameter**: `id` (Job Application ID)
 - **Description**: `Update the details of a job application.`
@@ -2968,7 +3055,7 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 
 #### Delete Job Application
-- **URL**: `job-applications/:id`
+- **URL**: `/job-applications/:id`
 - **Method**: `DELETE`
 - **Parameter**: `id` (Job Application ID)
 - **Description**: `Delete a job application by ID.`
@@ -2990,4 +3077,477 @@ Create a `.env` file in the root directory of the project with the following str
     ```
 ### Mentorship Programs
 #### ADD NEW
+- **URL**: `/mentorship-program`
+- **Method**: `POST`
+- **Description**: `Create a new mentorship program`
+- **Request Body**: `JSON object`
+    - Mentor could be a faculty or alumni 
+    - for faculty use `facultyMentorId`
+    - for alumni use `alumniMentorId`
+    ```json 
+    {
+        "title": "Mentorship_1",
+        "mentorType": "ALUMNI",   // ALUMNI, FACULTY
+        "description": "this is a program for the juniors",
+        "category": "Technical",
+        "duration": "3 Months",
+        "prerequisites": "NO",
+        "schedule": "Jun 2025 - Aug 2025",
+        "status": "UPCOMING",
+        "alumniMentorId": 2     // facultyMentorId: 1 
+    }
+    ```
+- **Response**: `201 Created`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 5,
+            "title": "Mentorship_1",
+            "mentorType": "ALUMNI",
+            "description": "this is a program for the juniors",
+            "category": "Technical",
+            "duration": "3 Months",
+            "prerequisites": "NO",
+            "schedule": "Jun 2025 - Aug 2025",
+            "status": "UPCOMING",
+            "createdAt": "2025-03-31T14:10:18.884Z",
+            "updatedAt": "2025-03-31T14:10:18.884Z",
+            "facultyMentorId": null,
+            "alumniMentorId": 2
+        },
+        "message": "Mentorship program created successfully"
+    }
+    ```
 
+#### GET ALL
+- **URL**: `/mentorship-program`
+- **Method**: `GET`
+- **Description**: `Get all mentorship programs`
+- **Query Parameters**: `page={value}`
+    - `page`: `string` (optional) (default value is 1)
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "id": 2,
+                "title": "Mentorship_1",
+                "mentorType": "FACULTY",
+                "description": "this is a program for the juniors",
+                "category": "Technical",
+                "duration": "3 Months",
+                "prerequisites": "NO",
+                "schedule": "Jun 2025 - Aug 2025",
+                "status": "UPCOMING",
+                "createdAt": "2025-03-31T14:09:02.157Z",
+                "updatedAt": "2025-03-31T14:09:02.157Z",
+                "facultyMentorId": 1,
+                "alumniMentorId": null,
+                "facultyMentor": {
+                    "facultyId": 1,
+                    "name": "Dr. John Smith",
+                    "department": "Computer Science",
+                    "email": "john.smith@example.com",
+                    "designation": "Professor",
+                    "phone": "1234567890",
+                    "profilePictureUrl": "https://example.com/profile.jpg"
+                },
+                "alumniMentor": null
+            },
+            {
+                "id": 5,
+                "title": "Mentorship_1",
+                "mentorType": "ALUMNI",
+                "description": "this is a program for the juniors",
+                "category": "Technical",
+                "duration": "3 Months",
+                "prerequisites": "NO",
+                "schedule": "Jun 2025 - Aug 2025",
+                "status": "UPCOMING",
+                "createdAt": "2025-03-31T14:10:18.884Z",
+                "updatedAt": "2025-03-31T14:10:18.884Z",
+                "facultyMentorId": null,
+                "alumniMentorId": 2,
+                "facultyMentor": null,
+                "alumniMentor": {
+                    "userId": 2,
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "email": "john.doe@example.com"
+                }
+            }
+        ],
+        "meta": {
+            "totalItems": 2,
+            "totalPages": 1,
+            "currentPage": 1,
+            "itemsPerPage": 10
+        }
+    }
+    ```
+
+#### Get By Program Id
+- **URL**: `/mentorship-program/{Id}`
+- **Method**: `GET`
+- **Description**: Get a mentorship program by its id.
+- **Parameter**: `Id` - The id of the mentorship program.
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 5,
+            "title": "Mentorship_1",
+            "mentorType": "ALUMNI",
+            "description": "this is a program for the juniors",
+            "category": "Technical",
+            "duration": "3 Months",
+            "prerequisites": "NO",
+            "schedule": "Jun 2025 - Aug 2025",
+            "status": "UPCOMING",
+            "createdAt": "2025-03-31T14:10:18.884Z",
+            "updatedAt": "2025-03-31T14:10:18.884Z",
+            "facultyMentorId": null,
+            "alumniMentorId": 2,
+            "facultyMentor": null,
+            "alumniMentor": {
+                "userId": 2,
+                "firstName": "John",
+                "lastName": "Doe",
+                "email": "john.doe@example.com",
+                "mobile": "9876543210",
+                "passingYear": 2025,
+                "profilePictureUrl": "https://example.com/profile/johndoe.jpg"
+            }
+        }
+    }
+    ```
+#### Get By mentor Id
+- **URL**: `/mentorship-program/:MentorType/:id`
+- **Method**: `GET`
+- **Description**: Get a mentorship program by its mentor id.
+- **Parameter**: `MentorType` - The type of mentor (ALUMNI or FACULTY), `id` - The id of the mentor.
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "id": 5,
+                "title": "Mentorship_1",
+                "mentorType": "ALUMNI",
+                "description": "this is a program for the juniors",
+                "category": "Technical",
+                "duration": "3 Months",
+                "prerequisites": "NO",
+                "schedule": "Jun 2025 - Aug 2025",
+                "status": "UPCOMING",
+                "createdAt": "2025-03-31T14:10:18.884Z",
+                "updatedAt": "2025-03-31T14:10:18.884Z",
+                "facultyMentorId": null,
+                "alumniMentorId": 2,
+                "facultyMentor": null,
+                "alumniMentor": {
+                    "userId": 2,
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "email": "john.doe@example.com"
+                }
+            }
+        ]
+    }
+    ```
+#### Update a Program
+- **URL**: `/mentorship-program/:id`
+- **Method**: `PUT`
+- **Description**: Update a mentorship program by its id.
+- **Parameter**: `id` - The id of the Program
+- **Request Body**: `JSON` - The updated program details
+    ```json
+    {
+        "title": "Program 1",
+        "status": "ACTIVE"
+    }
+    ```
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 2,
+            "title": "Program 1",
+            "mentorType": "FACULTY",
+            "description": "this is a program for the juniors",
+            "category": "Technical",
+            "duration": "3 Months",
+            "prerequisites": "NO",
+            "schedule": "Jun 2025 - Aug 2025",
+            "status": "ACTIVE",
+            "createdAt": "2025-03-31T14:09:02.157Z",
+            "updatedAt": "2025-03-31T14:30:13.392Z",
+            "facultyMentorId": 1,
+            "alumniMentorId": null
+        },
+        "message": "Mentorship program updated successfully"
+    }
+    ```
+#### Delete a Program
+- **URL**: `/mentorship-program/:id`
+- **Method**: `DELETE`
+- **Description**: Delete a mentorship program by its id.
+- **Parameter**: `id` - The id of the Program
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 6,
+            "title": "Mentorship_1",
+            "mentorType": "ALUMNI",
+            "description": "this is a program for the juniors",
+            "category": "Technical",
+            "duration": "3 Months",
+            "prerequisites": "NO",
+            "schedule": "Jun 2025 - Aug 2025",
+            "status": "UPCOMING",
+            "createdAt": "2025-03-31T14:31:32.306Z",
+            "updatedAt": "2025-03-31T14:31:32.306Z",
+            "facultyMentorId": null,
+            "alumniMentorId": 2
+        },
+        "message": "Mentorship program deleted successfully"
+    }
+    ```
+
+### Mentorship Program Applications ENDPOINTS
+#### Add New Application
+- **URL**: `/mentorship-applications`
+- **Method**: `POST`
+- **Description**: Add a new mentorship program application.
+- **Parameter**: `No Parameter`
+    ```json
+    {
+        "userId": 3,
+        "mentorshipId": 1,
+        "status": "PENDING"
+    }
+    ```
+- **Response**: `201 Created`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 2,
+            "userId": 3,
+            "mentorshipId": 1,
+            "status": "PENDING",
+            "createdAt": "2025-03-31T15:12:27.292Z",
+            "updatedAt": "2025-03-31T15:12:27.292Z"
+        },
+        "message": "mentorship application submitted successfully"
+    }
+    ```
+
+#### Get All Applications of a Mentorship Program
+- **URL**: `/mentorship-applications/{mentorshipId}`
+- **Method**: `GET`
+- **Description**: Get all applications of a mentorship program.
+- **Parameter**: `mentorshipId` (integer)
+- **Response**: `200 OK`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "id": 1,
+                "userId": 2,
+                "mentorshipId": 1,
+                "status": "PENDING",
+                "createdAt": "2025-03-31T15:11:44.637Z",
+                "updatedAt": "2025-03-31T15:11:44.637Z",
+                "user": {
+                    "userId": 2,
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "branch": "CSE",
+                    "passingYear": 2025,
+                    "email": "john.doe@example.com"
+                },
+                "mentorship": {
+                    "id": 1,
+                    "title": "Mentorship_1",
+                    "mentorType": "ALUMNI",
+                    "description": "this is a program for the juniors",
+                    "category": "Technical",
+                    "duration": "3 Months",
+                    "prerequisites": "NO",
+                    "schedule": "Jun 2025 - Aug 2025",
+                    "status": "ACTIVE",
+                    "createdAt": "2025-03-31T15:08:30.106Z",
+                    "updatedAt": "2025-03-31T15:10:33.660Z",
+                    "facultyMentorId": null,
+                    "alumniMentorId": 2
+                }
+            },
+            {
+                "id": 2,
+                "userId": 3,
+                "mentorshipId": 1,
+                "status": "PENDING",
+                "createdAt": "2025-03-31T15:12:27.292Z",
+                "updatedAt": "2025-03-31T15:12:27.292Z",
+                "user": {
+                    "userId": 3,
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "branch": "ECE",
+                    "passingYear": 2024,
+                    "email": "jane.doe@example.com"
+                },
+                "mentorship": {
+                    "id": 1,
+                    "title": "Mentorship_1",
+                    "mentorType": "ALUMNI",
+                    "description": "this is a program for the juniors",
+                    "category": "Technical",
+                    "duration": "3 Months",
+                    "prerequisites": "NO",
+                    "schedule": "Jun 2025 - Aug 2025",
+                    "status": "ACTIVE",
+                    "createdAt": "2025-03-31T15:08:30.106Z",
+                    "updatedAt": "2025-03-31T15:10:33.660Z",
+                    "facultyMentorId": null,
+                    "alumniMentorId": 2
+                }
+            }
+        ]
+    }
+    ```
+#### Get All Applications of a User
+- **URL**: `/mentorship-applications/user/:userId`
+- **Method**: `GET`
+- **Description**: This endpoint is used to get all the applications of a user.
+- **Parameter**: `userId` - The ID of the user.
+- **Response**: `200 Ok`
+    ```json
+    {
+        "status": "success",
+        "items": [
+            {
+                "id": 2,
+                "userId": 3,
+                "mentorshipId": 1,
+                "status": "PENDING",
+                "createdAt": "2025-03-31T15:12:27.292Z",
+                "updatedAt": "2025-03-31T15:12:27.292Z",
+                "mentorship": {
+                    "id": 1,
+                    "title": "Mentorship_1",
+                    "mentorType": "ALUMNI",
+                    "description": "this is a program for the juniors",
+                    "category": "Technical",
+                    "duration": "3 Months",
+                    "prerequisites": "NO",
+                    "schedule": "Jun 2025 - Aug 2025",
+                    "status": "ACTIVE",
+                    "createdAt": "2025-03-31T15:08:30.106Z",
+                    "updatedAt": "2025-03-31T15:10:33.660Z",
+                    "facultyMentorId": null,
+                    "alumniMentorId": 2
+                }
+            }
+        ]
+    }
+    ```
+
+#### Get a Specific Application 
+- **URL**: `/mentorship-applications/:applicationId`
+- **Method**: `GET`
+- **Description**: This endpoint is used to get a specific application by its ID.
+- **Parameter**: `applicationId` - The ID of the application.
+- **Response**: `200 Ok`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 1,
+            "userId": 2,
+            "mentorshipId": 1,
+            "status": "PENDING",
+            "createdAt": "2025-03-31T15:11:44.637Z",
+            "updatedAt": "2025-03-31T15:11:44.637Z",
+            "user": {
+                "userId": 2,
+                "firstName": "John",
+                "lastName": "Doe",
+                "branch": "CSE",
+                "passingYear": 2025,
+                "email": "john.doe@example.com"
+            },
+            "mentorship": {
+                "id": 1,
+                "title": "Mentorship_1",
+                "mentorType": "ALUMNI",
+                "description": "this is a program for the juniors",
+                "category": "Technical",
+                "duration": "3 Months",
+                "prerequisites": "NO",
+                "schedule": "Jun 2025 - Aug 2025",
+                "status": "ACTIVE",
+                "createdAt": "2025-03-31T15:08:30.106Z",
+                "updatedAt": "2025-03-31T15:10:33.660Z",
+                "facultyMentorId": null,
+                "alumniMentorId": 2
+            }
+        }
+    }
+    ```
+#### Update Status of Application
+- **URL**: `/mentorship-applications/:applicationId/status`
+- **Method**: `PUT`
+- **Description**: This endpoint is used to update an application by its ID.
+- **Parameter**: `applicationId` - The ID of the application.
+- **Body**: 
+    ```json
+    { 
+        "status": "APPROVED" // or "REJECTED" or "PENDING" 
+    }
+    ```
+- **Response**: `200 Ok`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 1,
+            "userId": 2,
+            "mentorshipId": 1,
+            "status": "APPROVED",
+            "createdAt": "2025-03-31T15:11:44.637Z",
+            "updatedAt": "2025-03-31T15:27:07.724Z"
+        },
+        "message": "Application status updated"
+    }
+    ```
+
+#### Delete Application 
+- **URL**: `/mentorship-applications/:applicationId`
+- **Method**: `DELETE`
+- **Description**: This endpoint is used to delete an application by its ID.
+- **Parameter**: `applicationId` - The ID of the application.
+- **Response**: `200 Ok`
+    ```json
+    {
+        "status": "success",
+        "item": {
+            "id": 2,
+            "userId": 3,
+            "mentorshipId": 1,
+            "status": "PENDING",
+            "createdAt": "2025-03-31T15:12:27.292Z",
+            "updatedAt": "2025-03-31T15:12:27.292Z"
+        },
+        "message": "Application deleted successfully"
+    }
+    ```

@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { MentorshipProgramService } from './mentorship-program.service';
 import { CreateMentorshipProgramDto, UpdateMentorshipProgramDto } from './dto/index.dto'
+import { MentorType } from '@prisma/client';
 
 @Controller('mentorship-program')
 export class MentorshipProgramController {
@@ -37,6 +38,18 @@ export class MentorshipProgramController {
         throw new BadRequestException('Invalid ID format');
       }
       return await this.mentorshipProgramService.findOne(programId);
+    }
+
+    @Get(':MentorType/:id')
+    async findByMentor(
+      @Param('id') id: string,
+      @Param('MentorType') MentorType: string
+  ) {
+      const mentorId = parseInt(id, 10);
+      if (isNaN(mentorId)) {
+        throw new BadRequestException('Invalid ID format');
+      }
+      return await this.mentorshipProgramService.findByMentor(mentorId,MentorType as MentorType);
     }
   
     // Update a mentorship program

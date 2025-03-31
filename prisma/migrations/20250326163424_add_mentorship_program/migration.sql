@@ -179,3 +179,8 @@ ALTER TABLE `MentorshipApplication` ADD CONSTRAINT `MentorshipApplication_userId
 
 -- AddForeignKey
 ALTER TABLE `MentorshipApplication` ADD CONSTRAINT `MentorshipApplication_mentorshipId_fkey` FOREIGN KEY (`mentorshipId`) REFERENCES `MentorshipProgram`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AlterTable
+ALTER TABLE `mentorshipapplication` DROP PRIMARY KEY,
+    MODIFY `id` INTEGER NOT NULL AUTO_INCREMENT,
+    ADD PRIMARY KEY (`id`);

@@ -340,7 +340,7 @@ enum ProgramStatus {
 }
 
 model MentorshipApplication {
-  id                String    @id @default(uuid())
+  id                Int    @id @default(autoincrement())
   userId            Int
   user              User      @relation("UserMentorshipApplication",fields: [userId], references: [userId],onDelete: Cascade)
   mentorshipId      Int
