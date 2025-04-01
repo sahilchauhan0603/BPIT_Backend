@@ -26,5 +26,5 @@ export class AddImageDto {
   imageUrl: string
   @IsInt()
   @IsNotEmpty()
-  albumId: number
+  albumId: bigint
 }

@@ -3,14 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
 // Achievement Schema
 model Achievement {
-  achievementId     Int                @id @default(autoincrement())
-  userId            Int
+  achievementId     BigInt                @id @default(autoincrement())
+  userId            BigInt
   title             String
   description       String
   startDate         DateTime
@@ -28,8 +28,8 @@ model Achievement {
 }
 
 model AchievementImage {
-  id            Int         @id @default(autoincrement())
-  achievementId Int
+  id            BigInt         @id @default(autoincrement())
+  achievementId BigInt
   imageUrl      String
   achievement   Achievement @relation(fields: [achievementId], references: [achievementId])
 
@@ -37,27 +37,27 @@ model AchievementImage {
 }
 
 model AchievementAnnouncement {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  achievementId Int
-  mentorId      Int
+  id            BigInt      @id @default(autoincrement())
+  userId        BigInt
+  achievementId BigInt
+  mentorId      BigInt
   dateCreated   DateTime @default(now())
   dateModified  DateTime @updatedAt
 }
 
 model VerificationRequest {
-  id            Int      @id @default(autoincrement())
-  achievementId Int
-  studentId     Int
-  mentorId      Int
+  id            BigInt      @id @default(autoincrement())
+  achievementId BigInt
+  studentId     BigInt
+  mentorId      BigInt
   status        Status @default(PENDING)
   dateCreated   DateTime @default(now())
   dateModified  DateTime @updatedAt
 }
 
 model Notification {
-  id           Int      @id @default(autoincrement())
-  userId       Int
+  id           BigInt      @id @default(autoincrement())
+  userId       BigInt
   content      String
   status       Status
   dateCreated  DateTime @default(now())
@@ -88,7 +88,7 @@ enum SocietyType {
 
 // Combined Schema
 model Faculty {
-  facultyId         Int      @id @default(autoincrement())
+  facultyId         BigInt      @id @default(autoincrement())
   name              String
   department        String
   specialization    String
@@ -109,8 +109,8 @@ model Faculty {
 }
 
 model User {
-  userId                   Int                       @id @default(autoincrement())
-  societyId                Int
+  userId                   BigInt                       @id @default(autoincrement())
+  societyId                BigInt
   firstName                String
   lastName                 String
   email                    String                    @unique
@@ -138,7 +138,7 @@ model User {
   instagramProfileUrl      String?
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
-  facultyId                Int
+  facultyId                BigInt
   faculty                  Faculty                @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
   achievements             Achievement[]             @relation("UserAchievements")
   professionalInformations ProfessionalInformation[] @relation("UserProfessionalInformation")
@@ -158,33 +158,33 @@ model User {
 
 
 model Gallary {
-  gallaryId        Int      @id @default(autoincrement())
+  gallaryId        BigInt      @id @default(autoincrement())
   imageUrl         String
   imageTitle       String
   imageDescription String
-  societyId Int?
+  societyId BigInt?
   society SocietyProfile? @relation("GallerySociety",fields: [societyId], references: [societyId], onDelete: Cascade)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
 model Album {
-  albumId        Int      @id @default(autoincrement())
+  albumId        BigInt      @id @default(autoincrement())
   albumName      String
   albumDescription String
   albumThumbnail String
   images AlumniImages[] @relation("AlbumImages")
 }
 model AlumniImages {
-  imageId Int      @id @default(autoincrement())
+  imageId BigInt      @id @default(autoincrement())
   imageTitle String
   imageDescription String
   imageUrl String
-  albumId Int 
+  albumId BigInt 
   album Album @relation("AlbumImages", fields: [albumId], references: [albumId], onDelete: Cascade)
 } 
 model ProfessionalInformation {
-  professionalInformationId Int       @id @default(autoincrement())
-  userId                    Int
+  professionalInformationId BigInt       @id @default(autoincrement())
+  userId                    BigInt
   companyName               String
   position                  String
   CTC                       String
@@ -198,8 +198,8 @@ model ProfessionalInformation {
 }
 
 model JobsPosting {
-  jobsPostingId Int @id @default(autoincrement())
-  userId        Int
+  jobsPostingId BigInt @id @default(autoincrement())
+  userId        BigInt
   jobTitle      String
   jobDescription String
   companyName String
@@ -219,9 +219,9 @@ model JobsPosting {
   applications JobApplication[] @relation("JobsPostingApplications")
 }
 model JobApplication {
-    jobApplicationId Int      @id @default(autoincrement())
-    jobPostingId     Int
-    userId           Int
+    jobApplicationId BigInt      @id @default(autoincrement())
+    jobPostingId     BigInt
+    userId           BigInt
     status           ApplicationStatus @default(PENDING) // Pending, Shortlisted, Rejected, Hired
     resumeUrl        String // Resume link
     coverLetter      String?
@@ -239,8 +239,8 @@ enum ApplicationStatus {
 }
 
 model InterviewExperience {
-  interviewExperienceId Int      @id @default(autoincrement())
-  userId                Int
+  interviewExperienceId BigInt      @id @default(autoincrement())
+  userId                BigInt
   Title                 String
   company               String
   description           String
@@ -256,7 +256,7 @@ model InterviewExperience {
 }
 
 model Event {
-  eventId          Int             @id @default(autoincrement())
+  eventId          BigInt             @id @default(autoincrement())
   eventName        String
   eventDescription String
   eventDate        DateTime
@@ -268,35 +268,35 @@ model Event {
   subcategory      String
   linkToRegister   String
   attendees        EventAttendee[] @relation("EventToAttendees")
-  societyId        Int?
+  societyId        BigInt?
   society          SocietyProfile? @relation("EventsOfSociety",fields: [societyId], references: [societyId])
 }
 
 model EventAttendee {
-  eventAttendeeId Int   @id @default(autoincrement())
-  eventId         Int
-  userId          Int
+  eventAttendeeId BigInt   @id @default(autoincrement())
+  eventId         BigInt
+  userId          BigInt
   role            String // e.g Speaker Attende Mentor etc.
   event           Event @relation("EventToAttendees", fields: [eventId], references: [eventId], onDelete: Cascade)
   user            User  @relation("UserToEventAttendees", fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model News {
-  newsId          Int @id @default(autoincrement())
+  newsId          BigInt @id @default(autoincrement())
   newsTitle       String
   newsDescription String
   newsImage       String
   newsDate        DateTime
   isActive        Boolean @default(true)
   author          String
-  societyId Int?
+  societyId BigInt?
   society SocietyProfile? @relation("NewsSociety",fields: [societyId], references: [societyId])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
 
 model Notice {
-  noticeId        Int @id @default(autoincrement())
+  noticeId        BigInt @id @default(autoincrement())
   noticeTitle     String
   noticeDescription String?
   noticeDate      DateTime
@@ -306,7 +306,7 @@ model Notice {
 }
 
 model MentorshipProgram {
-  id              Int    @id @default(autoincrement())
+  id              BigInt    @id @default(autoincrement())
   title           String
   mentorType      MentorType
   description     String
@@ -320,8 +320,8 @@ model MentorshipProgram {
   updatedAt       DateTime  @updatedAt
 
   // Mentor can be either Faculty or Alumni
-  facultyMentorId Int?
-  alumniMentorId  Int? 
+  facultyMentorId BigInt?
+  alumniMentorId  BigInt? 
 
   facultyMentor   Faculty?  @relation("FacultyToMentorship",fields: [facultyMentorId], references: [facultyId], onDelete: Cascade,  map: "MentorshipProgram_facultyMentor_fkey")
   alumniMentor    User?   @relation("UserToMentorship",fields: [alumniMentorId], references: [userId], onDelete: Cascade, map: "MentorshipProgram_alumniMentor_fkey")
@@ -340,10 +340,10 @@ enum ProgramStatus {
 }
 
 model MentorshipApplication {
-  id                Int    @id @default(autoincrement())
-  userId            Int
+  id                BigInt    @id @default(autoincrement())
+  userId            BigInt
   user              User      @relation("UserMentorshipApplication",fields: [userId], references: [userId],onDelete: Cascade)
-  mentorshipId      Int
+  mentorshipId      BigInt
   mentorship        MentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
   status            ApplStatus
   createdAt         DateTime @default(now())
@@ -358,8 +358,8 @@ enum ApplStatus {
 
 //done
 model SocietyProfile {
-  societyId          Int      @id 
-  facultyId          Int 
+  societyId          BigInt      @id 
+  facultyId          BigInt 
   societyType        String
   societyName        String
   societyHead        String
@@ -385,8 +385,8 @@ model SocietyProfile {
 
 //done
 model SocietyAchievement{
-  societyAchievementId Int @id 
-  societyId           Int
+  societyAchievementId BigInt @id 
+  societyId           BigInt
   society             SocietyProfile @relation("AchievementOfSociety",fields: [societyId], references: [societyId])
   title               String
   description         String
@@ -396,18 +396,18 @@ model SocietyAchievement{
 }
 
 model SocietyTestimonial {
-  userId  Int
+  userId  BigInt
   user User @relation("UserinSocietyTestimonial",fields: [userId], references: [userId])
-  societyId Int
+  societyId BigInt
   society SocietyProfile @relation("ProfileOfSociety",fields: [societyId], references: [societyId])
-  societyTestimonialId Int @id 
+  societyTestimonialId BigInt @id 
   description String
 }
 
 //done
 model StudentAchievement {
-  societyId     Int
-  userId Int
+  societyId     BigInt
+  userId BigInt
   achievementId Int @id
   title         String
   description   String
@@ -417,9 +417,9 @@ model StudentAchievement {
 }
 
 model StudentMarking {
-  userId        Int       
-  societyId     Int
-  markingId     Int     @id @default(autoincrement())
+  userId        BigInt       
+  societyId     BigInt
+  markingId     BigInt     @id @default(autoincrement())
   studentGrades String
   society       SocietyProfile @relation("StudentMarkings",fields: [societyId], references: [societyId])
   user User @relation("SocietyStudentMarking",fields: [userId], references: [userId])
@@ -428,10 +428,10 @@ model StudentMarking {
 
 //done
 model SocietyMember{
-  memberId Int @id @default(autoincrement())
-  userId  Int 
+  memberId BigInt @id @default(autoincrement())
+  userId  BigInt 
   user User @relation("SocietyMember",fields: [userId], references: [userId])
-  societyId Int
+  societyId BigInt
   society SocietyProfile @relation("MemberOfSociety",fields: [societyId], references: [societyId])
   societyPosition String
   domainExpertise String
@@ -470,8 +470,8 @@ model SocietyMember{
 // }
 
 model SocietyRole {
-  societyRoleId Int @id @default(autoincrement())
-  societyId Int
+  societyRoleId BigInt @id @default(autoincrement())
+  societyId BigInt
   roleType String
   roleName String
   roleDescription String
@@ -484,7 +484,7 @@ model SocietyRole {
 }
 
 model Equipment {
-  equipmentId        Int                @id @default(autoincrement())
+  equipmentId        BigInt                @id @default(autoincrement())
   equipmentName      String
   equipmentNumber    BigInt
   category           String
@@ -499,7 +499,7 @@ model Equipment {
 }
 
 model Room {
-  roomId              Int      @id @default(autoincrement())
+  roomId              BigInt      @id @default(autoincrement())
   roomNumber          Int
   floor               String
   category            String
@@ -511,9 +511,9 @@ model Room {
 }
 
 model EquipmentHistory {
-  equipmentHistoryId Int       @id @default(autoincrement())
-  equipmentId        Int
-  userId             Int
+  equipmentHistoryId BigInt       @id @default(autoincrement())
+  equipmentId        BigInt
+  userId             BigInt
   title              String
   description        String
   isSolved           Boolean   @default(false)
@@ -531,7 +531,7 @@ enum Role {
 }
 
 model Issue {
-  id Int @default(autoincrement()) @id
+  id BigInt @default(autoincrement()) @id
   Designation String
   Name String
   Enrollmentno String

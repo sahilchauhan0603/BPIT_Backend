@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE `achievement` MODIFY `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING';
-
--- AlterTable
-ALTER TABLE `verificationrequest` MODIFY `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING';
