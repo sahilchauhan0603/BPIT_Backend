@@ -26,5 +26,5 @@ export class UpdateImageDto {
 
   @IsInt()
   @IsOptional()
-  albumId: number;
+  albumId: bigint;
 }
