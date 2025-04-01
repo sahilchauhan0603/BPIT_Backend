@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 
 export class Issue implements Prisma.IssueCreateInput{
-    id: number;
+    id: bigint;
     Designation: string;
     Name: string;
     Enrollmentno: string;
