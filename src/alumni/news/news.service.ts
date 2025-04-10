@@ -43,7 +43,7 @@ export class NewsService {
     }
   }
 
-  async findById(id: number) {
+  async findById(id: bigint) {
     try {
       const news = await this.prisma.news.findUnique({ where: { newsId: id } });
       if (!news) {
@@ -58,7 +58,7 @@ export class NewsService {
     }
   }
 
-  async update(id: number, dto: UpdateNewsDto) {
+  async update(id: bigint, dto: UpdateNewsDto) {
     try {
       const updatedNews = await this.prisma.news.update({
         where: { newsId: id },
@@ -80,7 +80,7 @@ export class NewsService {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: bigint) {
     try {
       const deletedNews = await this.prisma.news.delete({
         where: { newsId: id },

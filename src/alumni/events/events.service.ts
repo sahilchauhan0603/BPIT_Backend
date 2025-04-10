@@ -76,7 +76,7 @@ export class EventsService {
   }
 
   // Get an event by EventID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const event = await this.prisma.event.findUnique({
         where: { eventId: id },
@@ -130,7 +130,7 @@ export class EventsService {
     }
   }
 
-  async getAllRole(eventId: number) {
+  async getAllRole(eventId: bigint) {
     try {
       const roles = await this.prisma.eventAttendee.findMany({
         where: { eventId: eventId },
@@ -164,7 +164,7 @@ export class EventsService {
   }
 
   // Update an Event by ID
-  async update(id: number, dto: UpdateEventDto) {
+  async update(id: bigint, dto: UpdateEventDto) {
     try {
       const updatedEvent = await this.prisma.event.update({
         where: { eventId: id },
@@ -188,7 +188,7 @@ export class EventsService {
   }
 
   // Update an EventRole by ID
-  async updateRole(id: number, dto: UpdateEventAttendeDto) {
+  async updateRole(id: bigint, dto: UpdateEventAttendeDto) {
     try {
       const updatedEventAttende = await this.prisma.eventAttendee.update({
         where: { eventAttendeeId: id },
@@ -212,7 +212,7 @@ export class EventsService {
   }
 
   // Delete an Event by ID
-  async removeEvent(id: number) {
+  async removeEvent(id: bigint) {
     try {
       const deletedEvent = await this.prisma.event.delete({
         where: { eventId: id },
@@ -234,7 +234,7 @@ export class EventsService {
     }
   }
 
-  async removeRole(id: number) {
+  async removeRole(id: bigint) {
     try {
       const deletedAttende = await this.prisma.eventAttendee.delete({
         where: { eventAttendeeId: id },
@@ -256,7 +256,7 @@ export class EventsService {
     }
   }
 
-  async getAllEventByUserId(userId: number) {
+  async getAllEventByUserId(userId: bigint) {
     try {
       const events = await this.prisma.eventAttendee.findMany({
         where: { userId: userId },

@@ -93,7 +93,7 @@ model Faculty {
   department        String
   specialization    String
   joiningDate       DateTime
-  resigningDate     DateTime
+  resigningDate     DateTime?
   phone             String   @unique
   email             String   @unique
   position          String

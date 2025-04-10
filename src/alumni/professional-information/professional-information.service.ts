@@ -78,7 +78,7 @@ export class ProfessionalInformationService {
   }
 
   // Get professional information by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const professionalInfo =
         await this.prisma.professionalInformation.findUnique({
@@ -113,7 +113,7 @@ export class ProfessionalInformationService {
   }
 
   // Get all professional information for a user
-  async findAllByUserId(userId: number, page: number) {
+  async findAllByUserId(userId: bigint, page: number) {
     try {
       const professionalInfos =
         await this.prisma.professionalInformation.findMany({
@@ -154,7 +154,7 @@ export class ProfessionalInformationService {
   }
 
   // Get the current company of a user
-  async findCurrentCompanyByUserId(userId: number) {
+  async findCurrentCompanyByUserId(userId: bigint) {
     try {
       // First, find the current company where endDate is null
       let currentCompany = await this.prisma.professionalInformation.findFirst({
@@ -208,7 +208,7 @@ export class ProfessionalInformationService {
   }
 
   // Update professional information by ID
-  async update(id: number, dto: UpdateProfessionalInformationDto) {
+  async update(id: bigint, dto: UpdateProfessionalInformationDto) {
     try {
       const updatedProfessionalInfo =
         await this.prisma.professionalInformation.update({
@@ -233,7 +233,7 @@ export class ProfessionalInformationService {
   }
 
   // Delete professional information by ID
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedProfessionalInfo =
         await this.prisma.professionalInformation.delete({

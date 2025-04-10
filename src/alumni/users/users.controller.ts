@@ -31,27 +31,33 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let userId: bigint;
+    try {
+        userId = BigInt(id);
+    } catch (err) {
+        throw new BadRequestException(`Invalid ID: ${id}`);
     }
     return await this.usersService.findOne(userId);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let userId: bigint;
+    try {
+        userId = BigInt(id);
+    } catch (err) {
+        throw new BadRequestException(`Invalid ID: ${id}`);
     }
     return await this.usersService.update(userId, updateUserDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let userId: bigint;
+    try {
+        userId = BigInt(id);
+    } catch (err) {
+        throw new BadRequestException(`Invalid ID: ${id}`);
     }
     return await this.usersService.remove(userId);
   }

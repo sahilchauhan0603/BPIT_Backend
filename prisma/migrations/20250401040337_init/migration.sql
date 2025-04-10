@@ -98,7 +98,7 @@ CREATE TABLE "Faculty" (
     "department" STRING NOT NULL,
     "specialization" STRING NOT NULL,
     "joiningDate" TIMESTAMP(3) NOT NULL,
-    "resigningDate" TIMESTAMP(3) NOT NULL,
+    "resigningDate" TIMESTAMP(3),
     "phone" STRING NOT NULL,
     "email" STRING NOT NULL,
     "position" STRING NOT NULL,

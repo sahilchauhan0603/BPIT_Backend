@@ -33,9 +33,11 @@ export class MentorshipProgramController {
     // Get a specific mentorship program by ID
     @Get(':id')
     async findOne(@Param('id') id: string) {
-      const programId = parseInt(id, 10);
-      if (isNaN(programId)) {
-        throw new BadRequestException('Invalid ID format');
+      let programId : bigint
+      try {
+        programId = BigInt(id)
+      } catch (error) {
+        throw new BadRequestException('Invalid program ID')
       }
       return await this.mentorshipProgramService.findOne(programId);
     }
@@ -45,9 +47,11 @@ export class MentorshipProgramController {
       @Param('id') id: string,
       @Param('MentorType') MentorType: string
   ) {
-      const mentorId = parseInt(id, 10);
-      if (isNaN(mentorId)) {
-        throw new BadRequestException('Invalid ID format');
+      let mentorId : bigint
+      try {
+        mentorId = BigInt(id)
+      } catch (error) {
+        throw new BadRequestException('Invalid mentor ID')
       }
       return await this.mentorshipProgramService.findByMentor(mentorId,MentorType as MentorType);
     }
@@ -58,9 +62,11 @@ export class MentorshipProgramController {
       @Param('id') id: string,
       @Body() updateMentorshipProgramDto: UpdateMentorshipProgramDto,
     ) {
-      const programId = parseInt(id, 10);
-      if (isNaN(programId)) {
-        throw new BadRequestException('Invalid ID format');
+      let programId : bigint
+      try {
+        programId = BigInt(id)
+      } catch (error) {
+        throw new BadRequestException('Invalid program ID')
       }
       return await this.mentorshipProgramService.update(programId, updateMentorshipProgramDto);
     }
@@ -68,9 +74,11 @@ export class MentorshipProgramController {
     // Delete a mentorship program
     @Delete(':id')
     async remove(@Param('id') id: string) {
-      const programId = parseInt(id, 10);
-      if (isNaN(programId)) {
-        throw new BadRequestException('Invalid ID format');
+      let programId : bigint
+      try {
+        programId = BigInt(id)
+      } catch (error) {
+        throw new BadRequestException('Invalid program ID')
       }
       return await this.mentorshipProgramService.remove(programId);
     }

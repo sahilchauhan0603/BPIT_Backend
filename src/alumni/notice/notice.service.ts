@@ -46,7 +46,7 @@ export class NoticeService {
     }
   }
 
-  async update(id: number, Dto: UpdateNoticeDto) {
+  async update(id: bigint, Dto: UpdateNoticeDto) {
     try {
       const updatedNotice = await this.prisma.notice.update({
         where: { noticeId: id },
@@ -69,7 +69,7 @@ export class NoticeService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedNotice = await this.prisma.notice.delete({
         where: { noticeId: id },

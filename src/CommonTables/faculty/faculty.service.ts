@@ -23,7 +23,7 @@ export class FacultyService {
     return await this.prisma.faculty.findMany();
   }
 
-  async getFacultyById(id: number) {
+  async getFacultyById(id: bigint) {
     const faculty = await this.prisma.faculty.findUnique({
       where: { facultyId: id },
     });
@@ -35,7 +35,7 @@ export class FacultyService {
     return faculty;
   }
 
-  async updateFaculty(id: number, updateFacultyDto: UpdateFacultyDto) {
+  async updateFaculty(id: bigint, updateFacultyDto: UpdateFacultyDto) {
     const existingFaculty = await this.getFacultyById(id);
 
     if (!existingFaculty) {
@@ -48,7 +48,7 @@ export class FacultyService {
     });
   }
 
-  async deleteFaculty(id: number) {
+  async deleteFaculty(id: bigint) {
     const existingFaculty = await this.getFacultyById(id);
 
     if (!existingFaculty) {
@@ -83,7 +83,7 @@ export class FacultyService {
   }
 
   // Fetch coordinators by society ID
-  async fetchCoordinatorBySocietyId(societyId: number) {
+  async fetchCoordinatorBySocietyId(societyId: bigint) {
     const coordinators = await this.prisma.faculty.findMany({
       where: {
         facultySociety: {
@@ -118,7 +118,7 @@ export class FacultyService {
   }
 
   // Fetch coordinator by coordinator ID
-  async fetchCoordinatorById(coordinatorId: number) {
+  async fetchCoordinatorById(coordinatorId: bigint) {
     const coordinator = await this.prisma.faculty.findUnique({
       where: { facultyId: coordinatorId },
       select: {
@@ -165,7 +165,7 @@ export class FacultyService {
     return coordinators;
   }
 
-  async fetchCoordinatorAdminBySocietyId(societyId: number) {
+  async fetchCoordinatorAdminBySocietyId(societyId: bigint) {
     const coordinators = await this.prisma.faculty.findMany({
       where: {
         facultySociety: {

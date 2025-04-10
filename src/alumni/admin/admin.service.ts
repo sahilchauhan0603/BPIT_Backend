@@ -87,14 +87,19 @@ export class AdminService {
       }
 
       const users = await this.prisma.user.findMany(query);
-      return { status: 'success', items: users };
+      // Exclude password
+      const sanitizedUsers = users.map((user) => {
+        const { password, ...rest } = user;
+        return rest;
+      });
+      return { status: 'success', items: sanitizedUsers };
     } catch (error) {
       handleError(error);
     }
   }
 
   // Approve Interview Experience
-  async handleInterviewExperienceApproval(id: number, isApproved: boolean) {
+  async handleInterviewExperienceApproval(id: bigint, isApproved: boolean) {
     try {
       if (isApproved) {
         const updated = await this.prisma.interviewExperience.update({
@@ -127,7 +132,7 @@ export class AdminService {
   }
 
   // Approve Professional Information
-  async handleProfessionalInformationApproval(id: number, isApproved: boolean) {
+  async handleProfessionalInformationApproval(id: bigint, isApproved: boolean) {
     try {
       if (isApproved) {
         const updated = await this.prisma.professionalInformation.update({
@@ -160,7 +165,7 @@ export class AdminService {
   }
 
   // Approve User
-  async handleUserApproval(id: number, isApproved: boolean) {
+  async handleUserApproval(id: bigint, isApproved: boolean) {
     try {
       if (isApproved) {
         const updated = await this.prisma.user.update({
@@ -228,31 +233,45 @@ export class AdminService {
     }
   }
   // Handle Accepted/Rejected state of Achievement
-  async handleAchievementApproval(id: number, isStatus: string) {
+  async handleAchievementApproval(id: bigint, isStatus: string) {
     try {
-      if ((isStatus = Status.ACCEPTED)) {
-        const updated = await this.prisma.achievement.update({
-          where: { achievementId: id },
-          data: { status: Status.ACCEPTED },
-        });
+      const validStatuses = [Status.ACCEPTED, Status.REJECTED, Status.PENDING];
+
+      if (!validStatuses.includes(isStatus as Status)) {
         return {
-          status: 'success',
-          item: updated,
-          message: 'Achievement approved successfully',
-        };
-      } else if ((isStatus = Status.REJECTED)) {
-        await this.prisma.achievement.delete({
-          where: { achievementId: id },
-        });
-        return {
-          status: 'success',
-          message: 'Achievement rejected and removed successfully',
+          status: 'error',
+          message: 'Invalid status',
         };
       }
+
+      const updated = await this.prisma.achievement.update({
+        where: { achievementId: id },
+        data: { status: isStatus as Status },
+      });
+
+      let message = '';
+
+      switch (isStatus) {
+        case Status.ACCEPTED:
+          message = 'Achievement approved successfully';
+          break;
+        case Status.REJECTED:
+          message = 'Achievement rejected successfully';
+          break;
+        case Status.PENDING:
+          message = 'Achievement status updated to Pending successfully';
+          break;
+      }
+
+      return {
+        status: 'success',
+        item: updated,
+        message,
+      };
     } catch (error) {
       if (isPrismaError(error) && error.code === 'P2025') {
         throw new HttpException(
-          { status: 'error', message: 'User not found' },
+          { status: 'error', message: 'Achievement not found' },
           HttpStatus.NOT_FOUND,
         );
       }

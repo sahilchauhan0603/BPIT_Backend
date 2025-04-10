@@ -28,21 +28,25 @@ export class NoticeController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateNoticeDto,
+    @Body() updateNoticeDto: UpdateNoticeDto,
   ) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let noticeId : bigint
+    try {
+      noticeId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid id')
     }
-    return await this.noticeService.update(userId, updateUserDto);
+    return await this.noticeService.update(noticeId, updateNoticeDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let noticeId : bigint
+    try {
+      noticeId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid id')
     }
-    return await this.noticeService.remove(userId);
+    return await this.noticeService.remove(noticeId);
   }
 }

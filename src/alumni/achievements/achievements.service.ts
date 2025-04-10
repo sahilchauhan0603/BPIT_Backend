@@ -84,7 +84,7 @@ export class AchievementsService {
   }
 
   // Get an interview experience by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const achievement = await this.prisma.achievement.findUnique({
         where: { achievementId: id },
@@ -127,7 +127,7 @@ export class AchievementsService {
   }
 
   // Get all achievements by user ID (approved and non-approved)
-  async findByUserId(userId: number) {
+  async findByUserId(userId: bigint) {
     try {
       const achievements = await this.prisma.achievement.findMany({
         where: { userId: userId },
@@ -162,7 +162,7 @@ export class AchievementsService {
   }
 
   // Update an Achievement by ID
-  async update(id: number, dto: UpdateAchievementDto) {
+  async update(id: bigint, dto: UpdateAchievementDto) {
     try {
       const updatedAchievement = await this.prisma.achievement.update({
         where: { achievementId: id },
@@ -186,7 +186,7 @@ export class AchievementsService {
   }
 
   // Delete an Achievement by ID
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedAchievement = await this.prisma.achievement.delete({
         where: { achievementId: id },
@@ -229,7 +229,7 @@ export class AchievementsService {
   }
 
   // Get all Image Related to a achievement
-  async findAllImage(id: number) {
+  async findAllImage(id: bigint) {
     try {
       const achievementImages = await this.prisma.achievementImage.findMany({
         where: { achievementId: id },
@@ -241,7 +241,7 @@ export class AchievementsService {
   }
 
   // Update Image
-  async updateImage(id: number, dto: UpdateAchievementImageDto) {
+  async updateImage(id: bigint, dto: UpdateAchievementImageDto) {
     try {
       const updatedAchievementImage = await this.prisma.achievementImage.update(
         {
@@ -266,7 +266,7 @@ export class AchievementsService {
     }
   }
 
-  async removeImage(id: number) {
+  async removeImage(id: bigint) {
     try {
       const deletedAchievementImage = await this.prisma.achievementImage.delete(
         {
@@ -290,7 +290,7 @@ export class AchievementsService {
     }
   }
 
-  async removeImages(id: number) {
+  async removeImages(id: bigint) {
     try {
       const deletedAchievementImages =
         await this.prisma.achievementImage.deleteMany({

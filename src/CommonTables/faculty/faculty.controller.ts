@@ -27,21 +27,21 @@ export class FacultyController {
   }
 
   @Get('/faculty/:id')
-  async getFacultyById(@Param('id', ParseIntPipe) id: number) {
-    return this.facultyService.getFacultyById(Number(id));
+  async getFacultyById(@Param('id') id: string) {
+    return this.facultyService.getFacultyById(BigInt(id));
   }
 
   @Put('/faculty/:id')
   async updateFaculty(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateFacultyDto: UpdateFacultyDto,
   ) {
-    return this.facultyService.updateFaculty(Number(id), updateFacultyDto);
+    return this.facultyService.updateFaculty(BigInt(id), updateFacultyDto);
   }
 
   @Delete('/faculty/:id')
-  async deleteFaculty(@Param('id', ParseIntPipe) id: number) {
-    return this.facultyService.deleteFaculty(Number(id));
+  async deleteFaculty(@Param('id') id: string) {
+    return this.facultyService.deleteFaculty(BigInt(id));
   }
 
   @Get('/societyCoordinator')
@@ -51,19 +51,19 @@ export class FacultyController {
 
   @Get('/societyCoordinator/:societyId')
   async getCoordinatorsBySocietyId(
-    @Param('societyId', ParseIntPipe) societyId: number,
+    @Param('societyId') societyId: string,
   ) {
     return await this.facultyService.fetchCoordinatorBySocietyId(
-      Number(societyId),
+      BigInt(societyId),
     );
   }
 
   @Get('/societyCoordinator/:coordinatorId')
   async getCoordinatorById(
-    @Param('coordinatorId', ParseIntPipe) coordinatorId: number,
+    @Param('coordinatorId') coordinatorId: string,
   ) {
     return await this.facultyService.fetchCoordinatorById(
-      Number(coordinatorId),
+      BigInt(coordinatorId),
     );
   }
 
@@ -74,10 +74,10 @@ export class FacultyController {
 
   @Get('/admin/societyCoordinator/:societyId')
   async getCoordinatorsAdminBySocietyId(
-    @Param('societyId', ParseIntPipe) societyId: number,
+    @Param('societyId') societyId: string,
   ) {
     return await this.facultyService.fetchCoordinatorAdminBySocietyId(
-      Number(societyId),
+      BigInt(societyId),
     );
   }
 }

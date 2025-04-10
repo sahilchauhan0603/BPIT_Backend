@@ -37,7 +37,7 @@ export class MentorshipApplicationsService {
   }
 
   // Get all job applications for a given job posting ID
-  async findByProgramId(mentorshipId: number) {
+  async findByProgramId(mentorshipId: bigint) {
     try {
       const applications = await this.prisma.mentorshipApplication.findMany({
         where: { mentorshipId },
@@ -58,7 +58,7 @@ export class MentorshipApplicationsService {
   }
 
   // Get all job applications submitted by a user
-  async findByUserId(userId: number) {
+  async findByUserId(userId: bigint) {
     try {
       const applications = await this.prisma.mentorshipApplication.findMany({
         where: { userId },
@@ -72,7 +72,7 @@ export class MentorshipApplicationsService {
   }
 
   // Get a specific job application by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const application = await this.prisma.mentorshipApplication.findUnique({
         where: { id: id },
@@ -101,7 +101,7 @@ export class MentorshipApplicationsService {
 
 
   // Update mentorship application status
-  async updateStatus(id: number, status: string) {
+  async updateStatus(id: bigint, status: string) {
     try {
        // Validate if the status is a valid enum value
         if (!Object.values(ApplStatus).includes(status as ApplStatus)) {
@@ -123,7 +123,7 @@ export class MentorshipApplicationsService {
   }
 
   // Delete a job application
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedApplication = await this.prisma.mentorshipApplication.delete({
         where: { id: id },

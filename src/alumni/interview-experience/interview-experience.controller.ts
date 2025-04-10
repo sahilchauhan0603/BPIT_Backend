@@ -45,9 +45,11 @@ export class InterviewExperienceController {
   // Get a specific interview experience by ID
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const experienceId = parseInt(id, 10);
-    if (isNaN(experienceId)) {
-      throw new BadRequestException('Invalid ID format');
+    let experienceId : bigint
+    try {
+      experienceId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid ID');
     }
     return await this.interviewExperienceService.findOne(experienceId);
   }
@@ -59,9 +61,11 @@ export class InterviewExperienceController {
     @Query('page') page: string = '1',
   ) {
     const pageNumber = parseInt(page, 10) || 1;
-    const userIdInt = parseInt(userId, 10);
-    if (isNaN(userIdInt)) {
-      throw new BadRequestException('Invalid User ID format');
+    let userIdInt : bigint
+    try {
+      userIdInt = BigInt(userId)
+    } catch (error) {
+      throw new BadRequestException('Invalid ID');
     }
     return await this.interviewExperienceService.findByUserId(
       userIdInt,
@@ -75,9 +79,11 @@ export class InterviewExperienceController {
     @Param('id') id: string,
     @Body() updateInterviewExperienceDto: UpdateInterviewExperienceDto,
   ) {
-    const experienceId = parseInt(id, 10);
-    if (isNaN(experienceId)) {
-      throw new BadRequestException('Invalid ID format');
+    let experienceId : bigint
+    try {
+      experienceId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid ID');
     }
     return await this.interviewExperienceService.update(
       experienceId,
@@ -88,9 +94,11 @@ export class InterviewExperienceController {
   // Delete an interview experience by ID
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const experienceId = parseInt(id, 10);
-    if (isNaN(experienceId)) {
-      throw new BadRequestException('Invalid ID format');
+    let experienceId : bigint
+    try {
+      experienceId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid ID');
     }
     return await this.interviewExperienceService.remove(experienceId);
   }

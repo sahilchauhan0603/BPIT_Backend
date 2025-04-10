@@ -59,7 +59,7 @@ export class JobsService {
   }
 
   // Get a job posting by ID with associated user data
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const jobPosting = await this.prisma.jobsPosting.findUnique({
         where: { jobsPostingId: id },
@@ -90,7 +90,7 @@ export class JobsService {
   }
 
   // Get all job postings by user ID
-  async findByUserId(userId: number, page: number) {
+  async findByUserId(userId: bigint, page: number) {
     try {
       const jobPostings = await this.prisma.jobsPosting.findMany({
         where: { userId: userId },
@@ -128,7 +128,7 @@ export class JobsService {
   }
 
   // Update job posting
-  async update(id: number, dto: UpdateJobPostingDto) {
+  async update(id: bigint, dto: UpdateJobPostingDto) {
     try {
       const updatedJobPosting = await this.prisma.jobsPosting.update({
         where: { jobsPostingId: id },
@@ -152,7 +152,7 @@ export class JobsService {
   }
 
   // Delete a job posting
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedJobPosting = await this.prisma.jobsPosting.delete({
         where: { jobsPostingId: id },
