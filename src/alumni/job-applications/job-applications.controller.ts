@@ -24,9 +24,11 @@ import {
     // Get all job applications for a given job posting ID
     @Get('job/:jobPostingId')
     async findByJobPostingId(@Param('jobPostingId') jobPostingId: string) {
-      const jobId = parseInt(jobPostingId, 10);
-      if (isNaN(jobId)) {
-        throw new BadRequestException('Invalid Job Posting ID format');
+      let jobId : bigint
+      try{
+        jobId = BigInt(jobPostingId)
+      } catch{
+        throw new BadRequestException('Invalid job posting ID')
       }
       return await this.jobApplicationService.findByJobPostingId(jobId);
     }
@@ -34,9 +36,11 @@ import {
     // Get all job applications submitted by a specific user
     @Get('user/:userId')
     async findByUserId(@Param('userId') userId: string) {
-      const userIdInt = parseInt(userId, 10);
-      if (isNaN(userIdInt)) {
-        throw new BadRequestException('Invalid User ID format');
+      let userIdInt : bigint
+      try{
+        userIdInt = BigInt(userId)
+      } catch{
+        throw new BadRequestException('Invalid user ID')
       }
       return await this.jobApplicationService.findByUserId(userIdInt);
     }
@@ -44,9 +48,11 @@ import {
     // Get a specific job application by ID
     @Get(':id')
     async findOne(@Param('id') id: string) {
-      const appId = parseInt(id, 10);
-      if (isNaN(appId)) {
-        throw new BadRequestException('Invalid Application ID format');
+      let appId : bigint
+      try{
+        appId = BigInt(id)
+      } catch{
+        throw new BadRequestException('Invalid application ID')
       }
       return await this.jobApplicationService.findOne(appId);
     }
@@ -54,9 +60,11 @@ import {
     // Update a job application (if the job posting is still active)
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateJobApplicationDto: UpdateJobApplicationDto) {
-      const appId = parseInt(id, 10);
-      if (isNaN(appId)) {
-        throw new BadRequestException('Invalid Application ID format');
+      let appId : bigint
+      try{
+        appId = BigInt(id)
+      } catch{
+        throw new BadRequestException('Invalid application ID')
       }
       delete updateJobApplicationDto['status'];
       return await this.jobApplicationService.update(appId, updateJobApplicationDto);
@@ -65,9 +73,11 @@ import {
     // Update the status of a job application
     @Put(':id/status')
     async updateStatus(@Param('id') id: string, @Body() updateApplicationStatusDto: UpdateApplicationStatusDto) {
-      const appId = parseInt(id, 10);
-      if (isNaN(appId)) {
-        throw new BadRequestException('Invalid Application ID format');
+      let appId : bigint
+      try{
+        appId = BigInt(id)
+      } catch{
+        throw new BadRequestException('Invalid application ID')
       }
       return await this.jobApplicationService.updateStatus(appId, updateApplicationStatusDto.status);
     }
@@ -75,9 +85,11 @@ import {
     // Delete a job application
     @Delete(':id')
     async remove(@Param('id') id: string) {
-      const appId = parseInt(id, 10);
-      if (isNaN(appId)) {
-        throw new BadRequestException('Invalid Application ID format');
+      let appId : bigint
+      try{
+        appId = BigInt(id)
+      } catch{
+        throw new BadRequestException('Invalid application ID')
       }
       return await this.jobApplicationService.remove(appId);
     }

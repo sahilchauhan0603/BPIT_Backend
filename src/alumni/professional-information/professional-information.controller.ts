@@ -41,9 +41,11 @@ export class ProfessionalInformationController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const professionalId = parseInt(id, 10);
-    if (isNaN(professionalId)) {
-      throw new BadRequestException('Invalid ID format');
+    let professionalId : bigint
+    try{
+      professionalId = BigInt(id)
+    } catch{
+      throw new BadRequestException('Invalid id')
     }
     return await this.professionalInformationService.findOne(professionalId);
   }
@@ -54,9 +56,11 @@ export class ProfessionalInformationController {
     @Query('page') page: string = '1',
   ) {
     const pageNumber = parseInt(page, 10) || 1;
-    const userIdInt = parseInt(userId, 10);
-    if (isNaN(userIdInt)) {
-      throw new BadRequestException('Invalid User ID format');
+    let userIdInt : bigint;
+    try{
+      userIdInt = BigInt(userId)
+    } catch{
+      throw new BadRequestException('Invalid id')
     }
     return await this.professionalInformationService.findAllByUserId(
       userIdInt,
@@ -66,9 +70,11 @@ export class ProfessionalInformationController {
 
   @Get('current-company/:userId')
   async findCurrentCompany(@Param('userId') userId: string) {
-    const userIdInt = parseInt(userId, 10);
-    if (isNaN(userIdInt)) {
-      throw new BadRequestException('Invalid User ID format');
+    let userIdInt : bigint;
+    try{
+      userIdInt = BigInt(userId)
+    } catch{
+      throw new BadRequestException('Invalid id')
     }
     return await this.professionalInformationService.findCurrentCompanyByUserId(
       userIdInt,
@@ -80,9 +86,11 @@ export class ProfessionalInformationController {
     @Param('id') id: string,
     @Body() updateProfessionalInformationDto: UpdateProfessionalInformationDto,
   ) {
-    const professionalId = parseInt(id, 10);
-    if (isNaN(professionalId)) {
-      throw new BadRequestException('Invalid ID format');
+    let professionalId : bigint
+    try{
+      professionalId = BigInt(id)
+    } catch{
+      throw new BadRequestException('Invalid id')
     }
     return await this.professionalInformationService.update(
       professionalId,
@@ -92,9 +100,11 @@ export class ProfessionalInformationController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const professionalId = parseInt(id, 10);
-    if (isNaN(professionalId)) {
-      throw new BadRequestException('Invalid ID format');
+    let professionalId : bigint
+    try{
+      professionalId = BigInt(id)
+    } catch{
+      throw new BadRequestException('Invalid id')
     }
     return await this.professionalInformationService.remove(professionalId);
   }

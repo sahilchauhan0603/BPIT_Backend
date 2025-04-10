@@ -5,6 +5,7 @@ import {
   Get,
   Query,
   BadRequestException,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 
@@ -33,7 +34,7 @@ export class AdminController {
   // Get all users (Alumni or Students) by approval status and role
   @Get('users')
   async getUsers(
-    @Query('isApproved') isApproved: boolean,
+    @Query('isApproved', new ParseBoolPipe()) isApproved: boolean,
     @Query('role') role?: string,
   ) {
     return await this.adminService.getUsers(isApproved, role);
@@ -45,9 +46,11 @@ export class AdminController {
     @Param('id') id: string,
     @Query('isApproved') isApproved: string,
   ) {
-    const experienceId = parseInt(id, 10);
-    if (isNaN(experienceId)) {
-      throw new BadRequestException('Invalid ID format');
+    let experienceId : bigint
+    try {
+      experienceId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid experience ID');
     }
     let temp: boolean = true;
     if (isApproved.toLocaleLowerCase() === 'false') temp = false;
@@ -63,9 +66,11 @@ export class AdminController {
     @Param('id') id: string,
     @Query('isApproved') isApproved: string,
   ) {
-    const infoId = parseInt(id, 10);
-    if (isNaN(infoId)) {
-      throw new BadRequestException('Invalid ID format');
+    let infoId : bigint
+    try {
+      infoId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid Professional information ID');
     }
     let temp: boolean = true;
     if (isApproved.toLocaleLowerCase() === 'false') temp = false;
@@ -81,9 +86,11 @@ export class AdminController {
     @Param('id') id: string,
     @Query('isApproved') isApproved: string,
   ) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let userId : bigint
+    try {
+      userId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid user ID');
     }
     let temp: boolean = true;
     if (isApproved.toLocaleLowerCase() === 'false') temp = false;
@@ -104,9 +111,11 @@ export class AdminController {
     @Param('id') id: string,
     @Query('isApproved') isStatus: string,
   ) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid achievement ID');
     }
     return await this.adminService.handleAchievementApproval(
       achievementId,

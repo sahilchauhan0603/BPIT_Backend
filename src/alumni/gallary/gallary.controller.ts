@@ -32,9 +32,11 @@ export class GallaryController {
   // Update album details
   @Put(':id')
   async updateAlbum(@Param('id') id: string, @Body() dto: UpdateAlbumDto) {
-    const albumId = parseInt(id, 10);
-    if (isNaN(albumId)) {
-      throw new BadRequestException('Invalid ID format');
+    let albumId : bigint
+    try {
+      albumId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid album id')
     }
     return await this.GallaryService.updateAlbum(albumId, dto);
   }
@@ -42,9 +44,11 @@ export class GallaryController {
   // Delete an album (and cascade delete all its images)
   @Delete(':id')
   async deleteAlbum(@Param('id') id: string) {
-    const albumId = parseInt(id, 10);
-    if (isNaN(albumId)) {
-      throw new BadRequestException('Invalid ID format');
+    let albumId : bigint
+    try {
+      albumId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid album id')
     }
     return await this.GallaryService.deleteAlbum(albumId);
   }
@@ -58,9 +62,11 @@ export class GallaryController {
   // Get all images of an album
   @Get(':id/images')
   async getAlbumImages(@Param('id') id: string) {
-    const albumId = parseInt(id, 10);
-    if (isNaN(albumId)) {
-      throw new BadRequestException('Invalid ID format');
+    let albumId : bigint
+    try {
+      albumId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid album id')
     }
     return await this.GallaryService.getAlbumImages(albumId);
   }
@@ -68,19 +74,24 @@ export class GallaryController {
   // update image details
   @Put('/images/:id')
   async updateImage(@Param('id') id: string, @Body() dto: UpdateImageDto) {
-    const imageId = parseInt(id, 10);
-    if (isNaN(imageId)) {
-      throw new BadRequestException('Invalid ID format');
+    let imageId : bigint
+    try {
+      imageId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid image id')
     }
     return await this.GallaryService.updateImage(imageId, dto);
   }
   // Delete a specific image
   @Delete(':albumId/images/:imageId')
   async deleteImage(@Param('albumId') albumId: string, @Param('imageId') imageId: string) {
-    const albumIdNum = parseInt(albumId, 10);
-    const imageIdNum = parseInt(imageId, 10);
-    if (isNaN(albumIdNum) || isNaN(imageIdNum)) {
-      throw new BadRequestException('Invalid ID format');
+    let albumIdNum : bigint
+    let imageIdNum : bigint
+    try {
+      albumIdNum = BigInt(albumId)
+      imageIdNum = BigInt(imageId)
+    } catch (error) {
+      throw new BadRequestException('Invalid album or image id')
     }
     return await this.GallaryService.deleteImage(albumIdNum, imageIdNum);
   }
@@ -88,9 +99,11 @@ export class GallaryController {
   // Delete all images of an album
   @Delete(':id/images')
   async deleteAllImages(@Param('id') id: string) {
-    const albumId = parseInt(id, 10);
-    if (isNaN(albumId)) {
-      throw new BadRequestException('Invalid ID format');
+    let albumId : bigint
+    try {
+      albumId = BigInt(id)
+    } catch (error) {
+      throw new BadRequestException('Invalid album id')
     }
     return await this.GallaryService.deleteAllImages(albumId);
   }

@@ -23,20 +23,24 @@ export class MentorshipApplicationsController {
       
     // Get all job applications for a given job posting ID
     @Get('program/:programId')
-    async findByProgramId(@Param('programId') programId: string) {
-        const Id = parseInt(programId, 10);
-        if (isNaN(Id)) {
-            throw new BadRequestException('Invalid Job Posting ID format');
+    async findByProgramId(@Param('programId') Id: string) {
+        let programId : bigint
+        try{
+            programId = BigInt(Id)
+        } catch{
+            throw new BadRequestException('Invalid program ID')
         }
-        return await this.mentorshipApplicationService.findByProgramId(Id);
+        return await this.mentorshipApplicationService.findByProgramId(programId);
     }
       
     // Get all applications submitted by a specific user
     @Get('user/:userId')
     async findByUserId(@Param('userId') userId: string) {
-        const userIdInt = parseInt(userId, 10);
-        if (isNaN(userIdInt)) {
-            throw new BadRequestException('Invalid User ID format');
+        let userIdInt : bigint
+        try{
+            userIdInt = BigInt(userId)
+        } catch{
+           throw new BadRequestException('Invalid user ID')
         }
         return await this.mentorshipApplicationService.findByUserId(userIdInt);
     }
@@ -44,9 +48,11 @@ export class MentorshipApplicationsController {
     // Get a specific application by ID
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const appId = parseInt(id, 10);
-        if (isNaN(appId)) {
-            throw new BadRequestException('Invalid Application ID format');
+        let appId : bigint
+        try{
+            appId = BigInt(id)
+        } catch{
+            throw new BadRequestException('Invalid application ID')
         }
         return await this.mentorshipApplicationService.findOne(appId);
     }
@@ -55,9 +61,11 @@ export class MentorshipApplicationsController {
     // Update the status of a job application
     @Put(':id/status')
     async updateStatus(@Param('id') id: string, @Body() updateApplicationStatusDto: UpdateMentorshipAppicationStatusDto) {
-        const appId = parseInt(id, 10);
-        if (isNaN(appId)) {
-            throw new BadRequestException('Invalid Application ID format');
+        let appId : bigint
+        try{
+            appId = BigInt(id)
+        } catch{
+            throw new BadRequestException('Invalid application ID')
         }
         return await this.mentorshipApplicationService.updateStatus(appId, updateApplicationStatusDto.status);
     }
@@ -65,10 +73,12 @@ export class MentorshipApplicationsController {
     // Delete a job application
     @Delete(':id')
     async remove(@Param('id') id: string) {
-      const appId = parseInt(id, 10);
-      if (isNaN(appId)) {
-        throw new BadRequestException('InvalidApplication ID format');
-      }
-      return await this.mentorshipApplicationService.remove(appId);
+        let appId : bigint
+        try{
+            appId = BigInt(id)
+        } catch{
+            throw new BadRequestException('Invalid application ID')
+        }
+        return await this.mentorshipApplicationService.remove(appId);
     }
 }

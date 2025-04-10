@@ -49,7 +49,7 @@ export class GallaryService {
   }
 
 
-  async updateAlbum(id: number, dto: UpdateAlbumDto) {
+  async updateAlbum(id: bigint, dto: UpdateAlbumDto) {
     try {
       const updatedAlbum = await this.prisma.album.update({
         where: { albumId: id },
@@ -71,7 +71,7 @@ export class GallaryService {
     }
   }
 
-  async deleteAlbum(id: number) {
+  async deleteAlbum(id: bigint) {
     try {
       const deletedGallery = await this.prisma.album.delete({
         where: { albumId: id },
@@ -105,7 +105,7 @@ export class GallaryService {
     }
   }
 
-  async getAlbumImages(albumId: number) {
+  async getAlbumImages(albumId: bigint) {
     try {
       const images = await this.prisma.alumniImages.findMany({
         where: {
@@ -122,7 +122,7 @@ export class GallaryService {
   }
 
 
-  async updateImage(id: number, dto: UpdateImageDto) {
+  async updateImage(id: bigint, dto: UpdateImageDto) {
     try {
       const updatedAlbum = await this.prisma.alumniImages.update({
         where: { imageId: id },
@@ -144,7 +144,7 @@ export class GallaryService {
     }
   }
 
-  async deleteImage(id: number,imageId: number) {
+  async deleteImage(id: bigint,imageId: bigint) {
     try {
       await this.prisma.alumniImages.delete({
         where: { imageId: id },
@@ -163,7 +163,7 @@ export class GallaryService {
       handleError(error);
     }
   }
-  async deleteAllImages(albumId: number) {
+  async deleteAllImages(albumId: bigint) {
     try {
       await this.prisma.alumniImages.deleteMany({
         where: { albumId: albumId },

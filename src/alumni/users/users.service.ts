@@ -89,7 +89,7 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const user = await this.prisma.user.findUnique({
         where: { userId: id },
@@ -109,23 +109,26 @@ export class UsersService {
           HttpStatus.NOT_FOUND,
         );
       }
+      // Exclude the password field from the user
+      const { password, ...rest } = user;
 
-      return { status: 'success', item: user };
+      return { status: 'success', item: rest };
     } catch (error) {
       handleError(error);
     }
   }
 
-  async update(id: number, Dto: UpdateUserDto) {
+  async update(id: bigint, Dto: UpdateUserDto) {
     try {
       const updatedUser = await this.prisma.user.update({
         where: { userId: id },
         data: Dto,
       });
-
+      // Exclude the password field from the user
+      const { password, ...rest } = updatedUser;
       return {
         status: 'success',
-        item: updatedUser,
+        item: rest,
         message: 'User updated successfully',
       };
     } catch (error) {
@@ -139,7 +142,7 @@ export class UsersService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedUser = await this.prisma.user.delete({
         where: { userId: id },

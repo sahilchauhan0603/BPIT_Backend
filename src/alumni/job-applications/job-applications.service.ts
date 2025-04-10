@@ -36,7 +36,7 @@ export class JobApplicationsService {
   }
 
   // Get all job applications for a given job posting ID
-  async findByJobPostingId(jobPostingId: number) {
+  async findByJobPostingId(jobPostingId: bigint) {
     try {
       const applications = await this.prisma.jobApplication.findMany({
         where: { jobPostingId },
@@ -57,7 +57,7 @@ export class JobApplicationsService {
   }
 
   // Get all job applications submitted by a user
-  async findByUserId(userId: number) {
+  async findByUserId(userId: bigint) {
     try {
       const applications = await this.prisma.jobApplication.findMany({
         where: { userId },
@@ -71,7 +71,7 @@ export class JobApplicationsService {
   }
 
   // Get a specific job application by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const application = await this.prisma.jobApplication.findUnique({
         where: { jobApplicationId: id },
@@ -99,7 +99,7 @@ export class JobApplicationsService {
   }
 
   // Update a job application (Ensure job posting is still active)
-  async update(id: number, dto: UpdateJobApplicationDto) {
+  async update(id: bigint, dto: UpdateJobApplicationDto) {
     try {
       const application = await this.prisma.jobApplication.findUnique({
         where: { jobApplicationId: id },
@@ -132,7 +132,7 @@ export class JobApplicationsService {
   }
 
   // Update job application status
-  async updateStatus(id: number, status: string) {
+  async updateStatus(id: bigint, status: string) {
     try {
        // Validate if the status is a valid enum value
         if (!Object.values(ApplicationStatus).includes(status as ApplicationStatus)) {
@@ -154,7 +154,7 @@ export class JobApplicationsService {
   }
 
   // Delete a job application
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedApplication = await this.prisma.jobApplication.delete({
         where: { jobApplicationId: id },

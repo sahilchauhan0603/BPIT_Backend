@@ -70,7 +70,7 @@ export class MentorshipProgramService {
   }
 
   // Get a mentorship program by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const mentorshipProgram = await this.prisma.mentorshipProgram.findUnique({
         where: { id: id },
@@ -114,7 +114,7 @@ export class MentorshipProgramService {
   }
 
   // Get all mentorship programs for a particular mentor
-  async findByMentor(mentorId: number, mentorType: MentorType) {
+  async findByMentor(mentorId: bigint, mentorType: MentorType) {
     try {
         const whereCondition: Prisma.MentorshipProgramWhereInput =
         mentorType === MentorType.FACULTY
@@ -153,7 +153,7 @@ export class MentorshipProgramService {
   }
 
   // Update a mentorship program
-  async update(id: number, dto: UpdateMentorshipProgramDto) {
+  async update(id: bigint, dto: UpdateMentorshipProgramDto) {
     try {
       const updatedProgram = await this.prisma.mentorshipProgram.update({
         where: { id: id },
@@ -177,7 +177,7 @@ export class MentorshipProgramService {
   }
 
   // Delete a mentorship program
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedProgram = await this.prisma.mentorshipProgram.delete({
         where: { id: id },

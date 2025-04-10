@@ -29,27 +29,33 @@ export class NewsController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    const newsId = parseInt(id, 10);
-    if (isNaN(newsId)) {
-      throw new BadRequestException('Invalid ID format');
+    let newsId: bigint
+    try {
+      newsId = BigInt(id)
+    } catch (error) {
+        throw new BadRequestException('Invalid news id')
     }
     return await this.newsService.findById(newsId);
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateNewsDto) {
-    const newsId = parseInt(id, 10);
-    if (isNaN(newsId)) {
-      throw new BadRequestException('Invalid ID format');
+    let newsId: bigint
+    try {
+      newsId = BigInt(id)
+    } catch (error) {
+        throw new BadRequestException('Invalid news id')
     }
     return await this.newsService.update(newsId, dto);
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    const newsId = parseInt(id, 10);
-    if (isNaN(newsId)) {
-      throw new BadRequestException('Invalid ID format');
+    let newsId: bigint
+    try {
+      newsId = BigInt(id)
+    } catch (error) {
+        throw new BadRequestException('Invalid news id')
     }
     return await this.newsService.delete(newsId);
   }

@@ -74,7 +74,7 @@ export class InterviewExperienceService {
   }
 
   // Get an interview experience by ID
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     try {
       const interviewExperience =
         await this.prisma.interviewExperience.findUnique({
@@ -107,7 +107,7 @@ export class InterviewExperienceService {
   }
 
   // Get all interview experiences by user ID (approved and non-approved)
-  async findByUserId(userId: number, page: number) {
+  async findByUserId(userId: bigint, page: number) {
     try {
       const interviewExperiences =
         await this.prisma.interviewExperience.findMany({
@@ -147,7 +147,7 @@ export class InterviewExperienceService {
   }
 
   // Update an interview experience by ID
-  async update(id: number, dto: UpdateInterviewExperienceDto) {
+  async update(id: bigint, dto: UpdateInterviewExperienceDto) {
     try {
       const updatedInterviewExperience =
         await this.prisma.interviewExperience.update({
@@ -172,7 +172,7 @@ export class InterviewExperienceService {
   }
 
   // Delete an interview experience by ID
-  async remove(id: number) {
+  async remove(id: bigint) {
     try {
       const deletedInterviewExperience =
         await this.prisma.interviewExperience.delete({

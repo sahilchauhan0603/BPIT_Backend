@@ -36,26 +36,32 @@ export class EventsController {
   }
   @Get(':id')
   async find(@Param('id') id: string) {
-    const eventId = parseInt(id, 10);
-    if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid event ID format');
+    let eventId : bigint
+    try {
+      eventId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Id')
     }
     return await this.eventsService.findOne(eventId);
   }
   @Get('/applied/:id')
   async findAllRoles(@Param('id') id: string) {
-    const eventId = parseInt(id, 10);
-    if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid event ID format');
+    let eventId : bigint
+    try {
+      eventId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Id')
     }
     return await this.eventsService.getAllRole(eventId);
   }
 
   @Get('/user/:id')
   async findAllEvents(@Param('id') id: string) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid event ID format');
+    let userId : bigint
+    try {
+      userId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Id')
     }
     return await this.eventsService.getAllEventByUserId(userId);
   }
@@ -65,9 +71,11 @@ export class EventsController {
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    const eventId = parseInt(id, 10);
-    if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid event ID format');
+    let eventId : bigint
+    try {
+      eventId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Id')
     }
     return await this.eventsService.update(eventId, updateEventDto);
   }
@@ -77,9 +85,11 @@ export class EventsController {
     @Param('id') id: string,
     @Body() updateEventAttendeDto: UpdateEventAttendeDto,
   ) {
-    const eventAttendeId = parseInt(id, 10);
-    if (isNaN(eventAttendeId)) {
-      throw new BadRequestException('Invalid User ID format');
+    let eventAttendeId : bigint
+    try {
+      eventAttendeId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Attende Id')
     }
     return await this.eventsService.updateRole(
       eventAttendeId,
@@ -89,18 +99,22 @@ export class EventsController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const eventId = parseInt(id, 10);
-    if (isNaN(eventId)) {
-      throw new BadRequestException('Invalid User ID format');
+    let eventId : bigint
+    try {
+      eventId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Id')
     }
     return await this.eventsService.removeEvent(eventId);
   }
 
   @Delete('/apply/:id')
   async removeRole(@Param('id') id: string) {
-    const eventAttendeId = parseInt(id, 10);
-    if (isNaN(eventAttendeId)) {
-      throw new BadRequestException('Invalid User ID format');
+    let eventAttendeId : bigint
+    try {
+      eventAttendeId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Event Attende Id')
     }
     return await this.eventsService.removeRole(eventAttendeId);
   }

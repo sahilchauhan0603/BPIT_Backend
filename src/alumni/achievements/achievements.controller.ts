@@ -37,17 +37,21 @@ export class AchievementsController {
   // Get Achievement By Id
   @Get(':id')
   async getAchievementById(@Param('id') id: string) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Id')
     }
     return await this.achievementsService.findOne(achievementId);
   }
   @Get('/user/:id')
   async getAchievementsByUserId(@Param('id') id: string) {
-    const userId = parseInt(id, 10);
-    if (isNaN(userId)) {
-      throw new BadRequestException('Invalid ID format');
+    let userId : bigint
+    try {
+      userId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid User Id')
     }
     return await this.achievementsService.findByUserId(userId);
   }
@@ -56,17 +60,21 @@ export class AchievementsController {
     @Param('id') id: string,
     @Body() updateAchievementDto: UpdateAchievementDto,
   ) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Id')
     }
     return this.achievementsService.update(achievementId, updateAchievementDto);
   }
   @Delete(':id')
   async deleteAchievement(@Param('id') id: string) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Id')
     }
     return await this.achievementsService.remove(achievementId);
   }
@@ -79,9 +87,11 @@ export class AchievementsController {
   // Get All Images of Achievemnt
   @Get('/images/:id')
   async getAllImages(@Param('id') id: string) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Id')
     }
     return await this.achievementsService.findAllImage(achievementId);
   }
@@ -92,9 +102,11 @@ export class AchievementsController {
     @Param('id') id: string,
     @Body() updateAchievementImageDto: UpdateAchievementImageDto,
   ) {
-    const achievementImageId = parseInt(id, 10);
-    if (isNaN(achievementImageId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementImageId : bigint
+    try {
+      achievementImageId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Image Id')
     }
     return await this.achievementsService.updateImage(
       achievementImageId,
@@ -105,9 +117,11 @@ export class AchievementsController {
   // Delete Image
   @Delete('/image/:id')
   async deleteImage(@Param('id') id: string) {
-    const achievementImageId = parseInt(id, 10);
-    if (isNaN(achievementImageId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementImageId : bigint
+    try {
+      achievementImageId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Image Id')
     }
     return await this.achievementsService.removeImage(achievementImageId);
   }
@@ -115,9 +129,11 @@ export class AchievementsController {
   // Delete All Images of given Achievement
   @Delete('/images/:id')
   async deleteAllImages(@Param('id') id: string) {
-    const achievementId = parseInt(id, 10);
-    if (isNaN(achievementId)) {
-      throw new BadRequestException('Invalid ID format');
+    let achievementId : bigint
+    try {
+      achievementId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid Achievement Id')
     }
     return await this.achievementsService.removeImages(achievementId);
   }

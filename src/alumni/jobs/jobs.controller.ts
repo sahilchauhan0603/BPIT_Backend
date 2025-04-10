@@ -31,9 +31,11 @@ export class JobsController {
   // Get a job posting by ID
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const jobId = parseInt(id, 10);
-    if (isNaN(jobId)) {
-      throw new BadRequestException('Invalid ID format');
+    let jobId : bigint
+    try {
+      jobId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid job ID')
     }
     return await this.JobsService.findOne(jobId);
   }
@@ -44,9 +46,11 @@ export class JobsController {
     @Param('id') id: string,
     @Body() updateJobPostingDto: UpdateJobPostingDto,
   ) {
-    const jobId = parseInt(id, 10);
-    if (isNaN(jobId)) {
-      throw new BadRequestException('Invalid ID format');
+    let jobId : bigint
+    try {
+      jobId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid job ID')
     }
     return await this.JobsService.update(jobId, updateJobPostingDto);
   }
@@ -58,18 +62,22 @@ export class JobsController {
     @Query('page') page: string = '1',
   ) {
     const pageNumber = parseInt(page, 10) || 1;
-    const userIdInt = parseInt(userId, 10);
-    if (isNaN(userIdInt)) {
-      throw new BadRequestException('Invalid ID format');
+    let userIdInt : bigint
+    try {
+      userIdInt = BigInt(userId)
+    } catch {
+      throw new BadRequestException('Invalid user ID')
     }
     return await this.JobsService.findByUserId(userIdInt, pageNumber);
   }
   // Delete a job posting by ID
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const jobId = parseInt(id, 10);
-    if (isNaN(jobId)) {
-      throw new BadRequestException('Invalid ID format');
+    let jobId : bigint
+    try {
+      jobId = BigInt(id)
+    } catch {
+      throw new BadRequestException('Invalid job ID')
     }
     return await this.JobsService.remove(jobId);
   }
