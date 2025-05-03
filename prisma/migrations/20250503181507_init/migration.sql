@@ -11,6 +11,9 @@ CREATE TYPE "SocietyStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 CREATE TYPE "SocietyType" AS ENUM ('TECHNICAL', 'NON_TECHNICAL');
 
 -- CreateEnum
+CREATE TYPE "Role" AS ENUM ('STUDENT', 'ALUMNI');
+
+-- CreateEnum
 CREATE TYPE "ApplicationStatus" AS ENUM ('PENDING', 'SHORTLISTED', 'REJECTED', 'HIRED');
 
 -- CreateEnum
@@ -23,7 +26,10 @@ CREATE TYPE "ProgramStatus" AS ENUM ('ACTIVE', 'UPCOMING', 'COMPLETED');
 CREATE TYPE "ApplStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('STUDENT', 'ALUMNI');
+CREATE TYPE "StatusAsset" AS ENUM ('PENDING', 'INPROGRESS', 'COMPLETE');
+
+-- CreateEnum
+CREATE TYPE "Condition" AS ENUM ('New', 'Good', 'Needs_Repair');
 
 -- CreateTable
 CREATE TABLE "Achievement" (
@@ -440,69 +446,87 @@ CREATE TABLE "SocietyRole" (
 );
 
 -- CreateTable
-CREATE TABLE "Equipment" (
-    "equipmentId" INT8 NOT NULL DEFAULT unique_rowid(),
-    "equipmentName" STRING NOT NULL,
-    "equipmentNumber" INT8 NOT NULL,
-    "category" STRING NOT NULL,
-    "price" STRING NOT NULL,
-    "warranty" STRING NOT NULL,
-    "supplier" STRING NOT NULL,
-    "lastMaintenance" TIMESTAMP(3) NOT NULL,
-    "remarks" STRING NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Equipment_pkey" PRIMARY KEY ("equipmentId")
-);
-
--- CreateTable
 CREATE TABLE "Room" (
     "roomId" INT8 NOT NULL DEFAULT unique_rowid(),
-    "roomNumber" INT4 NOT NULL,
-    "floor" STRING NOT NULL,
-    "category" STRING NOT NULL,
-    "message" STRING NOT NULL,
-    "allotedToDepartment" STRING NOT NULL,
-    "year" STRING NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "roomType" STRING NOT NULL,
+    "isActive" BOOL NOT NULL,
+    "FloorNo" INT4 NOT NULL,
+    "Condition" "Condition" NOT NULL,
+    "Location" STRING NOT NULL,
+    "isCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isModified" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Room_pkey" PRIMARY KEY ("roomId")
 );
 
 -- CreateTable
-CREATE TABLE "EquipmentHistory" (
-    "equipmentHistoryId" INT8 NOT NULL DEFAULT unique_rowid(),
-    "equipmentId" INT8 NOT NULL,
-    "userId" INT8 NOT NULL,
-    "title" STRING NOT NULL,
-    "description" STRING NOT NULL,
-    "isSolved" BOOL NOT NULL DEFAULT false,
-    "complaintDate" TIMESTAMP(3) NOT NULL,
-    "SolvedDate" TIMESTAMP(3) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+CREATE TABLE "Equipment" (
+    "equipmentId" INT8 NOT NULL DEFAULT unique_rowid(),
+    "Location" STRING NOT NULL,
+    "equipmentType" STRING NOT NULL,
+    "warranty" STRING NOT NULL,
+    "purchaseDate" TIMESTAMP(3) NOT NULL,
+    "issueHistory" STRING NOT NULL,
+    "condition" "Condition" NOT NULL,
+    "qrCode" STRING NOT NULL,
+    "isCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isModified" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isActive" BOOL NOT NULL,
 
-    CONSTRAINT "EquipmentHistory_pkey" PRIMARY KEY ("equipmentHistoryId")
+    CONSTRAINT "Equipment_pkey" PRIMARY KEY ("equipmentId")
 );
 
 -- CreateTable
 CREATE TABLE "Issue" (
-    "id" INT8 NOT NULL DEFAULT unique_rowid(),
-    "Designation" STRING NOT NULL,
-    "Name" STRING NOT NULL,
-    "Enrollmentno" STRING NOT NULL,
+    "issueId" INT8 NOT NULL DEFAULT unique_rowid(),
     "Location" STRING NOT NULL,
-    "Area" STRING NOT NULL,
-    "Floorno" STRING NOT NULL,
-    "Roomno" STRING NOT NULL,
-    "Itemtype" STRING NOT NULL,
-    "Equipmentid" STRING NOT NULL,
-    "Issuedescription" STRING NOT NULL,
-    "Status" STRING NOT NULL,
+    "equipmentType" STRING NOT NULL,
+    "warranty" STRING NOT NULL,
+    "purchaseDate" TIMESTAMP(3) NOT NULL,
+    "issueHistory" STRING NOT NULL,
+    "condition" "Condition" NOT NULL,
+    "qrCode" STRING NOT NULL,
+    "isCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isModified" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isActive" BOOL NOT NULL,
+    "Status" "StatusAsset" NOT NULL,
 
-    CONSTRAINT "Issue_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Issue_pkey" PRIMARY KEY ("issueId")
+);
+
+-- CreateTable
+CREATE TABLE "EquipmentType" (
+    "equipmentTypeId" INT8 NOT NULL DEFAULT unique_rowid(),
+    "Types" STRING NOT NULL,
+    "Quantity" INT4 NOT NULL,
+    "Title" STRING NOT NULL,
+    "Description" STRING NOT NULL,
+    "isActive" BOOL NOT NULL,
+    "dateCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "dateModified" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "EquipmentType_pkey" PRIMARY KEY ("equipmentTypeId")
+);
+
+-- CreateTable
+CREATE TABLE "Remarks" (
+    "remarkId" INT8 NOT NULL DEFAULT unique_rowid(),
+    "remark" STRING NOT NULL,
+    "dateCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "dateModified" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Remarks_pkey" PRIMARY KEY ("remarkId")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationAsset" (
+    "notificationId" INT8 NOT NULL DEFAULT unique_rowid(),
+    "notificationTitle" STRING NOT NULL,
+    "notificationDescription" STRING NOT NULL,
+    "dateCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isActive" BOOL NOT NULL,
+
+    CONSTRAINT "NotificationAsset_pkey" PRIMARY KEY ("notificationId")
 );
 
 -- CreateTable
@@ -621,12 +645,6 @@ ALTER TABLE "SocietyMember" ADD CONSTRAINT "SocietyMember_societyId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "SocietyRole" ADD CONSTRAINT "SocietyRole_societyId_fkey" FOREIGN KEY ("societyId") REFERENCES "SocietyProfile"("societyId") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "EquipmentHistory" ADD CONSTRAINT "EquipmentHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "EquipmentHistory" ADD CONSTRAINT "EquipmentHistory_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "Equipment"("equipmentId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_SocietyUsers" ADD CONSTRAINT "_SocietyUsers_A_fkey" FOREIGN KEY ("A") REFERENCES "SocietyProfile"("societyId") ON DELETE CASCADE ON UPDATE CASCADE;
