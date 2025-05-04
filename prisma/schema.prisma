@@ -116,7 +116,7 @@ enum Role {
 
 model User {
   userId                    BigInt                    @id @default(autoincrement())
-  societyId                 BigInt
+  societyId                 BigInt?
   firstName                 String
   lastName                  String
   email                     String                    @unique
@@ -144,8 +144,8 @@ model User {
   instagramProfileUrl       String?
   createdAt                 DateTime                  @default(now())
   updatedAt                 DateTime                  @updatedAt
-  facultyId                 BigInt
-  faculty                   Faculty                   @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
+  facultyId                 BigInt?
+  faculty                   Faculty?                   @relation("FacultyUsers", fields: [facultyId], references: [facultyId])
   achievements              Achievement[]             @relation("UserAchievements")
   professionalInformations  ProfessionalInformation[] @relation("UserProfessionalInformation")
   interviewExperiences      InterviewExperience[]     @relation("UserInterviewExperience")
@@ -159,6 +159,24 @@ model User {
   jobsApplication           JobApplication[]          @relation("UserToJobsApplication")
   mentorshipPrograms        MentorshipProgram[]       @relation("UserToMentorship")
   mentorshipApplications    MentorshipApplication[]   @relation("UserMentorshipApplication")
+  verification    VerificationToken?
+  resetToken      PasswordResetToken?
+}
+
+model VerificationToken {
+  id        BigInt   @id @default(autoincrement())
+  token     String
+  email     String   @unique
+  user      User     @relation(fields: [email], references: [email])
+  expiresAt DateTime
+}
+
+model PasswordResetToken {
+  id        BigInt   @id @default(autoincrement())
+  token     String
+  email     String   @unique
+  user      User     @relation(fields: [email], references: [email])
+  expiresAt DateTime
 }
 
 model Gallary {
