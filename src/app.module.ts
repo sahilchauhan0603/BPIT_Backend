@@ -5,6 +5,7 @@ import { AchievementModule } from './achievement/achievement.module';
 import { AlumniModule } from './alumni/alumni.module';
 import { FacultyModule } from './CommonTables/faculty/faculty.module';
 import { MailServiceModule } from './mail-service/mail-service.module';
+import { AssetManagementModule } from './assetManagement/AssetManagement.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MailServiceModule } from './mail-service/mail-service.module';
     AlumniModule,
     FacultyModule,
     MailServiceModule,
+    AssetManagementModule
   ],
 })
 export class AppModule {}
